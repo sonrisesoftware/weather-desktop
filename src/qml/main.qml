@@ -16,36 +16,20 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#ifndef WEATHER-DESKTOP_H
-#define WEATHER-DESKTOP_H
+import QtQuick 1.1
 
-#include <QDeclarativeView>
-#include <KDE/KMainWindow>
-
-/**
- * This class serves as the main window for WeatherDesktop.  It handles the
- * menus, toolbars and status bars.
- *
- * @short Main window class
- * @author Michael Spencer <spencers1993@gmail.com>
- * @version 0.1
- */
-class WeatherDesktop : public KMainWindow
-{
-    Q_OBJECT
-public:
-    /**
-     * Default Constructor
-     */
-    WeatherDesktop();
-
-    /**
-     * Default Destructor
-     */
-    virtual ~WeatherDesktop();
-
-private:
-    QDeclarativeView *view;
-};
-
-#endif // _WEATHER-DESKTOP_H_
+Rectangle {
+	id: root
+	
+	Text {
+		text: "Hello!"
+		anchors.centerIn: parent
+	}
+	
+	MouseArea {
+		anchors.fill: parent
+		onClicked: {
+			Qt.quit();
+		}
+	}
+}

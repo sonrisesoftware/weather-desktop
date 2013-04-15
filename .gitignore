@@ -1,0 +1,4 @@
+# Files ignored by git
+
+build
+src/api_key.h
