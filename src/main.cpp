@@ -26,7 +26,7 @@
 #include <KDE/KLocale>
 
 static const char description[] =
-    I18N_NOOP("An advanced weather application for KDE.");
+    I18N_NOOP("An advanced weather application.");
 
 static const char version[] = "0.1";
 

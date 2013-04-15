@@ -1,7 +1,7 @@
 Weather Desktop
 ===============
 
-An advanced weather application for KDE.
+An advanced weather application.
 
 ### Features ###
 
