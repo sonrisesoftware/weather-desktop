@@ -1,13 +1,14 @@
 Weather Desktop
 ===============
 
-An advanced weather application.
+A cross-platform advanced weather application.
 
 ### Features ###
 
 _**Warning:** this software is in a pre-release stage and is under active development! Some features mentioned below may not exist yet._
 
- * Multiple locations
+ * Runs on any system that supports KDE
+ * Multiple named locations
  * List of 10 recent locations
  * Current weather conditions
  * Weather forecasts for 10 days
@@ -55,7 +56,3 @@ Once you have an API key, create a file called `src/api_key.h` and add your API 
     $ make install # or 'sudo make install' if installing in a root directory
     
 If you do not specify an installation prefix, Weather Desktop will be installed in `/usr/local`.
-    
-**From KDevelop:**
-
-Build, then Project->Install Selection. It will install to `~/.local`

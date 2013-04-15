@@ -1,5 +1,5 @@
 /***************************************************************************
- *  Weather Desktop - An advanced weather application for KDE.             *
+ *  Weather Desktop - A cross-platform advanced weather application.       *
  *  Copyright (C) 2013  Michael Spencer <spencers1993@gmail.com>           *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
