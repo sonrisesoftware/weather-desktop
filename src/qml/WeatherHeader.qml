@@ -20,28 +20,66 @@ import QtQuick 1.1
 
 Rectangle {
 	id: root
+	width: 400
+	height: 64
+	color: "#99333333"
+	radius: 4
+	
+	property alias name: name.text;
+	property alias location: location.text;
+	property alias icon: icon.source;
+	property alias temp: temp.text;
+	property alias weather: weather.text;
+	
+//  	BorderImage {
+//  		id: background
+//  		source: "images/weather-header.png"
+//  		anchors.fill: parent
+//  	}
 	
 	Image {
-		id: background
-		source: "images/background.jpg"
-		anchors.fill: parent
+		id: icon
+		width: 64; height: 64;
+		anchors.centerIn: root
 	}
 	
-	WeatherHeader {
-		anchors.top: root.top
-		anchors.horizontalCenter: root.horizontalCenter
-		anchors.topMargin: 20
-		
-		name: "Home"
-		location: "St. Clair, MO"
-		temp: "43"
-		weather: "Cloudy"
+	Text {
+		id: name
+		color: "white"
+		font.pixelSize: 20
+		anchors {
+			bottom: root.verticalCenter
+			right: icon.left
+		}
 	}
 	
-	MouseArea {
-		anchors.fill: parent
-		onClicked: {
-			Qt.quit();
+	Text {
+		id: location
+		color: "white"
+		font.pixelSize: 16
+		anchors {
+			top: root.verticalCenter
+			right: icon.left
+		}
+	}
+	
+	Text {
+		id: temp
+		color: "white"
+		font.pixelSize: 20
+		anchors {
+			bottom: root.verticalCenter
+			left: icon.right
+		}
+	}
+	
+	Text {
+		id: weather
+		font.pixelSize: 16
+		color: "white"
+		anchors {
+			top: root.verticalCenter
+			left: icon.right
 		}
 	}
 }
