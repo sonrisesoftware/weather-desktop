@@ -32,24 +32,24 @@
  */
 class WeatherDesktop : public KMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    /**
-     * Default Constructor
-     */
-    WeatherDesktop();
+	/**
+	 * Default Constructor
+	 */
+	WeatherDesktop();
 
-    /**
-     * Default Destructor
-     */
-    virtual ~WeatherDesktop();
+	/**
+	 * Default Destructor
+	 */
+	virtual ~WeatherDesktop();
 
 public slots:
 	void onMinimumWidthChanged();
 	void onMinimumHeightChanged();
 	
 private:
-    QDeclarativeView *view;
+	QDeclarativeView *view;
 };
 
 #endif // _WEATHER-DESKTOP_H_

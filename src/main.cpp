@@ -26,32 +26,32 @@
 #include <KDE/KLocale>
 
 static const char description[] =
-    I18N_NOOP("An advanced weather application.");
+	I18N_NOOP("An advanced weather application.");
 
 static const char version[] = "0.1";
 
 int main(int argc, char **argv)
 {
-    KAboutData about("weather-desktop", 0, ki18n("Weather Desktop"), version, ki18n(description),
-                     KAboutData::License_GPL, ki18n("(C) 2013 Michael Spencer"), KLocalizedString(), 0, "spencers1993@gmail.com");
-    about.addAuthor( ki18n("Michael Spencer"), KLocalizedString(), "spencers1993@gmail.com");
+	KAboutData about("weather-desktop", 0, ki18n("Weather Desktop"), version, ki18n(description),
+			KAboutData::License_GPL, ki18n("(C) 2013 Michael Spencer"), KLocalizedString(), 0, "spencers1993@gmail.com");
+	about.addAuthor( ki18n("Michael Spencer"), KLocalizedString(), "spencers1993@gmail.com");
 	about.addCredit(ki18n("Christopher Spencer"), ki18n("Application design"));
-    KCmdLineArgs::init(argc, argv, &about);
+	KCmdLineArgs::init(argc, argv, &about);
 
-    KCmdLineOptions options;
-    KCmdLineArgs::addCmdLineOptions(options);
-    KApplication app;
+	KCmdLineOptions options;
+	KCmdLineArgs::addCmdLineOptions(options);
+	KApplication app;
 
 	// See if we are starting with session management
-    if (app.isSessionRestored())
-    {
-        RESTORE(WeatherDesktop);
-    }
-    else
+	if (app.isSessionRestored())
+	{
+		RESTORE(WeatherDesktop);
+	}
+	else
 	{
 		WeatherDesktop *mainWindow = new WeatherDesktop;
 		mainWindow->show();
 	}
     
-    return app.exec();
+	return app.exec();
 }
