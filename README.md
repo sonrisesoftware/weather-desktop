@@ -5,7 +5,7 @@ A cross-platform advanced weather application.
 
 ### Features ###
 
-_**Warning:** this software is in a pre-release stage and is under active development! Some features mentioned below may not exist yet._
+_**Warning:** this software is in a pre-release stage and is under active development! Most of the features listed below do not work yet or are in a non-working state._
 
  * Runs on any system that supports KDE
  * Multiple named locations
@@ -14,6 +14,7 @@ _**Warning:** this software is in a pre-release stage and is under active develo
  * Weather forecasts for 10 days
  * Severe weather alerts
  * Background of app depicts current conditions
+ * User can add additional backgrounds (weather-related or not)
 
 ### Requirements ###
  * KDE 4.x
@@ -26,7 +27,7 @@ _**Warning:** this software is in a pre-release stage and is under active develo
  * Weather provided by [Weather Underground](http://www.wunderground.com/?apiref=f7b0e81e954c09e8)
 
    ![Weather Underground](http://icons-ak.wxug.com/graphics/wu2/logo_130x80.png)
-   
+
 ### Licensing ###
 
 Weather Desktop is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
