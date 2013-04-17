@@ -5,15 +5,16 @@ A cross-platform advanced weather application.
 
 ### Features ###
 
-_**Warning:** this software is in a pre-release stage and is under active development! Some features mentioned below may not exist yet._
+_**Warning:** this software is in a pre-release stage and is under active development! Features listed below in italics do not exist yet._
 
  * Runs on any system that supports KDE
- * Multiple named locations
- * List of 10 recent locations
- * Current weather conditions
- * Weather forecasts for 10 days
- * Severe weather alerts
- * Background of app depicts current conditions
+ * _Multiple named locations_
+ * _List of 10 recent locations_
+ * _Current weather conditions_
+ * _Weather forecasts for 10 days_
+ * _Severe weather alerts_
+ * _Background of app depicts current conditions_
+ * _User can add additional backgrounds (weather-related or not)_
 
 ### Requirements ###
  * KDE 4.x
