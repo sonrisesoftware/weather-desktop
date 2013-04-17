@@ -20,6 +20,8 @@ import QtQuick 1.1
 
 Rectangle {
 	id: root
+	property int minWidth: header.minWidth + 40;
+	property int minHeight: header.minHeight + 40;
 	
 	Image {
 		id: background
@@ -28,6 +30,7 @@ Rectangle {
 	}
 	
 	WeatherHeader {
+		id: header
 		anchors.top: root.top
 		anchors.horizontalCenter: root.horizontalCenter
 		anchors.topMargin: 20

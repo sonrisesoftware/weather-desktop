@@ -25,6 +25,9 @@ Rectangle {
 	color: "#99333333"
 	radius: 4
 	
+	property int minWidth: width;
+	property int minHeight: height;
+	
 	property alias name: name.text;
 	property alias location: location.text;
 	property alias icon: icon.source;

@@ -44,6 +44,10 @@ public:
      */
     virtual ~WeatherDesktop();
 
+public slots:
+	void onMinimumWidthChanged();
+	void onMinimumHeightChanged();
+	
 private:
     QDeclarativeView *view;
 };

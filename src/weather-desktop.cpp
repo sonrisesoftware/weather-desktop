@@ -20,7 +20,9 @@
 #include "weather-desktop.h"
 
 #include <QApplication>
+#include <QGraphicsObject>
 #include <QDeclarativeEngine>
+#include <QDeclarativeProperty>
 
 WeatherDesktop::WeatherDesktop()
     : KMainWindow()
@@ -31,6 +33,10 @@ WeatherDesktop::WeatherDesktop()
 	QObject::connect(view->engine(), SIGNAL(quit()), qApp, SLOT(quit()));
 	view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 	view->setSource(RESOURCE("qml/main.qml"));
+	QDeclarativeProperty(view->rootObject(), "minWidth").connectNotifySignal(this, SLOT(onMinimumWidthChanged()));
+	QDeclarativeProperty(view->rootObject(), "minHeight").connectNotifySignal(this, SLOT(onMinimumHeightChanged()));
+	onMinimumWidthChanged();
+	onMinimumHeightChanged();
 	
     setCentralWidget(view);
 }
@@ -39,5 +45,17 @@ WeatherDesktop::~WeatherDesktop()
 {
 	
 }
+
+void WeatherDesktop::onMinimumWidthChanged()
+{
+	view->setMinimumWidth(view->rootObject()->property("minWidth").toInt());
+}
+
+void WeatherDesktop::onMinimumHeightChanged()
+{
+	view->setMinimumHeight(view->rootObject()->property("minHeight").toInt());
+}
+
+
 
 #include "weather-desktop.moc"
