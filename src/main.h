@@ -1,5 +1,5 @@
 /***************************************************************************
- *  Weather Desktop - A cross-platform advanced weather application.       *
+ *  Weather Desktop - An advanced, cross-platform weather application.     *
  *  Copyright (C) 2013  Michael Spencer <spencers1993@gmail.com>           *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -26,6 +26,128 @@
 #include <KDE/KCmdLineArgs>
 #include <KDE/KAboutData>
 
-#define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("data", KCmdLineArgs::aboutData()->appName() + QString("/") + file))
+#define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("data", 	\
+		KCmdLineArgs::aboutData()->appName() + QString("/") + file))
+
+
+
+#define PROPERTY(type, name, reader, writer)									\
+public:																			\
+	Q_PROPERTY(type name READ reader WRITE writer NOTIFY name ## Changed)		\
+																				\
+	type reader() const {														\
+		return m_ ## name;														\
+	}																			\
+																				\
+public slots:																	\
+	void writer(type name) {													\
+		m_ ## name = name;														\
+		emit name ## Changed(name);												\
+	}																			\
+																				\
+private:																		\
+	type m_ ## name;															\
+																				\
+signals:																		\
+	void name ## Changed(const type& name);
+
+
+
+#define CUSTOM_PROPERTY(type, name, reader, writer)								\
+public:																			\
+	Q_PROPERTY(type name READ reader WRITE writer NOTIFY name ## Changed)		\
+																				\
+	type reader() const {														\
+		return m_ ## name;														\
+	}																			\
+																				\
+public slots:																	\
+	void writer(type name);														\
+																				\
+private:																		\
+	type m_ ## name;															\
+																				\
+signals:																		\
+	void name ## Changed(const type& name);
+
+
+	
+#define R_PROPERTY(type, name, reader)							\
+public:															\
+	Q_PROPERTY(type name READ reader)							\
+																\
+	type reader() const {										\
+		return m_ ## name;										\
+	}															\
+																\
+protected:														\
+	type m_ ## name;											\
+
+
+#define P_PROPERTY(type, name, reader, writer)									\
+public:																			\
+	Q_PROPERTY(type name READ reader NOTIFY name ## Changed)					\
+																				\
+	type reader() const {														\
+		return m_ ## name;														\
+	}																			\
+																				\
+protected slots:																\
+	void writer(type name) {													\
+		m_ ## name = name;														\
+		emit name ## Changed(name);												\
+	}																			\
+																				\
+private:																		\
+	type m_ ## name;															\
+																				\
+signals:																		\
+	void name ## Changed(const type& name);
+	
+#define CUSTOM_P_PROPERTY(type, name, reader, writer)							\
+public:																			\
+	Q_PROPERTY(type name READ reader NOTIFY name ## Changed)					\
+																				\
+	type reader() const {														\
+		return m_ ## name;														\
+	}																			\
+																				\
+protected slots:																\
+	void writer(type name);														\
+																				\
+private:																		\
+	type m_ ## name;															\
+																				\
+signals:																		\
+	void name ## Changed(const type& name);
+
+
+#define STATIC_PROPERTY(type, name, reader, writer)				\
+public:															\
+																\
+	static type reader() {										\
+		return m_ ## name;										\
+	}															\
+																\
+	static void writer(type name) {								\
+		m_ ## name = name;										\
+	}															\
+																\
+private:														\
+	static type m_ ## name;
+
+
+
+#define CUSTOM_STATIC_PROPERTY(type, name, reader, writer)		\
+public:															\
+																\
+	static type reader() {										\
+		return m_ ## name;										\
+	}															\
+																\
+	static void writer(type name);								\
+																\
+private:														\
+	static type m_ ## name;
 
 #endif

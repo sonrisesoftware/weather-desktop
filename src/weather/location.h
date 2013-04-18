@@ -16,73 +16,41 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-import QtQuick 1.1
 
-Rectangle {
-	id: root
-	width: 400
-	height: 64
-	color: "#99333333"
-	radius: 4
-	
-	property int minWidth: width;
-	property int minHeight: height;
-	
-	property alias name: name.text;
-	property alias location: location.text;
-	property alias icon: icon.source;
-	property alias temp: temp.text;
-	property alias weather: weather.text;
-	
-//  	BorderImage {
-//  		id: background
-//  		source: "images/weather-header.png"
-//  		anchors.fill: parent
-//  	}
-	
-	Image {
-		id: icon
-		width: 64; height: 64;
-		anchors.centerIn: root
-	}
-	
-	Text {
-		id: name
-		color: "white"
-		font.pixelSize: 20
-		anchors {
-			bottom: root.verticalCenter
-			right: icon.left
-		}
-	}
-	
-	Text {
-		id: location
-		color: "white"
-		font.pixelSize: 16
-		anchors {
-			top: root.verticalCenter
-			right: icon.left
-		}
-	}
-	
-	Text {
-		id: temp
-		color: "white"
-		font.pixelSize: 20
-		anchors {
-			bottom: root.verticalCenter
-			left: icon.right
-		}
-	}
-	
-	Text {
-		id: weather
-		font.pixelSize: 16
-		color: "white"
-		anchors {
-			top: root.verticalCenter
-			left: icon.right
-		}
-	}
+#ifndef LOCATION_H
+#define LOCATION_H
+
+#include "main.h"
+
+#include <QObject>
+#include <QString>
+#include <QImage>
+#include <QIcon>
+
+namespace Weather
+{
+
+	class Location : public QObject
+	{
+		Q_OBJECT
+		
+		P_PROPERTY(QString, name, name, setName)
+		P_PROPERTY(QString, location, location, setLocation)
+		P_PROPERTY(QString, display, display, setDisplay)
+		P_PROPERTY(QIcon, icon, icon, setIcon)
+		P_PROPERTY(QImage *, background, background, setBackground)
+
+	public:
+		explicit Location(const QString& name, const QString& location, QObject* parent = 0);
+		virtual ~Location();
+		
+	public slots:
+		void refresh();
+		
+	signals:
+		void refreshed();
+	};
+
 }
+
+#endif // LOCATION_H

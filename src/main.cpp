@@ -1,5 +1,5 @@
 /***************************************************************************
- *  Weather Desktop - A cross-platform advanced weather application.       *
+ *  Weather Desktop - An advanced, cross-platform weather application.     *
  *  Copyright (C) 2013  Michael Spencer <spencers1993@gmail.com>           *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -26,14 +26,16 @@
 #include <KDE/KLocale>
 
 static const char description[] =
-	I18N_NOOP("An advanced weather application.");
+		I18N_NOOP("An advanced, cross-platform weather application.");
 
 static const char version[] = "0.1";
 
 int main(int argc, char **argv)
 {
-	KAboutData about("weather-desktop", 0, ki18n("Weather Desktop"), version, ki18n(description),
-			KAboutData::License_GPL, ki18n("(C) 2013 Michael Spencer"), KLocalizedString(), 0, "spencers1993@gmail.com");
+	KAboutData about("weather-desktop", 0, ki18n("Weather Desktop"), version, 
+			ki18n(description), KAboutData::License_GPL, 
+			ki18n("(C) 2013 Michael Spencer"), KLocalizedString(), 0, 
+			"spencers1993@gmail.com");
 	about.addAuthor( ki18n("Michael Spencer"), KLocalizedString(), "spencers1993@gmail.com");
 	about.addCredit(ki18n("Christopher Spencer"), ki18n("Application design"));
 	KCmdLineArgs::init(argc, argv, &about);
