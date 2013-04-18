@@ -40,7 +40,7 @@ If you are using Ubuntu, you can buy the application from the Ubuntu Software Ce
 
 ### Building from Source ###
 
-When building from source, you will need a [Wunderground API key](http://www.wunderground.com/weather/api/?apiref=f7b0e81e954c09e8).
+When building from source, you will need an API key from ???.
 
 Once you have an API key, create a file called `src/api_key.h` and add your API key to it:
 
