@@ -1,7 +1,11 @@
-Weather Desktop
-===============
+Weather Desktop - An advanced weather app
+=========================================
 
-An advanced, cross-platform weather application.
+Check the weather in a simple and easy-to-use manner. With no ads and a beautiful interface, it's easier and faster than checking weather websites!
+
+Weather Desktop provides access to multiple named locations, with previews of all available at the same time. It displays detailed current conditions,  daily forecasts for the next seven days, and hourly forecasts for the next 24 hours. For people on the go, Weather Desktop can automatically determine your location using your IP address. In addition, users can easily add their own backgrounds, weather-related or not, to the application. 
+
+Don't want to open the application? Just enable to option to set your current wallpaper to depict the current weather conditions!
 
 ### Features ###
 
