@@ -32,12 +32,17 @@ static const char version[] = "0.1";
 
 int main(int argc, char **argv)
 {
-	KAboutData about("weather-desktop", 0, ki18n("Weather Desktop"), version, 
-			ki18n(description), KAboutData::License_GPL, 
-			ki18n("(C) 2013 Michael Spencer"), KLocalizedString(), 0, 
+	KAboutData about("weather-desktop", 0, ki18nc("@title", "Weather Desktop"),
+			version, ki18nc("@title", description), KAboutData::License_GPL_V3, 
+			ki18n("(C) 2013 Michael Spencer"), ki18nc("@title", "Powered by ???"),
+			"https://github.com/iBeliever/weather-desktop", 
+			"https://github.com/iBeliever/weather-desktop/issues");
+	about.addAuthor(ki18nc("@info:credit", "Michael Spencer"),
+			ki18nc("@info:credit", "Maintainer, developer, and designer"),
 			"spencers1993@gmail.com");
-	about.addAuthor( ki18n("Michael Spencer"), KLocalizedString(), "spencers1993@gmail.com");
-	about.addCredit(ki18n("Christopher Spencer"), ki18n("Application design"));
+	about.addAuthor(ki18nc("@info:credit", "Christopher Spencer"),
+			ki18nc("@info:credit", "Designer"),
+			"spencers1993@gmail.com");
 	KCmdLineArgs::init(argc, argv, &about);
 
 	KCmdLineOptions options;

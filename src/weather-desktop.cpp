@@ -19,26 +19,34 @@
 #include "main.h"
 #include "weather-desktop.h"
 
-#include <QApplication>
 #include <QGraphicsObject>
 #include <QDeclarativeEngine>
 #include <QDeclarativeProperty>
 
+#include <KDE/KApplication>
+#include <KDE/KStandardAction>
+#include <KDE/KActionCollection>
+#include <KDE/KMenuBar>
+
 WeatherDesktop::WeatherDesktop()
-    : KMainWindow()
+	: KXmlGuiWindow()
 {
-	setAutoSaveSettings();
+	setupActions();
 	
-    view = new QDeclarativeView(this);
-	QObject::connect(view->engine(), SIGNAL(quit()), qApp, SLOT(quit()));
-	view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-	view->setSource(RESOURCE("qml/main.qml"));
-	QDeclarativeProperty(view->rootObject(), "minWidth").connectNotifySignal(this, SLOT(onMinimumWidthChanged()));
-	QDeclarativeProperty(view->rootObject(), "minHeight").connectNotifySignal(this, SLOT(onMinimumHeightChanged()));
+	setupGUI();
+	
+	m_view = new QDeclarativeView(this);
+	QObject::connect(m_view->engine(), SIGNAL(quit()), kapp, SLOT(quit()));
+	m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+	m_view->setSource(RESOURCE("qml/main.qml"));
+	QDeclarativeProperty(m_view->rootObject(), "minWidth").connectNotifySignal(this, SLOT(onMinimumWidthChanged()));
+	QDeclarativeProperty(m_view->rootObject(), "minHeight").connectNotifySignal(this, SLOT(onMinimumHeightChanged()));
 	onMinimumWidthChanged();
 	onMinimumHeightChanged();
 	
-    setCentralWidget(view);
+	setCentralWidget(m_view);
+	
+	menuBar()->setHidden(true);
 }
 
 WeatherDesktop::~WeatherDesktop()
@@ -46,14 +54,19 @@ WeatherDesktop::~WeatherDesktop()
 	
 }
 
+void WeatherDesktop::setupActions()
+{
+	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
+}
+
 void WeatherDesktop::onMinimumWidthChanged()
 {
-	view->setMinimumWidth(view->rootObject()->property("minWidth").toInt());
+	m_view->setMinimumWidth(m_view->rootObject()->property("minWidth").toInt());
 }
 
 void WeatherDesktop::onMinimumHeightChanged()
 {
-	view->setMinimumHeight(view->rootObject()->property("minHeight").toInt());
+	m_view->setMinimumHeight(m_view->rootObject()->property("minHeight").toInt());
 }
 
 

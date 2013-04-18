@@ -49,7 +49,7 @@ private:																		\
 	type m_ ## name;															\
 																				\
 signals:																		\
-	void name ## Changed(const type& name);
+	void name ## Changed(type name);
 
 
 
@@ -68,7 +68,7 @@ private:																		\
 	type m_ ## name;															\
 																				\
 signals:																		\
-	void name ## Changed(const type& name);
+	void name ## Changed(type name);
 
 
 	
@@ -102,7 +102,7 @@ private:																		\
 	type m_ ## name;															\
 																				\
 signals:																		\
-	void name ## Changed(const type& name);
+	void name ## Changed(type name);
 	
 #define CUSTOM_P_PROPERTY(type, name, reader, writer)							\
 public:																			\
@@ -119,7 +119,7 @@ private:																		\
 	type m_ ## name;															\
 																				\
 signals:																		\
-	void name ## Changed(const type& name);
+	void name ## Changed(type name);
 
 
 #define STATIC_PROPERTY(type, name, reader, writer)				\

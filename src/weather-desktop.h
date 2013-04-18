@@ -20,7 +20,7 @@
 #define WEATHER-DESKTOP_H
 
 #include <QDeclarativeView>
-#include <KDE/KMainWindow>
+#include <KDE/KXmlGuiWindow>
 
 /**
  * This class serves as the main window for WeatherDesktop.  It handles the
@@ -30,9 +30,10 @@
  * @author Michael Spencer <spencers1993@gmail.com>
  * @version 0.1
  */
-class WeatherDesktop : public KMainWindow
+class WeatherDesktop : public KXmlGuiWindow
 {
 	Q_OBJECT
+	
 public:
 	/**
 	 * Default Constructor
@@ -44,12 +45,14 @@ public:
 	 */
 	virtual ~WeatherDesktop();
 
-public slots:
+private:
+	void setupActions();
+	
+	QDeclarativeView *m_view;
+	
+private slots:
 	void onMinimumWidthChanged();
 	void onMinimumHeightChanged();
-	
-private:
-	QDeclarativeView *view;
 };
 
 #endif // _WEATHER-DESKTOP_H_

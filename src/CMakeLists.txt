@@ -18,7 +18,10 @@ target_link_libraries(weather-desktop ${KDE4_KDEUI_LIBS}  ${QT_QTDECLARATIVE_LIB
 # Tell cmake to install the application binary
 install(TARGETS weather-desktop ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+install(FILES weather-desktopui.rc 
+        DESTINATION  ${DATA_INSTALL_DIR}/weather-desktop)
+
 # Install the .desktop file
-install( PROGRAMS weather-desktop.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install(PROGRAMS weather-desktop.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 add_subdirectory(qml)
