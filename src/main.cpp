@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 // application header
+#include "main.h"
 #include "weather-desktop.h"
 
 // KDE headers
@@ -44,7 +45,7 @@ int main(int argc, char **argv)
 			ki18nc("@info:credit", "Designer"),
 			"spencers1993@gmail.com");
 	KCmdLineArgs::init(argc, argv, &about);
-
+	
 	KCmdLineOptions options;
 	KCmdLineArgs::addCmdLineOptions(options);
 	KApplication app;

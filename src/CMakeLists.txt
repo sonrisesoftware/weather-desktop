@@ -1,6 +1,7 @@
 # In this CMakeLists.txt we define which files
 # are used to compile the application
 set(weather-desktop_SRCS
+   weather/weather.cpp
    weather/location.cpp
    weather-desktop.cpp
    main.cpp

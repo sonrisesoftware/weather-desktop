@@ -17,25 +17,19 @@
  ***************************************************************************/
 
 
-#include "location.h"
+#ifndef WEATHER_H
+#define WEATHER_H
 
-using namespace Weather;
+#include <QObject>
 
-Location::Location(const QString& name, const QString& location, QObject* parent)
-	: QObject(parent)
+
+class Weather : public QObject
 {
-	// Whenever the location is changed, redownload the weather
-	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
-}
+	Q_OBJECT
 
-Location::~Location()
-{
+public:
+    explicit Weather(QObject* parent = 0);
+    virtual ~Weather();
+};
 
-}
-
-void Location::refresh()
-{
-	emit refreshed();
-}
-
-#include "location.moc"
+#endif // WEATHER_H

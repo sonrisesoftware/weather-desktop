@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Weather Desktop
-Exec=weather-desktop %i -caption "%c"
+Exec=weather-desktop %i -caption %c
 Icon=weather-desktop
 Type=Application
 X-DocPath=weather-desktop/index.html

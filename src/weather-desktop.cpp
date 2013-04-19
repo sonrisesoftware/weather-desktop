@@ -22,6 +22,7 @@
 #include <QGraphicsObject>
 #include <QDeclarativeEngine>
 #include <QDeclarativeProperty>
+#include <QDeclarativeContext>
 
 #include <KDE/KApplication>
 #include <KDE/KStandardAction>
@@ -30,7 +31,7 @@
 
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
-{
+{	
 	setupActions();
 	
 	setupGUI();
