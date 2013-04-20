@@ -34,11 +34,11 @@ namespace Weather
 	{
 		Q_OBJECT
 		
-		P_PROPERTY(QString, name, name, setName)
-		P_PROPERTY(QString, location, location, setLocation)
-		P_PROPERTY(QString, display, display, setDisplay)
-		P_PROPERTY(QIcon, icon, icon, setIcon)
-		P_PROPERTY(QImage *, background, background, setBackground)
+		Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
+		Q_PROPERTY(QString location READ location WRITE setLocation NOTIFY locationChanged)
+		Q_PROPERTY(QString display READ display WRITE setDisplay NOTIFY displayChanged)
+		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
+		Q_PROPERTY(QImage *background READ background WRITE setBackground NOTIFY backgroundChanged)
 
 	public:
 		explicit Location(const QString& name, const QString& location, QObject* parent = 0);
@@ -47,8 +47,10 @@ namespace Weather
 	public slots:
 		void refresh();
 		
-	signals:
+	signals:		
 		void refreshed();
+	
+	#include "weather/location.gen"
 	};
 
 }

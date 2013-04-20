@@ -17,7 +17,7 @@
  ***************************************************************************/
 
 
-#include "location.h"
+#include "weather/location.h"
 
 using namespace Weather;
 
@@ -26,6 +26,7 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 {
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
+	setName(name);
 }
 
 Location::~Location()

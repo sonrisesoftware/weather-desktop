@@ -39,7 +39,7 @@ public:																			\
 		return m_ ## name;														\
 	}																			\
 																				\
-public slots:																	\
+public Q_SLOTS:																	\
 	void writer(type name) {													\
 		m_ ## name = name;														\
 		emit name ## Changed(name);												\
@@ -48,7 +48,7 @@ public slots:																	\
 private:																		\
 	type m_ ## name;															\
 																				\
-signals:																		\
+Q_SIGNALS:																		\
 	void name ## Changed(type name);
 
 
