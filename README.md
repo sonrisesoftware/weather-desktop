@@ -25,7 +25,7 @@ _**Warning:** this software is in a pre-release stage and is under active develo
  * QJson (http://qjson.sourceforge.net)
 
 ### Build Requirements ###
- * [Qt Property Generator](https://github.com/iBeliever/mkprop)
+ * [QProperty Generator](https://github.com/iBeliever/mkprop)
 
 ### Acknowledgments ###
 
