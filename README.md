@@ -24,6 +24,9 @@ _**Warning:** this software is in a pre-release stage and is under active develo
  * KDE 4.x
  * QJson (http://qjson.sourceforge.net)
 
+### Build Requirements ###
+ * [Qt Property Generator](https://github.com/iBeliever/mkprop)
+
 ### Acknowledgments ###
 
  * Development by Michael Spencer (@iBeliever)
