@@ -25,6 +25,7 @@ function(PROCESS OUTVAR)
      set(source_in  "${f}.cpp")
      set(source_out "${of}.cpp")
      set(gen_f      "${of}.gen")
+     set(moc_f      "${of}.moc")
      # create the output directory if it doesn't exist
      get_filename_component(in_dir "${f}" PATH)
      get_filename_component(out_dir "${of}" PATH)
@@ -43,9 +44,12 @@ function(PROCESS OUTVAR)
          ARGS "${source_in}" "${source_out}"
          DEPENDS "${source_in}" "${header_out}"
        )
+     message("Moc: ${header_out}, ${moc_f}")
+     qt4_generate_moc(${header_out} ${moc_f})
      # append the output file to the list of outputs
-     list( APPEND outfiles "${source_out}")
-   endforeach( f )
+     list( APPEND outfiles "${source_out}" "${header_out}")
+   endforeach(f)
+   #qt4_automoc(${outfiles})
    # set the output list in the calling scope
    set(${OUTVAR} ${${OUTVAR}} ${outfiles} PARENT_SCOPE )
 endfunction( PROCESS )

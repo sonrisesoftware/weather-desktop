@@ -39,4 +39,4 @@ void Location::refresh()
 	emit refreshed();
 }
 
-#include "location.moc"
+#include "weather/location.moc"
