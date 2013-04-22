@@ -25,7 +25,7 @@ _**Warning:** this software is in a pre-release stage and is under active develo
  * QJson (http://qjson.sourceforge.net)
 
 ### Build Requirements ###
- * [QProperty Generator](https://github.com/iBeliever/mkprop)
+ * [Class Generator](https://github.com/iBeliever/classgen)
 
 ### Acknowledgments ###
 
@@ -52,9 +52,13 @@ When building from source, you will need an API key from ???.
 Once you have an API key, create a file called `src/api_key.h` and add your API key to it:
 
     #define API_KEY "<your-key-here>"
-    
 
-**From the command line under Unix/Linux:**
+    
+** Class Generator **
+
+Weather Desktop uses Class Generator to build some files, so [download it](https://github.com/iBeliever/classgen) and extract it to a directory called `classgen`.
+
+** From the command line under Unix/Linux: **
 
     $ cd <project_name_path>
     $ mkdir build
@@ -65,7 +69,7 @@ Once you have an API key, create a file called `src/api_key.h` and add your API 
     
 If you do not specify an installation prefix, Weather Desktop will be installed in `/usr/local`.
 
-**From the command line under Windows:**
+** From the command line under Windows: **
 
     > cd <project_name_path>
     > mkdir build
