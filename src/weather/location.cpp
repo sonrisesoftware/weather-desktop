@@ -18,15 +18,18 @@
 
 
 #include "weather/location.h"
+#include <QDateTime>
 
 using namespace Weather;
 
 Location::Location(const QString& name, const QString& location, QObject* parent)
 	: QObject(parent)
 {
+	qDebug() << "New location...";
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
 	setName(name);
+	setLocation(location);
 }
 
 Location::~Location()
@@ -36,6 +39,7 @@ Location::~Location()
 
 void Location::refresh()
 {
+	qDebug() << "Refreshing...";
 	emit refreshed();
 }
 

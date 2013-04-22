@@ -17,52 +17,36 @@
  ***************************************************************************/
 
 
-#ifndef LOCATION_H
-#define LOCATION_H
-
-#include "main.h"
-#include "weather/service.h"
+#ifndef SERVICE_H
+#define SERVICE_H
 
 #include <QObject>
-#include <QString>
-#include <QImage>
-#include <QIcon>
-#include <QDateTime>
+#include <QVariantMap>
+#include <qjson/parser.h>
 
 namespace Weather
 {
 
-	class Location : public QObject
+	class Service : public QObject
 	{
 		Q_OBJECT
 		
-		Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-		
-		Q_PROPERTY(QString location READ location WRITE setLocation NOTIFY locationChanged)
-		Q_PROPERTY(QString city READ city NOTIFY cityChanged)
-		
-		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
-		Q_PROPERTY(QImage *background READ background WRITE setBackground NOTIFY backgroundChanged)
-		
-		Q_PROPERTY(int timezone READ timezone NOTIFY timezoneChanged)
-		Q_PROPERTY(QDateTime *lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged)
-		Q_PROPERTY(bool day READ isDay NOTIFY dayChanged)
-		
-		Q_PROPERTY(Service *api READ api)
+		Q_PROPERTY(QString apiKey READ apiKey)
 
 	public:
-		explicit Location(const QString& name, const QString& location, QObject* parent = 0);
-		virtual ~Location();
-		
-	public slots:
-		void refresh();
-		
-	signals:		
-		void refreshed();
-	
-	#include "weather/location.gen"
-	};
+		explicit Service(QObject* parent = 0);
+		virtual ~Service();
 
+		virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "") = 0;
+		
+	protected:
+		QVariantMap json_call(QString *error, const QString& call);
+		
+		virtual QString prefix() = 0;
+		
+	#include "weather/service.gen"
+	};
+	
 }
 
-#endif // LOCATION_H
+#endif // SERVICE_H

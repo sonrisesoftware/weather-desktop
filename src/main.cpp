@@ -19,6 +19,7 @@
 // application header
 #include "main.h"
 #include "weather-desktop.h"
+#include "weather/location.h"
 
 // KDE headers
 #include <KDE/KApplication>
@@ -50,6 +51,8 @@ int main(int argc, char **argv)
 	KCmdLineArgs::addCmdLineOptions(options);
 	KApplication app;
 
+	qDebug() << "Debugging is enabled.";
+	
 	// See if we are starting with session management
 	if (app.isSessionRestored())
 	{
@@ -57,6 +60,8 @@ int main(int argc, char **argv)
 	}
 	else
 	{
+		Weather::Location("Test", "St. Clair, MO");
+		
 		WeatherDesktop *mainWindow = new WeatherDesktop;
 		mainWindow->show();
 	}

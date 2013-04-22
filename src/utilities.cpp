@@ -16,20 +16,51 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
+#include "main.h"
 
-#ifndef WEATHER_H
-#define WEATHER_H
+#include <QTextStream>
+#include <QVariant>
+#include <KDE/KTemporaryFile>
+#include <KDE/KMessageBox>
+#include <KDE/KXmlGuiWindow>
+#include <KDE/KActionCollection>
+#include <KIO/Job>
+#include <KIO/JobUiDelegate>
+#include <KIO/NetAccess>
 
-#include <QObject>
+QString readFile(const QString& fileName, QString *error) {
+	QFile file(fileName);
+	file.open(QIODevice::ReadOnly);
+	return QTextStream(&file).readAll();
+}
 
-
-class Weather : public QObject
-{
-	Q_OBJECT
-
-public:
-    explicit Weather(QObject* parent = 0);
-    virtual ~Weather();
-};
-
-#endif // WEATHER_H
+QString download(const QUrl& url, QString *error) {
+	QString text;
+	
+	/*QString tmpFile;
+	if(KIO::NetAccess::download(url, tmpFile, 0))
+	{
+		QFile file(tmpFile);
+		file.open(QIODevice::ReadOnly);
+		text = QTextStream(&file).readAll();
+		qDebug() << text;
+	
+		KIO::NetAccess::removeTempFile(tmpFile);
+	} else {
+		*error = KIO::NetAccess::lastErrorString();
+	}*/
+	
+	KTemporaryFile tmpFile;
+	if (tmpFile.open()) {
+		KIO::Job* getJob = KIO::file_copy(url, KUrl(tmpFile.fileName()), -1, KIO::Overwrite | KIO::HideProgressInfo);
+		if (KIO::NetAccess::synchronousRun(getJob, 0)) {
+			text = readFile(tmpFile.fileName(), error);
+		} else {
+			*error = getJob->errorString();
+		}
+	} else {
+		*error = tmpFile.errorString();
+	}		
+	
+	return text;
+}

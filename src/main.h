@@ -29,4 +29,6 @@
 #define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("data", 	\
 		KCmdLineArgs::aboutData()->appName() + QString("/") + file))
 
+QString download(const QUrl& url, QString *error);
+
 #endif

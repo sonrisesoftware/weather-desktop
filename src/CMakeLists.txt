@@ -1,16 +1,17 @@
+include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
+
 # In this CMakeLists.txt we define which files
 # are used to compile the application
 set(weather-desktop_SRCS
-   #/home/mspencer/Programs/weather-desktop/build/src/weather/location.cpp
-   weather-desktop.cpp
    main.cpp
+   utilities.cpp
+   weather-desktop.cpp
  )
  
 qclassgen(weather-desktop_SRCS
    weather/location
+   weather/service
  )
-
-message("Files: ${weather-desktop_SRCS}")
 
 # Run ui files through uic
 # kde4_add_ui_files(weather-desktop_SRCS weather-desktop.ui)
@@ -19,7 +20,7 @@ message("Files: ${weather-desktop_SRCS}")
 kde4_add_executable(weather-desktop ${weather-desktop_SRCS})
 
 # Select which libraries we need to link to
-target_link_libraries(weather-desktop ${KDE4_KDEUI_LIBS}  ${QT_QTDECLARATIVE_LIBRARY} qjson)
+target_link_libraries(weather-desktop ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${QT_QTDECLARATIVE_LIBRARY} qjson)
 
 # Tell cmake to install the application binary
 install(TARGETS weather-desktop ${INSTALL_TARGETS_DEFAULT_ARGS})
