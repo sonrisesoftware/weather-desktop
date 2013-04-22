@@ -1,5 +1,5 @@
 # Files ignored by git
 
 build
-classgen
+qclassgen
 src/api_key.h

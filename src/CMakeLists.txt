@@ -6,7 +6,7 @@ set(weather-desktop_SRCS
    main.cpp
  )
  
-classgen(weather-desktop_SRCS
+qclassgen(weather-desktop_SRCS
    weather/location
  )
 

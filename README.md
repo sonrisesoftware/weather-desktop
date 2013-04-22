@@ -25,7 +25,7 @@ _**Warning:** this software is in a pre-release stage and is under active develo
  * QJson (http://qjson.sourceforge.net)
 
 ### Build Requirements ###
- * Class Generator (https://github.com/iBeliever/classgen)
+ * Class Generator (https://github.com/iBeliever/qclassgen)
 
 ### Acknowledgments ###
 
@@ -58,7 +58,7 @@ Once you have an API key, create a file called `src/api_key.h` and add your API 
     
 **Class Generator**
 
-Weather Desktop uses Class Generator to build some files, so [download it](https://github.com/iBeliever/classgen/archive/master.zip) and extract it to a directory called `classgen`.
+Weather Desktop uses Class Generator to build some files, so [download it](https://github.com/iBeliever/qclassgen/archive/master.zip) and extract it to a directory called `classgen`.
 
 **From the command line under Unix/Linux:**
 
