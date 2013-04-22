@@ -47,6 +47,8 @@ If you are using Ubuntu, you can buy the application from the Ubuntu Software Ce
 
 ### Building from Source ###
 
+**API Key**
+
 When building from source, you will need an API key from ???.
 
 Once you have an API key, create a file called `src/api_key.h` and add your API key to it:
@@ -54,11 +56,11 @@ Once you have an API key, create a file called `src/api_key.h` and add your API 
     #define API_KEY "<your-key-here>"
 
     
-** Class Generator **
+**Class Generator**
 
 Weather Desktop uses Class Generator to build some files, so [download it](https://github.com/iBeliever/classgen) and extract it to a directory called `classgen`.
 
-** From the command line under Unix/Linux: **
+**From the command line under Unix/Linux:**
 
     $ cd <project_name_path>
     $ mkdir build
@@ -69,7 +71,7 @@ Weather Desktop uses Class Generator to build some files, so [download it](https
     
 If you do not specify an installation prefix, Weather Desktop will be installed in `/usr/local`.
 
-** From the command line under Windows: **
+**From the command line under Windows:**
 
     > cd <project_name_path>
     > mkdir build
