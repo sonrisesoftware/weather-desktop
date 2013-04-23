@@ -21,7 +21,7 @@ import QtQuick 1.1
 
 Rectangle {
 	id: root
-	property int minWidth: Qt.max(header.minWidth + 40, weatherBox.minWidth + 40);
+	property int minWidth: Math.max(header.minWidth + 40, weatherBox.minWidth + 40);
 	property int minHeight: header.minHeight + weatherBox.minHeight + 60;
 	
 	Image {
@@ -46,6 +46,9 @@ Rectangle {
 		id: weatherBox
 		color: "#99333333" // temporary, for visualization - will be transparent
 		radius: 4
+		
+		property int minWidth: 0
+		property int minHeight: 0
 		
 		anchors {
 			top: header.bottom; topMargin: 20;
