@@ -20,8 +20,8 @@ import QtQuick 1.1
 
 Rectangle {
 	id: root
-	property int minWidth: header.minWidth + 40;
-	property int minHeight: header.minHeight + 40;
+	property int minWidth: Qt.max(header.minWidth + 40, weatherBox.minWidth + 40);
+	property int minHeight: header.minHeight + weatherBox.minHeight + 60;
 	
 	Image {
 		id: background
@@ -39,6 +39,19 @@ Rectangle {
 		location: "St. Clair, MO"
 		temp: "43"
 		weather: "Cloudy"
+	}
+	
+	Rectangle {
+		id: weatherBox
+		color: "#99333333" // temporary, for visualization - will be transparent
+		radius: 4
+		
+		anchors {
+			top: header.bottom; topMargin: 20;
+			bottom: root.bottom; bottomMargin: 20;
+			left: root.left; leftMargin: 20;
+			right: root.right; rightMargin: 20;
+		}
 	}
 	
 	MouseArea {

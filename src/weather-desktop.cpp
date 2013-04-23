@@ -40,6 +40,9 @@ WeatherDesktop::WeatherDesktop()
 	QObject::connect(m_view->engine(), SIGNAL(quit()), kapp, SLOT(quit()));
 	m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 	m_view->setSource(RESOURCE("qml/main.qml"));
+	Q_ASSERT(m_view->errors().length() == 0); // Check for errors in the qml file
+	
+	
 	QDeclarativeProperty(m_view->rootObject(), "minWidth").connectNotifySignal(this, SLOT(onMinimumWidthChanged()));
 	QDeclarativeProperty(m_view->rootObject(), "minHeight").connectNotifySignal(this, SLOT(onMinimumHeightChanged()));
 	onMinimumWidthChanged();
