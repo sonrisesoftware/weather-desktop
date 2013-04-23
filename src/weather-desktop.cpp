@@ -45,10 +45,10 @@ WeatherDesktop::WeatherDesktop()
 	m_view->setSource(RESOURCE("qml/main.qml"));
 	Q_ASSERT(m_view->errors().length() == 0); // Check for errors in the qml file
 	
-	QDeclarativeProperty(m_view->rootObject(), "minWidth").connectNotifySignal(this, SLOT(onMinimumWidthChanged()));
-	QDeclarativeProperty(m_view->rootObject(), "minHeight").connectNotifySignal(this, SLOT(onMinimumHeightChanged()));
-	onMinimumWidthChanged();
-	onMinimumHeightChanged();
+	QDeclarativeProperty(m_view->rootObject(), "implicitWidth").connectNotifySignal(this, SLOT(onImplicitWidthChanged()));
+	QDeclarativeProperty(m_view->rootObject(), "implicitHeight").connectNotifySignal(this, SLOT(onImplicitHeightChanged()));
+	onImplicitWidthChanged();
+	onImplicitHeightChanged();
 	
 	setCentralWidget(m_view);
 	
@@ -69,14 +69,14 @@ void WeatherDesktop::setupActions()
 	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
 }
 
-void WeatherDesktop::onMinimumWidthChanged()
+void WeatherDesktop::onImplicitWidthChanged()
 {
-	m_view->setMinimumWidth(m_view->rootObject()->property("minWidth").toInt());
+	m_view->setMinimumWidth(m_view->rootObject()->property("implicitWidth").toInt());
 }
 
-void WeatherDesktop::onMinimumHeightChanged()
+void WeatherDesktop::onImplicitHeightChanged()
 {
-	m_view->setMinimumHeight(m_view->rootObject()->property("minHeight").toInt());
+	m_view->setMinimumHeight(m_view->rootObject()->property("implicitHeight").toInt());
 }
 
 void WeatherDesktop::test()

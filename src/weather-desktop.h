@@ -60,8 +60,8 @@ private:
 	QDeclarativeView *m_view = 0;
 	
 private slots:
-	void onMinimumWidthChanged();
-	void onMinimumHeightChanged();
+	void onImplicitWidthChanged();
+	void onImplicitHeightChanged();
 	void test();
 	void loadSettings();
 	void saveSettings();

@@ -20,13 +20,13 @@ import QtQuick 1.1
 
 Rectangle {
 	id: root
-	width: 400
-	height: 64
+	//width: 400
+	//height: 64
 	color: "#99333333"
 	radius: 4
 	
-	property int minWidth: width;
-	property int minHeight: height;
+	implicitWidth: 400
+	implicitHeight: 64
 	
 	property alias name: name.text;
 	property alias location: location.text;
