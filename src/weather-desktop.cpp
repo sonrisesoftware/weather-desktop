@@ -18,11 +18,13 @@
 
 #include "main.h"
 #include "weather-desktop.h"
+#include "settings.h"
 
 #include <QGraphicsObject>
 #include <QDeclarativeEngine>
 #include <QDeclarativeProperty>
 #include <QDeclarativeContext>
+#include <QtDeclarative>
 
 #include <KDE/KApplication>
 #include <KDE/KStandardAction>
@@ -37,11 +39,11 @@ WeatherDesktop::WeatherDesktop()
 	setupGUI();
 	
 	m_view = new QDeclarativeView(this);
-	QObject::connect(m_view->engine(), SIGNAL(quit()), kapp, SLOT(quit()));
+	m_view->rootContext()->setContextProperty("WeatherApp", this);
+	QObject::connect(m_view->engine(), SIGNAL(quit()), this, SLOT(test()));
 	m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 	m_view->setSource(RESOURCE("qml/main.qml"));
 	Q_ASSERT(m_view->errors().length() == 0); // Check for errors in the qml file
-	
 	
 	QDeclarativeProperty(m_view->rootObject(), "minWidth").connectNotifySignal(this, SLOT(onMinimumWidthChanged()));
 	QDeclarativeProperty(m_view->rootObject(), "minHeight").connectNotifySignal(this, SLOT(onMinimumHeightChanged()));
@@ -51,11 +53,15 @@ WeatherDesktop::WeatherDesktop()
 	setCentralWidget(m_view);
 	
 	menuBar()->setHidden(true);
+	
+	m_autoLocation = new Weather::Location(this);
+	setCurrentLocation(autoLocation());
+	loadSettings();
 }
 
 WeatherDesktop::~WeatherDesktop()
 {
-	
+	saveSettings();
 }
 
 void WeatherDesktop::setupActions()
@@ -73,6 +79,39 @@ void WeatherDesktop::onMinimumHeightChanged()
 	m_view->setMinimumHeight(m_view->rootObject()->property("minHeight").toInt());
 }
 
+void WeatherDesktop::test()
+{
+	delete currentLocation();
+	setCurrentLocation(new Weather::Location("Home", "St. Clair, MO", this));
+}
 
+void WeatherDesktop::loadSettings()
+{
+	foreach(QString str, Settings::locations()) {
+		QStringList list = str.split(":");
+		Q_ASSERT(list.length() == 2);
+		addLocation(list[0], list[1]);
+	}
+}
+
+void WeatherDesktop::saveSettings()
+{
+	QStringList list;
+	foreach(Weather::Location *location, locations()) {
+		if (location->location().isEmpty()) continue;
+		list.append(location->name() + ':' + location->location());
+	}
+	Settings::setLocations(list);
+	Settings::self()->writeConfig();
+}
+
+Weather::Location *WeatherDesktop::addLocation(const QString& name, const QString& location)
+{
+	if (location.isEmpty()) return nullptr;
+	qDebug() << "Adding location: " + name + " - " + location;
+	Weather::Location *l = new Weather::Location(name, location, this);
+	locations().append(l);
+	return l;
+}
 
 #include "weather-desktop.moc"

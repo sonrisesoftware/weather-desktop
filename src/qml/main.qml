@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 import QtQuick 1.1
+//import Weather 0.1
 
 Rectangle {
 	id: root
@@ -35,8 +36,8 @@ Rectangle {
 		anchors.horizontalCenter: root.horizontalCenter
 		anchors.topMargin: 20
 		
-		name: "Home"
-		location: "St. Clair, MO"
+		name: WeatherApp.currentLocation.name
+		location: WeatherApp.currentLocation.display
 		temp: "43"
 		weather: "Cloudy"
 	}

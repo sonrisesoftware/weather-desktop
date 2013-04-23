@@ -19,6 +19,8 @@
 #ifndef WEATHER-DESKTOP_H
 #define WEATHER-DESKTOP_H
 
+#include "weather/location.h"
+
 #include <QDeclarativeView>
 #include <KDE/KXmlGuiWindow>
 
@@ -34,6 +36,10 @@ class WeatherDesktop : public KXmlGuiWindow
 {
 	Q_OBJECT
 	
+	Q_PROPERTY(Weather::Location *currentLocation READ currentLocation WRITE setCurrentLocation NOTIFY currentLocationChanged)
+	Q_PROPERTY(Weather::Location *autoLocation READ autoLocation)
+	Q_PROPERTY(QList<Weather::Location *> locations READ locations)
+	
 public:
 	/**
 	 * Default Constructor
@@ -44,15 +50,23 @@ public:
 	 * Default Destructor
 	 */
 	virtual ~WeatherDesktop();
-
+	
+public slots:
+	Weather::Location *addLocation(const QString& name, const QString &location);
+	
 private:
 	void setupActions();
 	
-	QDeclarativeView *m_view;
+	QDeclarativeView *m_view = 0;
 	
 private slots:
 	void onMinimumWidthChanged();
 	void onMinimumHeightChanged();
+	void test();
+	void loadSettings();
+	void saveSettings();
+	
+#include "weather-desktop.gen"
 };
 
 #endif // _WEATHER-DESKTOP_H_

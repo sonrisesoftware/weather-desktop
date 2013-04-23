@@ -1,0 +1,4 @@
+File=settings.kcfg 
+ClassName=Settings 
+Singleton=true
+Mutators=true

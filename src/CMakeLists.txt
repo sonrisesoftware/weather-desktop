@@ -5,16 +5,20 @@ include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR})
 set(weather-desktop_SRCS
    main.cpp
    utilities.cpp
-   weather-desktop.cpp
  )
  
 qclassgen(weather-desktop_SRCS
+   weather-desktop
    weather/location
    weather/service
  )
 
 # Run ui files through uic
 # kde4_add_ui_files(weather-desktop_SRCS weather-desktop.ui)
+
+# Process the configuration definition
+kde4_add_kcfg_files(weather-desktop_SRCS GENERATE_MOC settings.kcfgc)
+install(FILES settings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 
 # Set the name of the application
 kde4_add_executable(weather-desktop ${weather-desktop_SRCS})

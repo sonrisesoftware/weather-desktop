@@ -25,12 +25,18 @@ using namespace Weather;
 Location::Location(const QString& name, const QString& location, QObject* parent)
 	: QObject(parent)
 {
-	qDebug() << "New location...";
+	qDebug() << "New location: " + name + " - " + (location.isEmpty() ? "Auto-IP" : location);
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
 	setName(name);
 	setLocation(location);
 }
+
+Location::Location(QObject* parent): Location("Current", "", parent)
+{
+	
+}
+
 
 Location::~Location()
 {
@@ -40,6 +46,10 @@ Location::~Location()
 void Location::refresh()
 {
 	qDebug() << "Refreshing...";
+	if (location().isEmpty())
+		setDisplay("Auto-IP");
+	else
+		setDisplay(location());
 	emit refreshed();
 }
 

@@ -39,7 +39,7 @@ namespace Weather
 		Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 		
 		Q_PROPERTY(QString location READ location WRITE setLocation NOTIFY locationChanged)
-		Q_PROPERTY(QString city READ city NOTIFY cityChanged)
+		Q_PROPERTY(QString display READ display NOTIFY displayChanged)
 		
 		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
 		Q_PROPERTY(QImage *background READ background WRITE setBackground NOTIFY backgroundChanged)
@@ -48,10 +48,11 @@ namespace Weather
 		Q_PROPERTY(QDateTime *lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged)
 		Q_PROPERTY(bool day READ isDay NOTIFY dayChanged)
 		
-		Q_PROPERTY(Service *api READ api)
+		Q_PROPERTY(Weather::Service *api READ api)
 
 	public:
 		explicit Location(const QString& name, const QString& location, QObject* parent = 0);
+		explicit Location(QObject *parent = 0);
 		virtual ~Location();
 		
 	public slots:

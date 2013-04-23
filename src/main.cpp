@@ -21,6 +21,9 @@
 #include "weather-desktop.h"
 #include "weather/location.h"
 
+// Qt headers
+#include <QtDeclarative>
+
 // KDE headers
 #include <KDE/KApplication>
 #include <KDE/KAboutData>
@@ -52,6 +55,9 @@ int main(int argc, char **argv)
 	KApplication app;
 
 	qDebug() << "Debugging is enabled.";
+	
+	qmlRegisterType<WeatherDesktop>();
+	qmlRegisterType<Weather::Location>();
 	
 	// See if we are starting with session management
 	if (app.isSessionRestored())
