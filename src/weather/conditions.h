@@ -57,9 +57,6 @@ namespace Weather
 	private slots:
 		void updateColor(const QString& temp);
 		
-	private:
-		QString m_weather = "<Weather>";
-		
 	#include "weather/conditions.gen"
 	};
 }

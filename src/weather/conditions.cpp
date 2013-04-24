@@ -41,7 +41,7 @@ void Conditions::refresh()
 	setTemp("0");
 	setWindchill("0");
 	setDewpoint("0");
-	
+	setWeather("Partly Cloudy");	
 }
 
 void Weather::Conditions::updateColor(const QString& temp)

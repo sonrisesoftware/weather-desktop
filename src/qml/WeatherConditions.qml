@@ -17,8 +17,11 @@
  ***************************************************************************/
 
 import QtQuick 1.1
-import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
+//import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 import org.kde.qtextracomponents 0.1
+
+import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
 	id: root
@@ -26,77 +29,244 @@ Rectangle {
 	color: "#99333333"
 	radius: 4
 	
-	implicitWidth: 600
-	implicitHeight: 400
+	implicitWidth: Math.max(header.width + 10, contents.width + 40)
+	implicitHeight: header.height + contents.height + 40
 	
 	property string windchill;
 	property string dewpoint;
 	
+	property string pressure;
+	property string visibility;
+	property string clouds;
+	
+	property string wind;
+	property string windgust;
+	
+	property int dataFontSize: 14;
+	property int headerFontSize: 16;
+	property int titleFontSize: 18;
+	
 	Text {
 		id: header
-		text: "Current Conditions"
+		text: i18n("Current Conditions")
 		color: "white"
-		font.pixelSize: 18
+		font.pixelSize: root.titleFontSize
 		
 		anchors { horizontalCenter: root.horizontalCenter; top: root.top;}
 	}
 	
-	Row {
+	Item {
+		id: contentBox
 		anchors {
-			top: header.bottom; bottom: root.bottom; 
-			left: root.left; right: root.right; 
-			leftMargin: 5; rightMargin: 5;
+			top: header.bottom; topMargin: 20;
+			bottom: root.bottom; bottomMargin: 20;
+			left: root.left; leftMargin: 0;
+			right: root.right; rightMargin: 20;
 		}
-		
-		Column { // Left column of data
-			Text {
-				text: "Temperature"
-				color: "white"
-				font.pixelSize: 16
+	
+		Row {
+			id: contents
+			spacing: 60
+			
+			anchors {
+				centerIn: contentBox
 			}
 			
-			Row {
-				x: 15
-				spacing: 5
+			Column { // Left column of data
+				Text {
+					text: i18n("Temperature")
+					color: "white"
+					font.pixelSize: root.headerFontSize
+				}
 				
-				Column { // The headers
+				Row {
+					x: 15
+					spacing: 5
 					
-					Text {
-						text: "Windchill: "
-						color: "white"
-						font.pixelSize: 12
+					Column { // The headers
+						
+						Text {
+							text: i18n("Windchill:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: i18n("Dew point:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
 					}
 					
-					Text {
-						text: "Dew point: "
-						color: "white"
-						font.pixelSize: 12
+					Column { // The actual data
+						Text {
+							text: root.windchill
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: root.dewpoint
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
 					}
 				}
 				
-				Column { // The actual data
-					Text {
-						text: root.windchill
-						color: "white"
-						font.pixelSize: 12
+				Text {
+					text: " "
+				}
+				
+				Text {
+					text: i18n("Conditions")
+					color: "white"
+					font.pixelSize: root.headerFontSize
+				}
+				
+				Row {
+					x: 15
+					spacing: 5
+					
+					Column { // The headers
+						
+						Text {
+							text: i18n("Pressure:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: i18n("Visibility:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: i18n("Cloud Cover:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
 					}
 					
-					Text {
-						text: root.dewpoint
-						color: "white"
-						font.pixelSize: 12
+					Column { // The actual data
+						Text {
+							text: root.pressure
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: root.visibility
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: root.clouds
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
 					}
 				}
 			}
-		}
-		
-		Column { // Right column of data
 			
+			Column { // Right column of data
+				Text {
+					text: i18n("Wind")
+					color: "white"
+					font.pixelSize: root.headerFontSize
+				}
+				
+				Row {
+					x: 15
+					spacing: 5
+					
+					Column { // The headers
+						
+						Text {
+							text: i18n("Speed/Dir:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: i18n("Wind Gust:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+					}
+					
+					Column { // The actual data
+						Text {
+							text: root.wind
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: root.windgust
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+					}
+				}
+				
+				Text {
+					text: " "
+				}
+				
+				Text {
+					text: i18n("Moisture")
+					color: "white"
+					font.pixelSize: root.headerFontSize
+				}
+				
+				Row {
+					x: 15
+					spacing: 5
+					
+					Column { // The headers
+						
+						Text {
+							text: i18n("Humidity:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: i18n("Rainfall:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: i18n("Snow depth:")
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+					}
+					
+					Column { // The actual data
+						Text {
+							text: root.humidity
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: root.rainfall
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+						
+						Text {
+							text: root.snowdepth
+							color: "white"
+							font.pixelSize: root.dataFontSize
+						}
+					}
+				}
+			}
 		}
 	}
-	
-/*
- *	Temperature                    ??????????
- *      Row
- */
 }
