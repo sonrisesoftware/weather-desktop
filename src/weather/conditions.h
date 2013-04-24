@@ -16,52 +16,52 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "main.h"
+
+#ifndef CONDITIONS_H
+#define CONDITIONS_H
+
 #include "weather/service.h"
 #include "weather/location.h"
-#include "weather/conditions.h"
 
-#include <QUrl>
-#include <QNetworkAccessManager>
+#include <QObject>
+#include <QColor>
+#include <QIcon>
 
-using namespace Weather;
-
-Service::Service(Location* location): QObject(location)
+namespace Weather
 {
+	class Location;
+	
+	class Conditions: QObject
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(QString temp READ temp NOTIFY tempChanged)
+		Q_PROPERTY(QString windchill READ windchill NOTIFY windchillChanged)
+		Q_PROPERTY(QString dewpoint READ dewpoint NOTIFY dewpointChanged)
+		Q_PROPERTY(QString weather READ weather NOTIFY weatherChanged)
+		Q_PROPERTY(QIcon icon READ icon NOTIFY iconChanged)
+		Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
+		
+		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
 
+	public:
+		explicit Conditions(Weather::Location *location);
+		virtual ~Conditions();
+		
+	public slots:
+		void refresh();
+		
+	signals:
+		void refreshed();
+		
+	private slots:
+		void updateColor(const QString& temp);
+		
+	private:
+		QString m_weather = "<Weather>";
+		
+	#include "weather/conditions.gen"
+	};
 }
 
-Service::~Service()
-{
-
-}
-
-QVariantMap Weather::Service::json_call(QString* error, const QString& call)
-{
-	QString text = download(QUrl(prefix() + '/' + call), error);
-	
-	if (!error->isEmpty())
-		return QVariantMap();
-	
-	bool ok;
-	QJson::Parser parser;
-	QVariantMap result = parser.parse(text.toAscii(), &ok).toMap();
-	if (!ok) {
-		*error = "Unable to parse JSON response!";
-		return QVariantMap();
-	}
-	
-	if (result["response"].toMap().contains("error")) {
-		*error = "[" + result["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
-				result["response"].toMap()["error"].toMap()["description"].toString();
-	}
-	
-	return result;
-}
-
-Weather::Conditions* Weather::Service::create_conditions()
-{
-	return new Conditions(location());
-}
-
-#include "weather/service.moc"
+#endif // CONDITIONS_H

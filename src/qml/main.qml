@@ -17,7 +17,8 @@
  ***************************************************************************/
 
 import QtQuick 1.1
-//import Weather 0.1
+import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
+import org.kde.qtextracomponents 0.1
 
 Rectangle {
 	id: root
@@ -36,16 +37,28 @@ Rectangle {
 		anchors.horizontalCenter: root.horizontalCenter
 		anchors.topMargin: 20
 		
-		name: WeatherApp.currentLocation.name
-		location: WeatherApp.currentLocation.display
-		temp: "43"
-		weather: "Cloudy"
+		name: WeatherApp.currentLocation.name;
+		location: WeatherApp.currentLocation.display;
+		temp: WeatherApp.currentLocation.conditions.temp;
+		weather: WeatherApp.currentLocation.conditions.weather;
+		icon: WeatherApp.currentLocation.conditions.icon;
 	}
 	
 	Rectangle {
 		id: weatherBox
-		color: "#99333333" // temporary, for visualization - will be transparent
+		//color: "#99333333" // temporary, for visualization - will be transparent
+		color: "#00000000" // transparent
 		radius: 4
+		
+		implicitWidth: conditions.implicitWidth;
+		implicitHeight: conditions.implicitHeight;
+		
+		WeatherConditions {
+			id: conditions
+			anchors.centerIn: weatherBox
+			windchill: WeatherApp.currentLocation.conditions.windchill;
+			dewpoint: WeatherApp.currentLocation.conditions.dewpoint;
+		}
 		
 		anchors {
 			top: header.bottom; topMargin: 20;

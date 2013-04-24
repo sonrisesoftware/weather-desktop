@@ -25,10 +25,15 @@
 #include <KDE/KStandardDirs>
 #include <KDE/KCmdLineArgs>
 #include <KDE/KAboutData>
+#include <KDE/KMainWindow>
 
 #define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("data", 	\
 		KCmdLineArgs::aboutData()->appName() + QString("/") + file))
 
+extern KMainWindow *kmainwin;
+		
 QString download(const QUrl& url, QString *error);
+void KError(const QString& msg, const QString& error);
+void KError(const QString& msg);
 
 #endif

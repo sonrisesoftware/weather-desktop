@@ -20,6 +20,8 @@
 #include "main.h"
 #include "weather-desktop.h"
 #include "weather/location.h"
+#include "weather/service.h"
+#include "weather/conditions.h"
 
 // Qt headers
 #include <QtDeclarative>
@@ -28,6 +30,7 @@
 #include <KDE/KApplication>
 #include <KDE/KAboutData>
 #include <KDE/KCmdLineArgs>
+#include <KDE/KMessageBox>
 #include <KDE/KLocale>
 
 static const char description[] =
@@ -58,6 +61,8 @@ int main(int argc, char **argv)
 	
 	qmlRegisterType<WeatherDesktop>();
 	qmlRegisterType<Weather::Location>();
+	qmlRegisterType<Weather::Service>();
+	qmlRegisterType<Weather::Conditions>();
 	
 	// See if we are starting with session management
 	if (app.isSessionRestored())
@@ -66,10 +71,13 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		Weather::Location("Test", "St. Clair, MO");
-		
+		// Test
 		WeatherDesktop *mainWindow = new WeatherDesktop;
+		kmainwin = mainWindow;
 		mainWindow->show();
+
+		// For debugging purposes
+		//KMessageBox::informationList(mainWindow, "Command line arguments:", KCmdLineArgs::allArguments());
 	}
     
 	return app.exec();

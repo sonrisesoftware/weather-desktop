@@ -17,51 +17,37 @@
  ***************************************************************************/
 
 #include "main.h"
-#include "weather/service.h"
-#include "weather/location.h"
 #include "weather/conditions.h"
-
-#include <QUrl>
-#include <QNetworkAccessManager>
+#include "weather/location.h"
+#include <KIcon>
 
 using namespace Weather;
 
-Service::Service(Location* location): QObject(location)
+Conditions::Conditions(Weather::Location *location): QObject(location)
+{
+	setLocation(location);
+	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
+}
+
+Conditions::~Conditions()
 {
 
 }
 
-Service::~Service()
+void Conditions::refresh()
 {
-
+	qDebug() << "Refreshing conditions...";
+	setIcon(KIcon("weather-clouds"));
+	setTemp("0");
+	setWindchill("0");
+	setDewpoint("0");
+	
 }
 
-QVariantMap Weather::Service::json_call(QString* error, const QString& call)
+void Weather::Conditions::updateColor(const QString& temp)
 {
-	QString text = download(QUrl(prefix() + '/' + call), error);
-	
-	if (!error->isEmpty())
-		return QVariantMap();
-	
-	bool ok;
-	QJson::Parser parser;
-	QVariantMap result = parser.parse(text.toAscii(), &ok).toMap();
-	if (!ok) {
-		*error = "Unable to parse JSON response!";
-		return QVariantMap();
-	}
-	
-	if (result["response"].toMap().contains("error")) {
-		*error = "[" + result["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
-				result["response"].toMap()["error"].toMap()["description"].toString();
-	}
-	
-	return result;
+	qDebug() << "Updating color...";
 }
 
-Weather::Conditions* Weather::Service::create_conditions()
-{
-	return new Conditions(location());
-}
 
-#include "weather/service.moc"
+#include "weather/conditions.moc"

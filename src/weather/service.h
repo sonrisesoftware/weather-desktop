@@ -26,23 +26,30 @@
 
 namespace Weather
 {
+	class Location;
+	class Conditions;
 
 	class Service : public QObject
 	{
 		Q_OBJECT
 		
-		Q_PROPERTY(QString apiKey READ apiKey)
+		Q_PROPERTY(QString apiKey READ apiKey NOTIFY apiKeyChanged)
+		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
 
 	public:
-		explicit Service(QObject* parent = 0);
+		explicit Service(Location* location);
 		virtual ~Service();
 
-		virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "") = 0;
+		//virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "") = 0;
+		
+		//Weather::Conditions *create_conditions() = 0;
+		Weather::Conditions *create_conditions();
 		
 	protected:
 		QVariantMap json_call(QString *error, const QString& call);
 		
-		virtual QString prefix() = 0;
+		//virtual QString prefix() = 0;
+		virtual QString prefix() { return ""; };
 		
 	#include "weather/service.gen"
 	};

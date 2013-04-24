@@ -16,52 +16,87 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "main.h"
-#include "weather/service.h"
-#include "weather/location.h"
-#include "weather/conditions.h"
+import QtQuick 1.1
+import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
+import org.kde.qtextracomponents 0.1
 
-#include <QUrl>
-#include <QNetworkAccessManager>
-
-using namespace Weather;
-
-Service::Service(Location* location): QObject(location)
-{
-
-}
-
-Service::~Service()
-{
-
-}
-
-QVariantMap Weather::Service::json_call(QString* error, const QString& call)
-{
-	QString text = download(QUrl(prefix() + '/' + call), error);
+Rectangle {
+	id: root
 	
-	if (!error->isEmpty())
-		return QVariantMap();
+	color: "#99333333"
+	radius: 4
 	
-	bool ok;
-	QJson::Parser parser;
-	QVariantMap result = parser.parse(text.toAscii(), &ok).toMap();
-	if (!ok) {
-		*error = "Unable to parse JSON response!";
-		return QVariantMap();
+	implicitWidth: 600
+	implicitHeight: 400
+	
+	property string windchill;
+	property string dewpoint;
+	
+	Text {
+		id: header
+		text: "Current Conditions"
+		color: "white"
+		font.pixelSize: 18
+		
+		anchors { horizontalCenter: root.horizontalCenter; top: root.top;}
 	}
 	
-	if (result["response"].toMap().contains("error")) {
-		*error = "[" + result["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
-				result["response"].toMap()["error"].toMap()["description"].toString();
+	Row {
+		anchors {
+			top: header.bottom; bottom: root.bottom; 
+			left: root.left; right: root.right; 
+			leftMargin: 5; rightMargin: 5;
+		}
+		
+		Column { // Left column of data
+			Text {
+				text: "Temperature"
+				color: "white"
+				font.pixelSize: 16
+			}
+			
+			Row {
+				x: 15
+				spacing: 5
+				
+				Column { // The headers
+					
+					Text {
+						text: "Windchill: "
+						color: "white"
+						font.pixelSize: 12
+					}
+					
+					Text {
+						text: "Dew point: "
+						color: "white"
+						font.pixelSize: 12
+					}
+				}
+				
+				Column { // The actual data
+					Text {
+						text: root.windchill
+						color: "white"
+						font.pixelSize: 12
+					}
+					
+					Text {
+						text: root.dewpoint
+						color: "white"
+						font.pixelSize: 12
+					}
+				}
+			}
+		}
+		
+		Column { // Right column of data
+			
+		}
 	}
 	
-	return result;
+/*
+ *	Temperature                    ??????????
+ *      Row
+ */
 }
-
-Weather::Conditions* Weather::Service::create_conditions()
-{
-	return new Conditions(location());
-}
-
-#include "weather/service.moc"

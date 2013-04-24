@@ -11,6 +11,7 @@ qclassgen(weather-desktop_SRCS
    weather-desktop
    weather/location
    weather/service
+   weather/conditions
  )
 
 # Run ui files through uic

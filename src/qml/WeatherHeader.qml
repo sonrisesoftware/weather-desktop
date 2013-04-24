@@ -17,6 +17,8 @@
  ***************************************************************************/
 
 import QtQuick 1.1
+import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
+import org.kde.qtextracomponents 0.1
 
 Rectangle {
 	id: root
@@ -26,11 +28,11 @@ Rectangle {
 	radius: 4
 	
 	implicitWidth: 400
-	implicitHeight: 64
+	implicitHeight: 6 + Math.max(Math.max(icon.height, name.height + location.height), temp.height + weather.height)
 	
 	property alias name: name.text;
 	property alias location: location.text;
-	property alias icon: icon.source;
+	property alias icon: icon.icon;
 	property alias temp: temp.text;
 	property alias weather: weather.text;
 	
@@ -40,7 +42,7 @@ Rectangle {
 //  		anchors.fill: parent
 //  	}
 	
-	Image {
+	QIconItem {
 		id: icon
 		width: 64; height: 64;
 		anchors.centerIn: root
@@ -53,6 +55,7 @@ Rectangle {
 		anchors {
 			bottom: root.verticalCenter
 			right: icon.left
+			rightMargin: 10
 		}
 	}
 	
@@ -63,6 +66,7 @@ Rectangle {
 		anchors {
 			top: root.verticalCenter
 			right: icon.left
+			rightMargin: 10
 		}
 	}
 	
@@ -73,6 +77,7 @@ Rectangle {
 		anchors {
 			bottom: root.verticalCenter
 			left: icon.right
+			leftMargin: 10
 		}
 	}
 	
@@ -83,6 +88,7 @@ Rectangle {
 		anchors {
 			top: root.verticalCenter
 			left: icon.right
+			leftMargin: 10
 		}
 	}
 }

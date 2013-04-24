@@ -18,7 +18,9 @@
 
 
 #include "weather/location.h"
+
 #include <QDateTime>
+#include <KLocalizedString>
 
 using namespace Weather;
 
@@ -26,15 +28,20 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 	: QObject(parent)
 {
 	qDebug() << "New location: " + name + " - " + (location.isEmpty() ? "Auto-IP" : location);
+	
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
+	
+	setApi(new Weather::Service(this));
+	m_conditions = api()->create_conditions();
+	
 	setName(name);
 	setLocation(location);
 }
 
-Location::Location(QObject* parent): Location("Current", "", parent)
+Location::Location(QObject* parent): Location(i18nc("@title:tab", "Current"), "", parent)
 {
-	
+
 }
 
 
@@ -47,9 +54,12 @@ void Location::refresh()
 {
 	qDebug() << "Refreshing...";
 	if (location().isEmpty())
-		setDisplay("Auto-IP");
+		setDisplay(i18nc("@label", "Auto IP"));
 	else
 		setDisplay(location());
+	
+	conditions()->refresh();
+	
 	emit refreshed();
 }
 

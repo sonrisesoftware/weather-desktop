@@ -22,6 +22,7 @@
 
 #include "main.h"
 #include "weather/service.h"
+#include "weather/conditions.h"
 
 #include <QObject>
 #include <QString>
@@ -48,7 +49,8 @@ namespace Weather
 		Q_PROPERTY(QDateTime *lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged)
 		Q_PROPERTY(bool day READ isDay NOTIFY dayChanged)
 		
-		Q_PROPERTY(Weather::Service *api READ api)
+		Q_PROPERTY(Weather::Conditions *conditions READ conditions NOTIFY conditionsChanged)
+		Q_PROPERTY(Weather::Service *api READ api NOTIFY apiChanged)
 
 	public:
 		explicit Location(const QString& name, const QString& location, QObject* parent = 0);

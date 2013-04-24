@@ -38,10 +38,15 @@ WeatherDesktop::WeatherDesktop()
 	
 	setupGUI();
 	
+	m_autoLocation = new Weather::Location(this);
+	setCurrentLocation(autoLocation());
+	loadSettings();
+	
 	m_view = new QDeclarativeView(this);
 	m_view->rootContext()->setContextProperty("WeatherApp", this);
 	QObject::connect(m_view->engine(), SIGNAL(quit()), this, SLOT(test()));
 	m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+	m_view->engine()->addImportPath("/usr/lib/kde4/imports");
 	m_view->setSource(RESOURCE("qml/main.qml"));
 	Q_ASSERT(m_view->errors().length() == 0); // Check for errors in the qml file
 	
@@ -53,10 +58,6 @@ WeatherDesktop::WeatherDesktop()
 	setCentralWidget(m_view);
 	
 	menuBar()->setHidden(true);
-	
-	m_autoLocation = new Weather::Location(this);
-	setCurrentLocation(autoLocation());
-	loadSettings();
 }
 
 WeatherDesktop::~WeatherDesktop()

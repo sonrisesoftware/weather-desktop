@@ -28,6 +28,8 @@
 #include <KIO/JobUiDelegate>
 #include <KIO/NetAccess>
 
+KMainWindow *kmainwin;
+
 QString readFile(const QString& fileName, QString *error) {
 	QFile file(fileName);
 	file.open(QIODevice::ReadOnly);
@@ -63,4 +65,13 @@ QString download(const QUrl& url, QString *error) {
 	}		
 	
 	return text;
+}
+
+void KError(const QString& msg, const QString& error) {
+	KError("<b>" + msg + "</b><p><p>");
+}
+
+void KError(const QString& msg) {
+	KMessageBox::error(kmainwin, msg);
+	exit(-1);
 }
