@@ -1,5 +1,8 @@
 set(weather-desktop_QML
    main.qml
+   Form.qml
+   FormItem.qml
+   FormHeader.qml
    WeatherHeader.qml
    WeatherConditions.qml
  )

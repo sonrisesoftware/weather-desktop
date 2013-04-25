@@ -26,8 +26,8 @@ Rectangle {
 	color: "#99333333"
 	radius: 4
 	
-	implicitWidth: Math.max(header.width + 10, contents.width + 40)
-	implicitHeight: header.height + contents.height + 40
+	implicitWidth: Math.max(header.width + 10, left.width + right.width + 80)
+	implicitHeight: header.height + Math.max(left.height, right.height) + 40
 	
 	property string windchill;
 	property string dewpoint;
@@ -55,219 +55,103 @@ Rectangle {
 		
 		anchors { horizontalCenter: root.horizontalCenter; top: root.top;}
 	}
-	
-	Item {
-		id: contentBox
+		
+	Form {
+		id: left
+		fontSize: 14
+		headerSize: 16
+		color: "white"
+		
 		anchors {
-			top: header.bottom; topMargin: 20;
-			bottom: root.bottom; bottomMargin: 20;
-			left: root.left; leftMargin: 0;
-			right: root.right; rightMargin: 20;
+			top: header.bottom
+			topMargin: 20
+			left: root.left
+			leftMargin: 20
 		}
+		
+		FormHeader {
+			text: i18n("Temperature")
+		}
+		
+		FormItem {
+			label: i18n("Windchill:")
+			value: root.windchill
+		}
+		
+		FormItem {
+			label: i18n("Dew point:")
+			value: root.dewpoint
+		}
+		
+		FormItem {}
+		
+		FormHeader {
+			text: i18n("Conditions")
+		}
+		
+		FormItem {
+			label: i18n("Pressure:")
+			value: root.pressure
+		}
+				
+		FormItem {
+			label: i18n("Visibility:")
+			value: root.visibility
+		}
+		
+		FormItem {
+			label: i18n("Cloud Cover:")
+			value: root.clouds
+		}
+		
+	}
 	
-		Row {
-			id: contents
-			spacing: 60
-			
-			anchors {
-				centerIn: contentBox
-			}
-			
-			Column { // Left column of data
-				Text {
-					text: i18n("Temperature")
-					color: "white"
-					font.pixelSize: root.headerFontSize
-				}
+	Form { // Right column of data
+		id: right
+		fontSize: 14
+		headerSize: 16
+		color: "white"
+		
+		anchors {
+			top: header.bottom
+			topMargin: 20
+			right: root.right
+			rightMargin: 30
+		}
+		
+		FormHeader {
+			text: i18n("Wind")
+		}
 				
-				Row {
-					x: 15
-					spacing: 5
-					
-					Column { // The headers
-						
-						Text {
-							text: i18n("Windchill:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: i18n("Dew point:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-					}
-					
-					Column { // The actual data
-						Text {
-							text: root.windchill
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: root.dewpoint
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-					}
-				}
-				
-				Text {
-					text: " "
-				}
-				
-				Text {
-					text: i18n("Conditions")
-					color: "white"
-					font.pixelSize: root.headerFontSize
-				}
-				
-				Row {
-					x: 15
-					spacing: 5
-					
-					Column { // The headers
-						
-						Text {
-							text: i18n("Pressure:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: i18n("Visibility:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: i18n("Cloud Cover:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-					}
-					
-					Column { // The actual data
-						Text {
-							text: root.pressure
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: root.visibility
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: root.clouds
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-					}
-				}
-			}
-			
-			Column { // Right column of data
-				Text {
-					text: i18n("Wind")
-					color: "white"
-					font.pixelSize: root.headerFontSize
-				}
-				
-				Row {
-					x: 15
-					spacing: 5
-					
-					Column { // The headers
-						
-						Text {
-							text: i18n("Speed/Dir:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: i18n("Wind Gust:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-					}
-					
-					Column { // The actual data
-						Text {
-							text: root.wind
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: root.windgust
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-					}
-				}
-				
-				Text {
-					text: " "
-				}
-				
-				Text {
-					text: i18n("Moisture")
-					color: "white"
-					font.pixelSize: root.headerFontSize
-				}
-				
-				Row {
-					x: 15
-					spacing: 5
-					
-					Column { // The headers
-						
-						Text {
-							text: i18n("Humidity:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: i18n("Rainfall:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: i18n("Snow depth:")
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-					}
-					
-					Column { // The actual data
-						Text {
-							text: root.humidity
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: root.rainfall
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-						
-						Text {
-							text: root.snowdepth
-							color: "white"
-							font.pixelSize: root.dataFontSize
-						}
-					}
-				}
-			}
+		FormItem {
+			label: i18n("Speed/Dir:")
+			value: root.wind
+		}
+		
+		FormItem {
+			label: i18n("Wind Gust:")
+			value: root.windgust
+		}
+		
+		FormItem {}
+		
+		FormHeader {
+			text: i18n("Moisture")
+		}
+		
+		FormItem {
+			label: i18n("Humidity:")
+			value: root.humidity
+		}
+		
+		FormItem {
+			label: i18n("Rainfall:")
+			value: root.rainfall
+		}
+		
+		FormItem {
+			label: i18n("Snow depth:")
+			value: root.snowdepth
 		}
 	}
 }
