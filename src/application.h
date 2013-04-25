@@ -16,20 +16,42 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#ifndef MAIN_H
-#define MAIN_H
 
-#include <QDebug>
-#include <QUrl>
+#ifndef APPLICATION_H
+#define APPLICATION_H
 
-#include <KDE/KStandardDirs>
-#include <KDE/KCmdLineArgs>
-#include <KDE/KAboutData>
+#include <KDE/KApplication>
 #include <KDE/KMainWindow>
 
-#define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("data", 	\
-		KCmdLineArgs::aboutData()->appName() + QString("/") + file))
-		
-QString download(const QUrl& url, QString *error);
+#include <QDeclarativeEngine>
+#include "weather-desktop.h"
 
-#endif
+class Application : public KApplication
+{
+	Q_OBJECT
+
+public:
+	Application();
+    virtual ~Application();
+	
+	static void setupDeclarativeBindings(QDeclarativeEngine* declarativeEngine);
+	
+	static KMainWindow *window() {
+		return m_window;
+	}
+	
+	static void setWindow(KMainWindow *window) {
+		Q_ASSERT(m_window == nullptr);
+		m_window = window;
+	}
+	
+	static void error(const QString& msg, const QString& error);
+	static void error(const QString& msg);
+	
+private:
+	void registerQMLTypes();
+	
+	static KMainWindow *m_window;
+};
+
+#endif // APPLICATION_H

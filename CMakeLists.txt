@@ -1,6 +1,7 @@
 project(weather-desktop)
 
 find_package(KDE4 REQUIRED)
+find_package(KDeclarative REQUIRED)
 include (KDE4Defaults)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/qclassgen")

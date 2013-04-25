@@ -16,20 +16,58 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#ifndef MAIN_H
-#define MAIN_H
 
-#include <QDebug>
-#include <QUrl>
+#include "application.h"
 
-#include <KDE/KStandardDirs>
-#include <KDE/KCmdLineArgs>
-#include <KDE/KAboutData>
-#include <KDE/KMainWindow>
+#include "weather/location.h"
+#include "weather/service.h"
+#include "weather/conditions.h"
 
-#define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("data", 	\
-		KCmdLineArgs::aboutData()->appName() + QString("/") + file))
-		
-QString download(const QUrl& url, QString *error);
+// Qt headers
+#include <QtDeclarative>
 
-#endif
+// KDE headers
+#include <KDE/KMessageBox>
+#include <kdeclarative.h>
+
+KMainWindow *Application::m_window = nullptr;
+
+Application::Application(): KApplication(true)
+{
+	registerQMLTypes();
+}
+
+Application::~Application()
+{
+
+}
+
+void Application::registerQMLTypes()
+{
+	qmlRegisterType<WeatherDesktop>();
+	qmlRegisterType<Weather::Location>();
+	qmlRegisterType<Weather::Service>();
+	qmlRegisterType<Weather::Conditions>();
+}
+
+void Application::setupDeclarativeBindings(QDeclarativeEngine* declarativeEngine)
+{
+    KDeclarative kDeclarative;
+    kDeclarative.setDeclarativeEngine(declarativeEngine);
+    kDeclarative.initialize();
+    kDeclarative.setupBindings();
+
+    QScriptEngine* engine = kDeclarative.scriptEngine();
+    QScriptValue globalObject = engine->globalObject();
+}
+
+void Application::error(const QString& msg, const QString& error) {
+	Application::error("<b>" + msg + "</b><p><p>");
+}
+
+void Application::error(const QString& msg) {
+	KMessageBox::error(window(), msg);
+	exit(-1);
+}
+
+#include "application.moc"

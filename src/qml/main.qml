@@ -17,9 +17,6 @@
  ***************************************************************************/
 
 import QtQuick 1.1
-//import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
-import org.kde.qtextracomponents 0.1
-
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
@@ -59,8 +56,20 @@ Rectangle {
 		WeatherConditions {
 			id: conditions
 			anchors.centerIn: weatherBox
+			
 			windchill: WeatherApp.currentLocation.conditions.windchill;
 			dewpoint: WeatherApp.currentLocation.conditions.dewpoint;
+			
+			pressure: WeatherApp.currentLocation.conditions.pressure;
+			visibility: WeatherApp.currentLocation.conditions.visibility;
+			clouds: WeatherApp.currentLocation.conditions.clouds;
+			
+			wind: WeatherApp.currentLocation.conditions.wind;
+			windgust: WeatherApp.currentLocation.conditions.windgust;
+			
+			humidity: WeatherApp.currentLocation.conditions.humidity;
+			rainfall: WeatherApp.currentLocation.conditions.rainfall;
+			snowdepth: WeatherApp.currentLocation.conditions.snowdepth;
 		}
 		
 		anchors {

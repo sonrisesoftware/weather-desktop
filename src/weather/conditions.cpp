@@ -37,11 +37,24 @@ Conditions::~Conditions()
 void Conditions::refresh()
 {
 	qDebug() << "Refreshing conditions...";
+	
 	setIcon(KIcon("weather-clouds"));
+	setWeather("Partly Cloudy");	
 	setTemp("0");
+	
 	setWindchill("0");
 	setDewpoint("0");
-	setWeather("Partly Cloudy");	
+	
+	setPressure("29.92 inHg");
+	setVisibility("10 mi");
+	setClouds("25%");
+	
+	setWind("5 mph from the North");
+	setWindgust("10 mph");
+	
+	setHumidity("70%");
+	setRainfall("0.5 in");
+	setSnowdepth("N/A");
 }
 
 void Weather::Conditions::updateColor(const QString& temp)

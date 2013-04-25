@@ -17,9 +17,6 @@
  ***************************************************************************/
 
 import QtQuick 1.1
-//import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
-import org.kde.qtextracomponents 0.1
-
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
@@ -35,7 +32,7 @@ Rectangle {
 	
 	property alias name: name.text;
 	property alias location: location.text;
-	property alias icon: icon.icon;
+	property alias icon: icon.source;
 	property alias temp: temp.text;
 	property alias weather: weather.text;
 	
@@ -45,7 +42,7 @@ Rectangle {
 //  		anchors.fill: parent
 //  	}
 	
-	QIconItem {
+	PlasmaCore.IconItem {
 		id: icon
 		width: 64; height: 64;
 		anchors.centerIn: root

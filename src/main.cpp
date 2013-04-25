@@ -19,12 +19,8 @@
 // application header
 #include "main.h"
 #include "weather-desktop.h"
-#include "weather/location.h"
-#include "weather/service.h"
-#include "weather/conditions.h"
 
-// Qt headers
-#include <QtDeclarative>
+#include "application.h"
 
 // KDE headers
 #include <KDE/KApplication>
@@ -55,14 +51,9 @@ int main(int argc, char **argv)
 	
 	KCmdLineOptions options;
 	KCmdLineArgs::addCmdLineOptions(options);
-	KApplication app;
+	Application app;
 
 	qDebug() << "Debugging is enabled.";
-	
-	qmlRegisterType<WeatherDesktop>();
-	qmlRegisterType<Weather::Location>();
-	qmlRegisterType<Weather::Service>();
-	qmlRegisterType<Weather::Conditions>();
 	
 	// See if we are starting with session management
 	if (app.isSessionRestored())
@@ -71,9 +62,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		// Test
 		WeatherDesktop *mainWindow = new WeatherDesktop;
-		kmainwin = mainWindow;
 		mainWindow->show();
 
 		// For debugging purposes

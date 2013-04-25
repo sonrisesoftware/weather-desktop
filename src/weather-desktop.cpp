@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "main.h"
+#include "application.h"
 #include "weather-desktop.h"
 #include "settings.h"
 
@@ -44,12 +45,17 @@ WeatherDesktop::WeatherDesktop()
 	
 	m_view = new QDeclarativeView(this);
 	m_view->rootContext()->setContextProperty("WeatherApp", this);
-	QObject::connect(m_view->engine(), SIGNAL(quit()), this, SLOT(test()));
+	m_view->setStyleSheet("background-color: transparent;");
 	m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
-	m_view->engine()->addImportPath("/usr/lib/kde4/imports");
+	
+	Application::setupDeclarativeBindings(m_view->engine());
+	QObject::connect(m_view->engine(), SIGNAL(quit()), this, SLOT(test()));
+	
 	m_view->setSource(RESOURCE("qml/main.qml"));
+	
 	Q_ASSERT(m_view->errors().length() == 0); // Check for errors in the qml file
 	
+	// Bind the minimum size
 	QDeclarativeProperty(m_view->rootObject(), "implicitWidth").connectNotifySignal(this, SLOT(onImplicitWidthChanged()));
 	QDeclarativeProperty(m_view->rootObject(), "implicitHeight").connectNotifySignal(this, SLOT(onImplicitHeightChanged()));
 	onImplicitWidthChanged();
@@ -58,6 +64,8 @@ WeatherDesktop::WeatherDesktop()
 	setCentralWidget(m_view);
 	
 	menuBar()->setHidden(true);
+	
+	Application::setWindow(this);
 }
 
 WeatherDesktop::~WeatherDesktop()
