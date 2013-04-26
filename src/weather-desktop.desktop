@@ -5,4 +5,4 @@ Icon=weather-desktop
 Type=Application
 X-DocPath=weather-desktop/index.html
 GenericName=Weather Viewer
-Category=Qt;KDE;Utility
+Categories=Qt;KDE;Utility
