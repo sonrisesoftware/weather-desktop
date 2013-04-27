@@ -18,6 +18,8 @@
 
 
 #include "weather/location.h"
+#include "weather/service.h"
+#include "weather/conditions.h"
 
 #include <QDateTime>
 #include <KLocalizedString>
@@ -32,11 +34,13 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
 	
-	setApi(new Weather::Service(this));
+	setApi(Weather::Service::create(this));
 	m_conditions = api()->create_conditions();
+	qDebug() << "Done with conditions.";
 	
 	setName(name);
 	setLocation(location);
+	qDebug() << "Done.";
 }
 
 Location::Location(QObject* parent): Location(i18nc("@title:tab", "Current"), "", parent)

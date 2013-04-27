@@ -20,11 +20,15 @@
 #include "weather/service.h"
 #include "weather/location.h"
 #include "weather/conditions.h"
+#include "worldweather/worldweatheronline.h"
 
 #include <QUrl>
 #include <QNetworkAccessManager>
 
 using namespace Weather;
+
+QString Weather::Service::m_apiKey = "";
+Weather::Provider Weather::Service::m_provider = Weather::WorldWeatherOnline;
 
 Service::Service(Location* location): QObject(location)
 {
@@ -39,6 +43,7 @@ Service::~Service()
 QVariantMap Weather::Service::json_call(QString* error, const QString& call)
 {
 	QString text = download(QUrl(prefix() + '/' + call), error);
+	qDebug() << text;
 	
 	if (!error->isEmpty())
 		return QVariantMap();
@@ -59,9 +64,22 @@ QVariantMap Weather::Service::json_call(QString* error, const QString& call)
 	return result;
 }
 
-Weather::Conditions* Weather::Service::create_conditions()
+Service* Weather::Service::create(Location *location)
 {
-	return new Conditions(location());
+	qDebug() << "Creating service provider...";
+	if (weatherProvider() == Weather::WorldWeatherOnline) {
+		return new WorldWeatherOnline::WorldWeatherOnline(location);
+	} else {
+		qFatal("Invalid service provider!");
+		return nullptr;
+	}
 }
+
+void Weather::Service::setWeatherProvider(Weather::Provider provider)
+{
+	m_provider = provider;
+}
+
+
 
 #include "weather/service.moc"

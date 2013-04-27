@@ -16,53 +16,31 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "main.h"
-#include "weather/conditions.h"
-#include "weather/location.h"
-#include <KIcon>
 
-using namespace Weather;
+#include "worldweather/worldweatheronline.h"
+#include "worldweather/conditions.h"
 
-Conditions::Conditions(Weather::Location *location): QObject(location)
+WorldWeatherOnline::WorldWeatherOnline::WorldWeatherOnline(Weather::Location* location): Weather::Service(location)
 {
-	qDebug() << "Generic conditions!";
-	Q_ASSERT(location != nullptr);
+	qDebug() << "WorldWeatherOnline service!";
 	setLocation(location);
-	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
 }
 
-Conditions::~Conditions()
+QString WorldWeatherOnline::WorldWeatherOnline::prefix()
 {
-
+    return "http://api.worldweatheronline.com/free/v1/";
 }
 
-void Conditions::refresh()
+Weather::Conditions* WorldWeatherOnline::WorldWeatherOnline::create_conditions()
 {
-	qDebug() << "Refreshing conditions...";
-	
-	setIcon(KIcon("weather-clouds"));
-	setWeather("Partly Cloudy");	
-	setTemp("0");
-	
-	setWindchill("0");
-	setDewpoint("0");
-	
-	setPressure("29.92 inHg");
-	setVisibility("10 mi");
-	setClouds("25%");
-	
-	setWind("5 mph from the North");
-	setWindgust("10 mph");
-	
-	setHumidity("70%");
-	setRainfall("0.5 in");
-	setSnowdepth("N/A");
+	qDebug() << "Creating conditions for WWO";
+	return new WorldWeatherConditions(location());
 }
 
-void Weather::Conditions::updateColor(const QString& temp)
+QVariantMap WorldWeatherOnline::WorldWeatherOnline::json_query(QString* error, const QString& query, const QString& params)
 {
-	qDebug() << "Updating color...";
+	return json_call(error, query + ".ashx?q=" + location()->location() + "&format=json&" + params + "&key=" + Weather::Service::apiKey());
 }
 
 
-#include "weather/conditions.moc"
+#include "worldweather/worldweatheronline.moc"

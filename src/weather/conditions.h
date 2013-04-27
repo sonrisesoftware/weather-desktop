@@ -31,7 +31,7 @@ namespace Weather
 {
 	class Location;
 	
-	class Conditions: QObject
+	class Conditions: public QObject
 	{
 		Q_OBJECT
 		
@@ -60,7 +60,7 @@ namespace Weather
 		virtual ~Conditions();
 		
 	public slots:
-		void refresh();
+		virtual void refresh() = 0;
 		
 	signals:
 		void refreshed();

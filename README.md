@@ -31,7 +31,7 @@ _**Warning:** this software is in a pre-release stage and is under active develo
 
  * Development by Michael Spencer (@iBeliever)
  * Design by Michael Spencer (@iBeliever) and Christopher Spencer
- * Powered by ??? (Provider has not been selected yet).
+ * Powered by World Weather Online (Provider has not been selected yet).
 
 ### Licensing ###
 

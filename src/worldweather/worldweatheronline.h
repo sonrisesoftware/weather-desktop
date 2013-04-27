@@ -16,53 +16,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "main.h"
-#include "weather/conditions.h"
-#include "weather/location.h"
-#include <KIcon>
 
-using namespace Weather;
+#ifndef WORLDWEATHERONLINE_H
+#define WORLDWEATHERONLINE_H
 
-Conditions::Conditions(Weather::Location *location): QObject(location)
-{
-	qDebug() << "Generic conditions!";
-	Q_ASSERT(location != nullptr);
-	setLocation(location);
-	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
+#include "weather/service.h"
+#include "worldweather/conditions.h"
+
+namespace WorldWeatherOnline {
+	class WorldWeatherOnline : public Weather::Service
+	{
+		Q_OBJECT
+
+	public:
+		explicit WorldWeatherOnline(Weather::Location* location);
+		
+		virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "");
+		
+		virtual Weather::Conditions *create_conditions();
+
+	protected:
+		virtual QString prefix();
+		
+	#include "worldweather/worldweatheronline.gen"
+	};
 }
 
-Conditions::~Conditions()
-{
-
-}
-
-void Conditions::refresh()
-{
-	qDebug() << "Refreshing conditions...";
-	
-	setIcon(KIcon("weather-clouds"));
-	setWeather("Partly Cloudy");	
-	setTemp("0");
-	
-	setWindchill("0");
-	setDewpoint("0");
-	
-	setPressure("29.92 inHg");
-	setVisibility("10 mi");
-	setClouds("25%");
-	
-	setWind("5 mph from the North");
-	setWindgust("10 mph");
-	
-	setHumidity("70%");
-	setRainfall("0.5 in");
-	setSnowdepth("N/A");
-}
-
-void Weather::Conditions::updateColor(const QString& temp)
-{
-	qDebug() << "Updating color...";
-}
-
-
-#include "weather/conditions.moc"
+#endif // WORLDWEATHERONLINE_H

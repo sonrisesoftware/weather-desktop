@@ -18,6 +18,7 @@
 
 
 #include "application.h"
+#include "api_key.h"
 
 #include "weather/location.h"
 #include "weather/service.h"
@@ -35,6 +36,8 @@ KMainWindow *Application::m_window = nullptr;
 Application::Application(): KApplication(true)
 {
 	registerQMLTypes();
+	Weather::Service::setWeatherProvider(Weather::WorldWeatherOnline);
+	Weather::Service::setAPIKey(WWO_API_KEY);
 }
 
 Application::~Application()

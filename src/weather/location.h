@@ -21,8 +21,6 @@
 #define LOCATION_H
 
 #include "main.h"
-#include "weather/service.h"
-#include "weather/conditions.h"
 
 #include <QObject>
 #include <QString>
@@ -32,6 +30,8 @@
 
 namespace Weather
 {
+	class Conditions;
+	class Service;
 
 	class Location : public QObject
 	{

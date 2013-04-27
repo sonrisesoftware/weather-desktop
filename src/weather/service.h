@@ -28,28 +28,40 @@ namespace Weather
 {
 	class Location;
 	class Conditions;
+	
+	enum Provider {
+		WorldWeatherOnline,
+		Wunderground
+	};
 
 	class Service : public QObject
 	{
 		Q_OBJECT
 		
-		Q_PROPERTY(QString apiKey READ apiKey NOTIFY apiKeyChanged)
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
 
 	public:
 		explicit Service(Location* location);
 		virtual ~Service();
 
-		//virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "") = 0;
+		virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "") = 0;
 		
-		//Weather::Conditions *create_conditions() = 0;
-		Weather::Conditions *create_conditions();
+		virtual Weather::Conditions *create_conditions() = 0;
+		
+		static Service *create(Location *location);
+		static void setWeatherProvider(Weather::Provider provider);
+		static void setAPIKey(const QString& apiKey) { m_apiKey = apiKey; }
+		static Weather::Provider weatherProvider() { return m_provider; }
+		static QString apiKey() { return m_apiKey; }
 		
 	protected:
 		QVariantMap json_call(QString *error, const QString& call);
 		
-		//virtual QString prefix() = 0;
-		virtual QString prefix() { return ""; };
+		virtual QString prefix() = 0;
+		
+	private:
+		static Weather::Provider m_provider;
+		static QString m_apiKey;
 		
 	#include "weather/service.gen"
 	};
