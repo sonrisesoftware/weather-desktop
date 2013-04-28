@@ -17,6 +17,7 @@
  ***************************************************************************/
 
 #include "main.h"
+#include <application.h>
 #include "weather/service.h"
 #include "weather/location.h"
 #include "weather/conditions.h"
@@ -62,6 +63,21 @@ QVariantMap Weather::Service::json_call(QString* error, const QString& call)
 	}
 	
 	return result;
+}
+
+QVariantMap Service::json_query(const QString& query, const QString& params)
+{
+	QString error;
+	QVariantMap map = json_query(&error, query, params);
+	qDebug() << "Error? " + error;
+	if (!error.isEmpty()) {
+		qDebug() << "THERE IS AN ERROR!!!!";
+		Application::error("Unable to download weather:", error);
+	} else {
+		qDebug() << "No errors found...";
+	}
+	
+	return map;
 }
 
 Service* Weather::Service::create(Location *location)

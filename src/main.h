@@ -21,6 +21,7 @@
 
 #include <QDebug>
 #include <QUrl>
+#include <qglobal.h>
 
 #include <KDE/KStandardDirs>
 #include <KDE/KCmdLineArgs>

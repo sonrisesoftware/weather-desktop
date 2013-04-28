@@ -45,6 +45,7 @@ namespace Weather
 		virtual ~Service();
 
 		virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "") = 0;
+		QVariantMap json_query(const QString& query, const QString& params = "");
 		
 		virtual Weather::Conditions *create_conditions() = 0;
 		

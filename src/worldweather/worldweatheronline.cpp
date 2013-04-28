@@ -39,7 +39,13 @@ Weather::Conditions* WorldWeatherOnline::WorldWeatherOnline::create_conditions()
 
 QVariantMap WorldWeatherOnline::WorldWeatherOnline::json_query(QString* error, const QString& query, const QString& params)
 {
-	return json_call(error, query + ".ashx?q=" + location()->location() + "&format=json&" + params + "&key=" + Weather::Service::apiKey());
+	QVariantMap map = json_call(error, query + ".ashx?q=" + location()->location().replace(' ', '+') + "&format=json&" + params + "&key=" + Weather::Service::apiKey());
+	if (map["data"].toMap().contains("error")) {
+		qDebug() << "ERROR!";
+		*error = map["data"].toMap()["error"].toList()[0].toMap()["msg"].toString();
+	}
+	
+	return map;
 }
 
 

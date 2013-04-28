@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-
+#include "main.h"
 #include "worldweather/conditions.h"
 #include "weather/service.h"
 
@@ -35,10 +35,21 @@ WorldWeatherConditions::~WorldWeatherConditions()
 void WorldWeatherConditions::refresh()
 {
 	qDebug() << "Refreshing WWO!";
-	QString error;
 	Q_ASSERT(location() != nullptr);
 	Q_ASSERT(location()->api() != nullptr);
-	setTemp(location()->api()->json_query(&error, "weather", "")["weather"].toMap()["temp_C"].toString());
+	QString error;
+	QVariantMap data = location()->api()->json_query(&error, "weather");
+	if (!error.isEmpty()) return;
+	qDebug() << "List: " << data["data"].toMap()["current_condition"].toList();
+	data = data["data"].toMap()["current_condition"].toList()[0].toMap();
+	setTemp(data["temp_F"].toString()); // TODO: Unit conversion
+	setVisibility(data["visibility"].toString() + "%");
+	setWeather(data["weatherDesc"].toList()[0].toMap()["value"].toString());
+	setPressure(data["pressure"].toString() + " millibars"); //TODO: Unit conversion
+	setClouds(data["cloudcover"].toString() + "%");
+	setHumidity(data["humidity"].toString() + "%");
+	setRainfall(data["precipMM"].toString() + " mm"); //TODO: Unit conversion
+	setWind(data["windspeedMiles"].toString() + " mph from the " + data["winddir16Point"].toString()); //TODO: Unit conversion
 }
 
 #include "worldweather/conditions.moc"

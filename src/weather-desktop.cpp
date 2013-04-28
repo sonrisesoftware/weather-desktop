@@ -91,7 +91,7 @@ void WeatherDesktop::onImplicitHeightChanged()
 void WeatherDesktop::test()
 {
 	delete currentLocation();
-	setCurrentLocation(new Weather::Location("Home", "Saint+Louis,MO", this));
+	setCurrentLocation(new Weather::Location("Home", "Saint Louis, MO", this));
 }
 
 void WeatherDesktop::loadSettings()

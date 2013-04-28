@@ -65,12 +65,13 @@ void Application::setupDeclarativeBindings(QDeclarativeEngine* declarativeEngine
 }
 
 void Application::error(const QString& msg, const QString& error) {
-	Application::error("<b>" + msg + "</b><p><p>");
+	Application::error("<b>" + msg + "</b><p><p>" + error);
 }
 
 void Application::error(const QString& msg) {
 	KMessageBox::error(window(), msg);
-	exit(-1);
+	//qFatal(msg.toUtf8());
+	::exit(-1);
 }
 
 #include "application.moc"
