@@ -20,49 +20,21 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Rectangle {
+WeatherPanel {
 	id: root
-	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
-	implicitHeight: header.implicitHeight + weatherView.implicitHeight + 60;
 	
-	property variant appStyle: Style {
-		id: style
-	}
+	//property Style style;
+	//color: Qt.rgba(0.5,0.25,0.25,0.75)
+	property alias text: msg.text
+	width: 210
+	height: Math.max(160, msg.paintedHeight + 10)
 	
-	Image {
-		id: background
-		source: "images/background.jpg"
-		anchors.fill: parent
-	}
-	
-	WeatherHeader {
-		id: header
-		anchors.top: root.top
-		anchors.horizontalCenter: root.horizontalCenter
-		anchors.topMargin: 20
-		
-		name: WeatherApp.currentLocation.name;
-		location: WeatherApp.currentLocation.display;
-		temp: WeatherApp.currentLocation.conditions.temp;
-		weather: WeatherApp.currentLocation.conditions.weather;
-		icon: WeatherApp.currentLocation.conditions.icon;
-	}
-		
-	WeatherView {
-		id: weatherView
-			
-		anchors {
-			top: header.bottom; topMargin: 20;
-			bottom: root.bottom; bottomMargin: 20;
-			left: root.left; leftMargin: 20;
-			right: root.right; rightMargin: 20;
-		}
-	}
-	
-	MouseArea {
-		anchors.fill: parent
-		onClicked: {
-			Qt.quit();
-		}
+	Text {
+		id: msg
+		color: appStyle.textColor
+		width: 200
+		wrapMode: Text.Wrap
+		font.pixelSize: appStyle.headerColor
+		anchors.centerIn: root
 	}
 }

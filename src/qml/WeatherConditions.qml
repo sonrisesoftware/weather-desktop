@@ -20,13 +20,8 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Rectangle {
+WeatherPanel {
 	id: root
-	
-	//color: "#99333333"
-	color: "#00000000"
-	
-	radius: 4
 	
 	implicitWidth: Math.max(header.width + 10, left.width + right.width + 80)
 	implicitHeight: header.height + Math.max(left.height, right.height) + 40
@@ -45,18 +40,7 @@ Rectangle {
 	property string rainfall;
 	property string snowdepth;
 	
-	property int dataFontSize: 14;
-	property int headerFontSize: 16;
-	property int titleFontSize: 18;
-	
-	Text {
-		id: header
-		text: i18n("Current Conditions")
-		color: "white"
-		font.pixelSize: root.titleFontSize
-		
-		anchors { horizontalCenter: root.horizontalCenter; top: root.top;}
-	}
+	title: i18n("Current Conditions")
 		
 	Form {
 		id: left

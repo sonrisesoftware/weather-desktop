@@ -22,18 +22,16 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
 	id: root
-	color: "#99333333" // temporary, for visualization - will be transparent
-	//color: "#00000000" // transparent
-	radius: 6
-	implicitWidth: childrenRect.width
-	implicitHeight: childrenRect.height
+	//color: "#99333333" // temporary, for visualization - will be transparent
+	color: "#00000000" // transparent
+	//radius: 6
 	
 	state: "conditions"
 	
 	WeatherConditions {
 		id: conditions
 		anchors.centerIn: root
-		visible: false
+		opacity: 0
 		
 		windchill: WeatherApp.currentLocation.conditions.windchill;
 		dewpoint: WeatherApp.currentLocation.conditions.dewpoint;
@@ -48,56 +46,41 @@ Rectangle {
 		humidity: WeatherApp.currentLocation.conditions.humidity;
 		rainfall: WeatherApp.currentLocation.conditions.rainfall;
 		snowdepth: WeatherApp.currentLocation.conditions.snowdepth;
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
 	}
 	
-	Text {
+	ErrorDialog {
 		id: error
+		opacity: 0
 		anchors.centerIn: root
-		visible: false
-		width: 200
-		wrapMode: Text.Wrap
-		text: "<b>Unable to access weather:</b><p><p>" + WeatherApp.currentLocation.errorMessage
-	}
-	
-	Behavior on implicitHeight {
-		NumberAnimation {
-             easing {
-                 type: Easing.OutElastic
-                 amplitude: 1.0
-                 period: 0.5
-             }
-         }
-	}
-	
-	Behavior on implicitWidth {
-		NumberAnimation {
-             easing {
-                 type: Easing.OutElastic
-                 amplitude: 1.0
-                 period: 0.5
-             }
-         }
+		title: "Unable to access weather"
+		text: WeatherApp.currentLocation.errorMessage
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
 	}
 	
 	states: [
 		State {
 			name: "conditions"
 			when: (WeatherApp.currentLocation.error != true)
-			PropertyChanges { target: conditions; visible: true; restoreEntryValues: true; }
-			PropertyChanges { target: root;  color: "#99333333"; restoreEntryValues: true; }
+			PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
 		},
 		State {
 			name: "error"
 			when: (WeatherApp.currentLocation.error == true)
-			PropertyChanges { target: error; visible: true; restoreEntryValues: true; }
-			PropertyChanges { target: root;  color: Qt.rgba(0.5,0.25,0.25,0.75); restoreEntryValues: true; }
+			PropertyChanges { target: error; opacity: 1; restoreEntryValues: true; }
 		}
 	]
 	
-	/*transitions: [
+	transitions: [
 		Transition {
-			from 
-			NumberAnimation { properties: "root.scale"; from: 0; to: 1; duration: 200; easing {type: Easing.OutBack; overshoot: 500} }
-		}		
-	]*/
+			to:	"*"
+			NumberAnimation { property: "opacity"; duration: 1000 }
+		}
+	]
 }

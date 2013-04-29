@@ -22,47 +22,19 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
 	id: root
-	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
-	implicitHeight: header.implicitHeight + weatherView.implicitHeight + 60;
 	
-	property variant appStyle: Style {
-		id: style
-	}
+	color: appStyle.panelColor;
+	radius: 4;
 	
-	Image {
-		id: background
-		source: "images/background.jpg"
-		anchors.fill: parent
-	}
+	property alias title: header.text
+	property alias header: header
+	//property Style style;
 	
-	WeatherHeader {
+	Text {
 		id: header
-		anchors.top: root.top
-		anchors.horizontalCenter: root.horizontalCenter
-		anchors.topMargin: 20
+		color: appStyle.textColor;
+		font.pixelSize: appStyle.titleFontSize
 		
-		name: WeatherApp.currentLocation.name;
-		location: WeatherApp.currentLocation.display;
-		temp: WeatherApp.currentLocation.conditions.temp;
-		weather: WeatherApp.currentLocation.conditions.weather;
-		icon: WeatherApp.currentLocation.conditions.icon;
-	}
-		
-	WeatherView {
-		id: weatherView
-			
-		anchors {
-			top: header.bottom; topMargin: 20;
-			bottom: root.bottom; bottomMargin: 20;
-			left: root.left; leftMargin: 20;
-			right: root.right; rightMargin: 20;
-		}
-	}
-	
-	MouseArea {
-		anchors.fill: parent
-		onClicked: {
-			Qt.quit();
-		}
+		anchors { horizontalCenter: root.horizontalCenter; top: root.top;}
 	}
 }
