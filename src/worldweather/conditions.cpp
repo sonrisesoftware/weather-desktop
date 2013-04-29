@@ -39,7 +39,14 @@ void WorldWeatherConditions::refresh()
 	Q_ASSERT(location()->api() != nullptr);
 	QString error;
 	QVariantMap data = location()->api()->json_query(&error, "weather");
-	if (!error.isEmpty()) return;
+	
+	if (!error.isEmpty()) {
+		location()->setError(true);
+		location()->setErrorMessage(error);
+		return;
+	}
+	
+	
 	qDebug() << "List: " << data["data"].toMap()["current_condition"].toList();
 	data = data["data"].toMap()["current_condition"].toList()[0].toMap();
 	setTemp(data["temp_F"].toString()); // TODO: Unit conversion

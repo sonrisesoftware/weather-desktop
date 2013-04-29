@@ -23,7 +23,9 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 Rectangle {
 	id: root
 	
-	color: "#99333333"
+	//color: "#99333333"
+	color: "#00000000"
+	
 	radius: 4
 	
 	implicitWidth: Math.max(header.width + 10, left.width + right.width + 80)

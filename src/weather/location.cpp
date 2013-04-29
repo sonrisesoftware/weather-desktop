@@ -57,6 +57,8 @@ Location::~Location()
 void Location::refresh()
 {
 	qDebug() << "Refreshing...";
+	setError(false); // Start fresh
+	
 	if (location().isEmpty())
 		setDisplay(i18nc("@label", "Auto IP"));
 	else

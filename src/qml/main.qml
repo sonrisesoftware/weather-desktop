@@ -22,8 +22,8 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
 	id: root
-	implicitWidth: Math.max(header.implicitWidth + 40, weatherBox.implicitWidth + 40);
-	implicitHeight: header.implicitHeight + weatherBox.implicitHeight + 60;
+	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
+	implicitHeight: header.implicitHeight + weatherView.implicitHeight + 60;
 	
 	Image {
 		id: background
@@ -46,30 +46,11 @@ Rectangle {
 	
 	Rectangle {
 		id: weatherBox
-		//color: "#99333333" // temporary, for visualization - will be transparent
-		color: "#00000000" // transparent
-		radius: 4
+		color: Qt.rgba(0,0,0,0)
 		
-		implicitWidth: conditions.implicitWidth;
-		implicitHeight: conditions.implicitHeight;
-		
-		WeatherConditions {
-			id: conditions
+		WeatherView {
+			id: weatherView
 			anchors.centerIn: weatherBox
-			
-			windchill: WeatherApp.currentLocation.conditions.windchill;
-			dewpoint: WeatherApp.currentLocation.conditions.dewpoint;
-			
-			pressure: WeatherApp.currentLocation.conditions.pressure;
-			visibility: WeatherApp.currentLocation.conditions.visibility;
-			clouds: WeatherApp.currentLocation.conditions.clouds;
-			
-			wind: WeatherApp.currentLocation.conditions.wind;
-			windgust: WeatherApp.currentLocation.conditions.windgust;
-			
-			humidity: WeatherApp.currentLocation.conditions.humidity;
-			rainfall: WeatherApp.currentLocation.conditions.rainfall;
-			snowdepth: WeatherApp.currentLocation.conditions.snowdepth;
 		}
 		
 		anchors {

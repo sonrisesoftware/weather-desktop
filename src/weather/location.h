@@ -51,6 +51,9 @@ namespace Weather
 		
 		Q_PROPERTY(Weather::Conditions *conditions READ conditions NOTIFY conditionsChanged)
 		Q_PROPERTY(Weather::Service *api READ api NOTIFY apiChanged)
+		
+		Q_PROPERTY(bool error READ hasError WRITE setError NOTIFY errorChanged)
+		Q_PROPERTY(QString errorMessage READ errorMessage WRITE setErrorMessage NOTIFY errorMessageChanged)
 
 	public:
 		explicit Location(const QString& name, const QString& location, QObject* parent = 0);
