@@ -24,7 +24,7 @@ Rectangle {
 	id: root
 	//width: 400
 	//height: 64
-	color: "#99333333"
+	color: appStyle.panelColor
 	radius: 4
 	
 	implicitWidth: 400
@@ -50,7 +50,7 @@ Rectangle {
 	
 	Text {
 		id: name
-		color: "white"
+		color: appStyle.textColor
 		font.pixelSize: 20
 		anchors {
 			bottom: root.verticalCenter
@@ -61,7 +61,7 @@ Rectangle {
 	
 	Text {
 		id: location
-		color: "white"
+		color: appStyle.textColor
 		font.pixelSize: 16
 		anchors {
 			top: root.verticalCenter
@@ -72,7 +72,7 @@ Rectangle {
 	
 	Text {
 		id: temp
-		color: "white"
+		color: appStyle.textColor
 		font.pixelSize: 20
 		anchors {
 			bottom: root.verticalCenter
@@ -84,7 +84,7 @@ Rectangle {
 	Text {
 		id: weather
 		font.pixelSize: 16
-		color: "white"
+		color: appStyle.textColor
 		anchors {
 			top: root.verticalCenter
 			left: icon.right

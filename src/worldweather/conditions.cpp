@@ -34,6 +34,7 @@ WorldWeatherConditions::~WorldWeatherConditions()
 
 void WorldWeatherConditions::refresh()
 {
+	Weather::Conditions::refresh();
 	qDebug() << "Refreshing WWO!";
 	Q_ASSERT(location() != nullptr);
 	Q_ASSERT(location()->api() != nullptr);
