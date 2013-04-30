@@ -26,7 +26,7 @@ Rectangle {
 	color: "#00000000" // transparent
 	//radius: 6
 	
-	state: "conditions"
+	property string view: "conditions"
 	
 	WeatherConditions {
 		id: conditions
@@ -67,20 +67,24 @@ Rectangle {
 	states: [
 		State {
 			name: "conditions"
-			when: (WeatherApp.currentLocation.error != true)
+			when: (WeatherApp.currentLocation.error != true) && view == "conditions"
 			PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: conditions.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: conditions.implicitHeight; }
 		},
 		State {
 			name: "error"
 			when: (WeatherApp.currentLocation.error == true)
 			PropertyChanges { target: error; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: error.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: error.implicitHeight; }
 		}
 	]
 	
 	transitions: [
 		Transition {
 			to:	"*"
-			NumberAnimation { property: "opacity"; duration: 1000 }
+			NumberAnimation { property: "opacity"; duration: 750 }
 		}
 	]
 }

@@ -4,6 +4,7 @@ set(weather-desktop_QML
    Form.qml
    FormItem.qml
    FormHeader.qml
+   Line.qml
    Style.qml
    WeatherConditions.qml
    WeatherHeader.qml

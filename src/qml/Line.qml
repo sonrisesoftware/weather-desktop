@@ -17,24 +17,8 @@
  ***************************************************************************/
 
 import QtQuick 1.1
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.components 0.1 as PlasmaComponents
 
-WeatherPanel {
-	id: root
-	
-	//property Style style;
-	color: Qt.rgba(0.5,0.25,0.25,0.75)
-	property alias text: msg.text
-	implicitWidth: Math.max(220, header.width + 20);
-	implicitHeight: Math.max(160, msg.paintedHeight + 10);
-	
-	Text {
-		id: msg
-		color: appStyle.textColor
-		width: 200
-		wrapMode: Text.Wrap
-		font.pixelSize: appStyle.headerFontSize
-		anchors.centerIn: root
-	}
+Rectangle {
+	width: 1
+	height: 1
 }

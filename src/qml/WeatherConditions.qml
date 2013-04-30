@@ -23,8 +23,9 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 WeatherPanel {
 	id: root
 	
-	implicitWidth: Math.max(header.width + 10, left.width + right.width + 80)
-	implicitHeight: header.height + Math.max(left.height, right.height) + 40
+	// FIXME: Why doesn't the WeatherPanel version work???
+ 	implicitWidth: Math.max(header.width + 10, left.width + right.width + 90)
+ 	implicitHeight: header.height + Math.max(left.height, right.height) + 40
 	
 	property string windchill;
 	property string dewpoint;
@@ -44,9 +45,9 @@ WeatherPanel {
 		
 	Form {
 		id: left
-		fontSize: 14
-		headerSize: 16
-		color: "white"
+		fontSize: appStyle.dataFontSize
+		headerSize: appStyle.headerFontSize
+		color: appStyle.textColor
 		
 		anchors {
 			top: header.bottom
@@ -94,15 +95,15 @@ WeatherPanel {
 	
 	Form { // Right column of data
 		id: right
-		fontSize: 14
-		headerSize: 16
-		color: "white"
+		fontSize: appStyle.dataFontSize
+		headerSize: appStyle.headerFontSize
+		color: appStyle.textColor
 		
 		anchors {
 			top: header.bottom
 			topMargin: 20
-			right: root.right
-			rightMargin: 30
+			left: left.right
+			leftMargin: 40
 		}
 		
 		FormHeader {

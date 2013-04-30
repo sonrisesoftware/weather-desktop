@@ -23,6 +23,9 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 Rectangle {
 	id: root
 	
+	implicitWidth: childrenRect.width + 50
+	implicitHeight: childrenRect.height + 20
+	
 	color: appStyle.panelColor;
 	radius: 4;
 	
@@ -35,6 +38,12 @@ Rectangle {
 		color: appStyle.textColor;
 		font.pixelSize: appStyle.titleFontSize
 		
-		anchors { horizontalCenter: root.horizontalCenter; top: root.top;}
+		anchors { horizontalCenter: root.horizontalCenter; top: root.top; topMargin: 5 }
+	}
+	
+	Line {
+		width: 100
+		color: Qt.rgba(1,1,1,0.75);
+		anchors { horizontalCenter: root.horizontalCenter; top: header.bottom; topMargin: 5 }
 	}
 }
