@@ -55,6 +55,12 @@ namespace Weather
 		static Weather::Provider weatherProvider() { return m_provider; }
 		static QString apiKey() { return m_apiKey; }
 		
+	public slots:
+		virtual void refresh() = 0;
+		
+	signals:
+		void refreshed();
+		
 	protected:
 		QVariantMap json_call(QString *error, const QString& call);
 		

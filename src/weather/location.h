@@ -52,6 +52,7 @@ namespace Weather
 		Q_PROPERTY(Weather::Conditions *conditions READ conditions NOTIFY conditionsChanged)
 		Q_PROPERTY(Weather::Service *api READ api NOTIFY apiChanged)
 		
+		Q_PROPERTY(bool updating READ isUpdated WRITE setUpdating NOTIFY updatingChanged)
 		Q_PROPERTY(bool error READ hasError WRITE setError NOTIFY errorChanged)
 		Q_PROPERTY(QString errorMessage READ errorMessage WRITE setErrorMessage NOTIFY errorMessageChanged)
 
@@ -65,6 +66,11 @@ namespace Weather
 		
 	signals:		
 		void refreshed();
+		
+	private:
+		void internalRefresh();
+		
+		int m_updating = 0;
 	
 	#include "weather/location.gen"
 	};

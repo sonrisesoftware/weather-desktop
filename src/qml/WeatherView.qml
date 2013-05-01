@@ -19,6 +19,7 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
@@ -27,6 +28,17 @@ Rectangle {
 	//radius: 6
 	
 	property string view: "conditions"
+	
+	PlasmaWidgets.BusyWidget {
+		id: updating
+		
+		width: 100; height: 100;
+		anchors.centerIn: root
+		
+		opacity: 0
+		running: false
+		label: "Updating weather..."
+	}
 	
 	WeatherConditions {
 		id: conditions
@@ -74,10 +86,17 @@ Rectangle {
 		},
 		State {
 			name: "error"
-			when: (WeatherApp.currentLocation.error == true)
+			when: (WeatherApp.currentLocation.error == true) && (WeatherApp.currentLocation.updating == false)
 			PropertyChanges { target: error; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: error.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: error.implicitHeight; }
+		},
+		State {
+			name: "updating"
+			when: (WeatherApp.currentLocation.updating == true)
+			PropertyChanges { target: error; opacity: 1; running: true; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: updating.width; }
+			PropertyChanges { target: root; implicitHeight: updating.height; }
 		}
 	]
 	

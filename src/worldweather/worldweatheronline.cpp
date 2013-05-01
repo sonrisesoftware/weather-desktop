@@ -53,6 +53,19 @@ QString WorldWeatherOnline::WorldWeatherOnline::internalLocation()
 	return location()->location().replace(' ', '+').replace("St.", "Saint");
 }
 
+void WorldWeatherOnline::WorldWeatherOnline::refresh()
+{
+	QString error;
+	QVariantMap data = location()->api()->json_query(&error, "weather");
+	
+	if (!error.isEmpty()) {
+		location()->setError(true);
+		location()->setErrorMessage(error);
+		return;
+	}
+	
+	this->data()["weather"] = data;
+}
 
 
 #include "worldweather/worldweatheronline.moc"

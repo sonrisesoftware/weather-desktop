@@ -27,6 +27,8 @@ namespace WorldWeatherOnline {
 	class WorldWeatherOnline : public Weather::Service
 	{
 		Q_OBJECT
+		
+		Q_PROPERTY(QMap<QString,QVariantMap> data READ data NOTIFY dataChanged)
 
 	public:
 		explicit WorldWeatherOnline(Weather::Location* location);
@@ -35,6 +37,9 @@ namespace WorldWeatherOnline {
 		
 		virtual Weather::Conditions *create_conditions();
 
+	public slots:
+		virtual void refresh();
+		
 	protected:
 		virtual QString prefix();
 		

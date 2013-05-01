@@ -22,6 +22,8 @@
 #include "weather/conditions.h"
 
 #include <QDateTime>
+#include <QtConcurrentRun>
+#include <qtimer.h>
 #include <KLocalizedString>
 
 using namespace Weather;
@@ -29,18 +31,18 @@ using namespace Weather;
 Location::Location(const QString& name, const QString& location, QObject* parent)
 	: QObject(parent)
 {
-	qDebug() << "New location: " + name + " - " + (location.isEmpty() ? "Auto-IP" : location);
+	//qDebug() << "New location: " + name + " - " + (location.isEmpty() ? "Auto-IP" : location);
 	
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
 	
 	setApi(Weather::Service::create(this));
 	m_conditions = api()->create_conditions();
-	qDebug() << "Done with conditions.";
+	//qDebug() << "Done with conditions.";
 	
 	setName(name);
 	setLocation(location);
-	qDebug() << "Done.";
+	//qDebug() << "Done.";
 }
 
 Location::Location(QObject* parent): Location(i18nc("@title:tab", "Current"), "", parent)
@@ -56,7 +58,7 @@ Location::~Location()
 
 void Location::refresh()
 {
-	qDebug() << "Refreshing...";
+	//qDebug() << "Refreshing...";
 	setError(false); // Start fresh
 	
 	if (location().isEmpty())
@@ -64,9 +66,10 @@ void Location::refresh()
 	else
 		setDisplay(location());
 	
-	conditions()->refresh();
+	api()->refresh();
 	
 	emit refreshed();
 }
+
 
 #include "weather/location.moc"
