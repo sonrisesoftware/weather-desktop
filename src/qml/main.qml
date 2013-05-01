@@ -174,7 +174,7 @@ Rectangle {
 				//iconSource: "go-home"
 				clickMessage: i18n("Search...")
 				clearButtonShown: true
-				//onClicked: console.log("New doc!")
+				onReturnPressed: WeatherApp.setLocation(text)
 				width: minimumWidth + 5
 			}
 		}

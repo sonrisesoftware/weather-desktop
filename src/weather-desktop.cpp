@@ -90,7 +90,7 @@ void WeatherDesktop::onImplicitHeightChanged()
 
 void WeatherDesktop::test()
 {
-	delete currentLocation();
+	//delete currentLocation();
 	setCurrentLocation(new Weather::Location("Home", "Saint Louis, MO", this));
 }
 
@@ -122,5 +122,21 @@ Weather::Location *WeatherDesktop::addLocation(const QString& name, const QStrin
 	locations().append(l);
 	return l;
 }
+
+void WeatherDesktop::setLocation(const QString& location)
+{
+	qDebug() << "Set location to:" << location;
+	if (location.isEmpty()) {
+		setCurrentLocation(autoLocation());
+	} else {
+		if (searchLocation() == nullptr) {
+			setSearchLocation(new Weather::Location("Manual", location, this));
+		} else {
+			searchLocation()->setLocation(location);
+		}
+		setCurrentLocation(searchLocation());
+	}
+}
+
 
 #include "weather-desktop.moc"

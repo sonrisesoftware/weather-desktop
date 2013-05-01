@@ -60,6 +60,8 @@ namespace Weather
 		
 		virtual QString prefix() = 0;
 		
+		virtual QString internalLocation() = 0;
+		
 	private:
 		static Weather::Provider m_provider;
 		static QString m_apiKey;

@@ -38,6 +38,8 @@ namespace WorldWeatherOnline {
 	protected:
 		virtual QString prefix();
 		
+		virtual QString internalLocation();
+		
 	#include "worldweather/worldweatheronline.gen"
 	};
 }
