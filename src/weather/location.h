@@ -70,7 +70,7 @@ namespace Weather
 	private:
 		void internalRefresh();
 		
-		int m_updating = 0;
+		bool m_updating = false;
 	
 	#include "weather/location.gen"
 	};

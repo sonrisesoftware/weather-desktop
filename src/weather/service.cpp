@@ -41,43 +41,33 @@ Service::~Service()
 
 }
 
-QVariantMap Weather::Service::json_call(QString* error, const QString& call)
+void Service::json_call(const QString& call, QObject *reciever, const char* slot)
 {
-	QString text = download(QUrl(prefix() + '/' + call), error);
-	qDebug() << text;
+	//QString text = download(QUrl(prefix() + '/' + call), error);
+	KIO::TransferJob *job = KIO::get(KUrl(prefix() + '/' + call), KIO::NoReload, KIO::HideProgressInfo);
 	
-	if (!error->isEmpty())
-		return QVariantMap();
+	QObject::connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(process_query(KIO::Job*,QByteArray)));
+	m_slots[job] = SlotObject(reciever, slot);
+}
+
+void Service::process_query(KIO::Job *job, const QByteArray& data) {
+	qDebug() << "Data:" << data;
 	
-	bool ok;
+	QString error; bool ok;
 	QJson::Parser parser;
-	QVariantMap result = parser.parse(text.toAscii(), &ok).toMap();
+	QVariantMap result = parser.parse(data, &ok).toMap();
 	if (!ok) {
-		*error = "Unable to parse JSON response!";
-		return QVariantMap();
-	}
-	
-	if (result["response"].toMap().contains("error")) {
-		*error = "[" + result["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
+		error = "Unable to parse JSON response!";
+	} else if (result["response"].toMap().contains("error")) {
+		error = "[" + result["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
 				result["response"].toMap()["error"].toMap()["description"].toString();
 	}
 	
-	return result;
-}
-
-QVariantMap Service::json_query(const QString& query, const QString& params)
-{
-	QString error;
-	QVariantMap map = json_query(&error, query, params);
-	qDebug() << "Error? " + error;
-	if (!error.isEmpty()) {
-		qDebug() << "THERE IS AN ERROR!!!!";
-		Application::error("Unable to download weather:", error);
-	} else {
-		qDebug() << "No errors found...";
-	}
-	
-	return map;
+	SlotObject obj = m_slots[job];
+	ok = QMetaObject::invokeMethod(obj.obj, obj.slot, Q_ARG(QString, error), Q_ARG(QVariantMap, result));
+	if (!ok) qDebug() << "Failed to call slot:" << obj.slot;
+	m_slots.remove(job);
+	delete job;
 }
 
 Service* Weather::Service::create(Location *location)

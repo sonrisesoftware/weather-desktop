@@ -18,6 +18,7 @@
 
 #include "main.h"
 #include "worldweather/conditions.h"
+#include <worldweather/worldweatheronline.h>
 #include "weather/service.h"
 
 using namespace WorldWeatherOnline;
@@ -39,7 +40,7 @@ void WorldWeatherConditions::refresh()
 
 	if (location()->hasError()) return;
 	
-	QVariantMap data = location()->api()->data()["weather"];
+	QVariantMap data = location()->api()->data()["weather"].toMap();
 	
 	qDebug() << "List: " << data["data"].toMap()["current_condition"].toList();
 	data = data["data"].toMap()["current_condition"].toList()[0].toMap();

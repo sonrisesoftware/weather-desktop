@@ -27,13 +27,11 @@ namespace WorldWeatherOnline {
 	class WorldWeatherOnline : public Weather::Service
 	{
 		Q_OBJECT
-		
-		Q_PROPERTY(QMap<QString,QVariantMap> data READ data NOTIFY dataChanged)
 
 	public:
 		explicit WorldWeatherOnline(Weather::Location* location);
 		
-		virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "");
+		virtual void json_query(const QString& query, const QString& params, QObject *reciever, const char* slot);
 		
 		virtual Weather::Conditions *create_conditions();
 
@@ -44,6 +42,9 @@ namespace WorldWeatherOnline {
 		virtual QString prefix();
 		
 		virtual QString internalLocation();
+		
+	private slots:
+		void onWeatherDownloaded(const QString& error, const QVariantMap& data);
 		
 	#include "worldweather/worldweatheronline.gen"
 	};

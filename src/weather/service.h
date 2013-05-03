@@ -24,6 +24,10 @@
 #include <QVariantMap>
 #include <qjson/parser.h>
 
+#include <KDE/KUrl>
+#include <KIO/TransferJob>
+#include <KIO/Job>
+
 namespace Weather
 {
 	class Location;
@@ -33,19 +37,34 @@ namespace Weather
 		WorldWeatherOnline,
 		Wunderground
 	};
+	
+	class SlotObject: QObject {
+		Q_OBJECT
+		
+	public:
+		SlotObject(QObject *obj, const char* slot) { this->obj = obj; this->slot = slot; }
+		SlotObject(SlotObject& copy) { this->obj = copy.obj; this->slot = copy.slot; }
+		
+		const char *slot;
+		QObject *obj;
+	};
 
 	class Service : public QObject
 	{
 		Q_OBJECT
 		
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
+		Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged)
 
 	public:
 		explicit Service(Location* location);
 		virtual ~Service();
 
-		virtual QVariantMap json_query(QString *error, const QString& query, const QString& params = "") = 0;
-		QVariantMap json_query(const QString& query, const QString& params = "");
+		virtual void json_query(const QString& query, const QString& params, QObject *reciever, const char* slot) = 0;
+		
+		inline void json_query(const QString& query, QObject *reciever, const char* slot) {
+			json_query(query, "", reciever, slot);
+		}
 		
 		virtual Weather::Conditions *create_conditions() = 0;
 		
@@ -62,7 +81,7 @@ namespace Weather
 		void refreshed();
 		
 	protected:
-		QVariantMap json_call(QString *error, const QString& call);
+		void json_call(const QString& call, QObject *reciever, const char* slot);
 		
 		virtual QString prefix() = 0;
 		
@@ -71,6 +90,11 @@ namespace Weather
 	private:
 		static Weather::Provider m_provider;
 		static QString m_apiKey;
+		
+		QMap<KIO::Job *, SlotObject> m_slots;
+		
+	private slots:
+		void process_query(KIO::Job *job, const QByteArray& data);
 		
 	#include "weather/service.gen"
 	};

@@ -37,15 +37,9 @@ Weather::Conditions* WorldWeatherOnline::WorldWeatherOnline::create_conditions()
 	return new WorldWeatherConditions(location());
 }
 
-QVariantMap WorldWeatherOnline::WorldWeatherOnline::json_query(QString* error, const QString& query, const QString& params)
+void WorldWeatherOnline::WorldWeatherOnline::json_query(const QString& query, const QString& params, QObject* reciever, const char* slot)
 {
-	QVariantMap map = json_call(error, query + ".ashx?q=" + internalLocation() + "&format=json&" + params + "&key=" + Weather::Service::apiKey());
-	if (map["data"].toMap().contains("error")) {
-		qDebug() << "ERROR!";
-		*error = map["data"].toMap()["error"].toList()[0].toMap()["msg"].toString();
-	}
-	
-	return map;
+	json_call(query + ".ashx?q=" + internalLocation() + "&format=json&" + params + "&key=" + Weather::Service::apiKey(), reciever, slot);
 }
 
 QString WorldWeatherOnline::WorldWeatherOnline::internalLocation()
@@ -55,8 +49,14 @@ QString WorldWeatherOnline::WorldWeatherOnline::internalLocation()
 
 void WorldWeatherOnline::WorldWeatherOnline::refresh()
 {
-	QString error;
-	QVariantMap data = location()->api()->json_query(&error, "weather");
+	json_query("weather", this, SLOT(onWeatherDownloaded(QString,QVariantMap)));
+}
+
+void WorldWeatherOnline::WorldWeatherOnline::onWeatherDownloaded(const QString& error, const QVariantMap& data)
+{
+	if (error.isEmpty() && data["data"].toMap().contains("error")) {
+		error = data["data"].toMap()["error"].toList()[0].toMap()["msg"].toString();
+	}
 	
 	if (!error.isEmpty()) {
 		location()->setError(true);
@@ -64,8 +64,9 @@ void WorldWeatherOnline::WorldWeatherOnline::refresh()
 		return;
 	}
 	
-	this->data()["weather"] = data;
+	this->data()["weather"] = QVariant(data);
 }
+
 
 
 #include "worldweather/worldweatheronline.moc"
