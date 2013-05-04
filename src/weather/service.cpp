@@ -75,9 +75,6 @@ void Service::process_query(KJob *job) {
 	if (!ok) {
 		error = "Unable to parse JSON response!";
 		qDebug() << "ERROR:" << error;
-	} else if (result["response"].toMap().contains("error")) {
-		error = "[" + result["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
-				result["response"].toMap()["error"].toMap()["description"].toString();
 	}
 	
 	obj->emit_signal(error, result);
@@ -107,6 +104,10 @@ Service* Weather::Service::create(Location *location)
 void Weather::Service::setWeatherProvider(Weather::Provider provider)
 {
 	m_provider = provider;
+	
+	if (provider == Weather::Wunderground) {
+		Wunderground::Wunderground::init();
+	}
 }
 
 

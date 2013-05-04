@@ -22,6 +22,8 @@
 
 #include "weather/service.h"
 
+#include <KDE/KIcon>
+
 namespace Wunderground {
 	class Wunderground : public Weather::Service
 	{
@@ -34,6 +36,9 @@ namespace Wunderground {
 		virtual Weather::Conditions* create_conditions();
 		virtual void json_query(const QString& query, const QString& params, QObject* reciever, const char* slot);
 	
+		static void init();
+		static KIcon icon(const QString &weather, const bool day);
+		
 	public slots:
 		virtual void refresh();
 		
@@ -43,6 +48,10 @@ namespace Wunderground {
 		
 	private slots:
 		void onConditionsDownloaded(QString error, const QVariantMap& data);
+		
+	private:
+		static QMap<QString, KIcon> icons_day;
+		static QMap<QString, KIcon> icons_night;
 		
 	#include "wunderground/wunderground.gen"
 	};

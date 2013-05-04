@@ -40,7 +40,7 @@ Rectangle {
 		
 		opacity: 0
 		running: false
-		label: "Updating weather..."
+		//label: "Updating weather..."
 	}
 	
 	WeatherConditions {
@@ -71,7 +71,7 @@ Rectangle {
 		id: error
 		opacity: 0
 		anchors.centerIn: root
-		title: "Unable to access weather"
+		title: i18n("Unable to access weather")
 		text: WeatherApp.currentLocation.errorMessage
 		
 		Behavior on opacity {

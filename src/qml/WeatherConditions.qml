@@ -61,7 +61,7 @@ Panel {
 		}
 		
 		FormItem {
-			label: i18n("Windchill:")
+			label: i18n("Feels like:")
 			value: root.windchill
 		}
 		

@@ -52,6 +52,7 @@ void WundergroundConditions::refresh()
 	setWindgust(data["wind_gust_mph"].toString() + " mph");
 	setWindchill(data["feelslike_f"].toString() + " *F");
 	setDewpoint(data["dewpoint_f"].toString() + " *F");
+	setIcon(Wunderground::Wunderground::icon(data["icon"].toString(), true));
 }
 
 

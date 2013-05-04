@@ -22,6 +22,10 @@
 
 using namespace Wunderground;
 
+QMap<QString, KIcon> Wunderground::Wunderground::icons_day;
+QMap<QString, KIcon> Wunderground::Wunderground::icons_night;
+
+
 Wunderground::Wunderground::Wunderground(Weather::Location* location): Weather::Service(location)
 {
 	qDebug() << "Wunderground weather!";
@@ -67,10 +71,12 @@ void Wunderground::Wunderground::json_query(const QString& query, const QString&
 }
 
 void Wunderground::Wunderground::onConditionsDownloaded(QString error, const QVariantMap& data)
-{
-// 	if (error.isEmpty() && data["data"].toMap().contains("error")) {
-// 		error = data["data"].toMap()["error"].toList()[0].toMap()["msg"].toString();
-// 	}
+{	
+	if (data["response"].toMap().contains("error")) {
+		//error = "[" + data["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
+		//		data["response"].toMap()["error"].toMap()["description"].toString();
+		error = data["response"].toMap()["error"].toMap()["description"].toString();
+	}
 	
 	location()->setUpdating(false);
 	
@@ -85,6 +91,89 @@ void Wunderground::Wunderground::onConditionsDownloaded(QString error, const QVa
 	this->setData(new QVariantMap(data));
 	//qDebug() << "NEW Data: " << *this->data();
 	emit refreshed();
+}
+
+void Wunderground::Wunderground::init() {
+	icons_day["chanceflurries"]				= KIcon("weather-snow-scattered-day"); //***
+	icons_day["flurries"]					= KIcon("weather-snow-scattered-day"); //***
+	icons_day["chancesnow"]					= KIcon("weather-snow-scattered");
+	icons_day["snow"]						= KIcon("weather-snow");
+	
+	icons_day["chancerain"]					= KIcon("weather-showers-day"); //***
+	icons_day["rain"]						= KIcon("weather-showers");
+	
+	//icons_day["chancesleet"]				= KIcon("weather-freezing-rain");
+	//icons_day["sleet"]						= KIcon("weather-freezing-rain");
+	
+	icons_day["chancesleet"]			= KIcon("weather-snow-rain");
+	icons_day["sleet"]						= KIcon("weather-hail");
+	
+	icons_day["chancetstorms"]		= KIcon("weather-storm-day"); //***
+	icons_day["tstorms"]				= KIcon("weather-storm");
+	//icons_day["thunderstorms"]				= KIcon("weather-storm");
+	
+	icons_day["clear"]						= KIcon("weather-clear"); //***
+	icons_day["sunny"]						= KIcon("weather-clear"); //***
+	icons_day["mostlysunny"]				= KIcon("weather-few-clouds"); //***
+	icons_day["partlycloudy"]				= KIcon("weather-few-clouds"); //***
+	//icons_day["scatteredclouds"]			= KIcon("weather-clouds"); //***
+	icons_day["partlysunny"]				= KIcon("weather-clouds"); //***
+	icons_day["mostlycloudy"]				= KIcon("weather-clouds"); //***
+	icons_day["cloudy"]						= KIcon("weather-many-clouds");
+	//icons_day["overcast"]					= KIcon("weather-many-clouds");
+	
+	icons_day["fog"]						= KIcon("weather-mist");
+	icons_day["hazy"]						= KIcon("weather-mist");
+		
+	icons_day["unknown"]					= KIcon("weather-none-available");
+	
+	
+	
+	
+	// ***** NIGHT ICONS ***** //
+	icons_night["chanceflurries"]				= KIcon("weather-snow-scattered-night"); //***
+	icons_night["flurries"]					= KIcon("weather-snow-scattered-night"); //***
+	icons_night["chancesnow"]					= KIcon("weather-snow-scattered");
+	icons_night["snow"]						= KIcon("weather-snow");
+	
+	icons_night["chancerain"]					= KIcon("weather-showers-night"); //***
+	icons_night["rain"]						= KIcon("weather-showers");
+	
+	//icons_night["chancesleet"]				= KIcon("weather-freezing-rain");
+	//icons_night["sleet"]						= KIcon("weather-freezing-rain");
+	
+	icons_night["chancesleet"]			= KIcon("weather-snow-rain");
+	icons_night["sleet"]						= KIcon("weather-hail");
+	
+	icons_night["chancetstorms"]		= KIcon("weather-storm-night"); //***
+	icons_night["tstorms"]				= KIcon("weather-storm");
+	//icons_night["thunderstorms"]				= KIcon("weather-storm");
+	
+	icons_night["clear"]						= KIcon("weather-clear-night"); //***
+	icons_night["sunny"]						= KIcon("weather-clear-night"); //***
+	icons_night["mostlysunny"]				= KIcon("weather-few-clouds-night"); //***
+	icons_night["partlycloudy"]				= KIcon("weather-few-clouds-night"); //***
+	//icons_night["scatteredclouds"]			= KIcon("weather-clouds"); //***
+	icons_night["partlysunny"]				= KIcon("weather-clouds-night"); //***
+	icons_night["mostlycloudy"]				= KIcon("weather-clouds-night"); //***
+	icons_night["cloudy"]						= KIcon("weather-many-clouds");
+	//icons_night["overcast"]					= KIcon("weather-many-clouds");
+	
+	icons_night["fog"]						= KIcon("weather-mist");
+	icons_night["hazy"]						= KIcon("weather-mist");
+		
+	icons_night["unknown"]					= KIcon("weather-none-available");
+}
+
+KIcon Wunderground::Wunderground::icon(const QString &weather, const bool day) {
+	if (!Wunderground::icons_day.contains(weather))
+		return Wunderground::icons_day.value("unknown");
+	
+	if (day) {
+		return Wunderground::icons_day.value(weather);
+	} else {
+		return Wunderground::icons_night.value(weather);
+	}
 }
 
 
