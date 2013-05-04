@@ -49,14 +49,16 @@ QString WorldWeatherOnline::WorldWeatherOnline::internalLocation()
 
 void WorldWeatherOnline::WorldWeatherOnline::refresh()
 {
-	json_query("weather", this, SLOT(onWeatherDownloaded(QString,QVariantMap)));
+	json_query("weather", "", this, SLOT(onWeatherDownloaded(QString,QVariantMap)));
 }
 
-void WorldWeatherOnline::WorldWeatherOnline::onWeatherDownloaded(const QString& error, const QVariantMap& data)
+void WorldWeatherOnline::WorldWeatherOnline::onWeatherDownloaded(QString error, const QVariantMap& data)
 {
 	if (error.isEmpty() && data["data"].toMap().contains("error")) {
 		error = data["data"].toMap()["error"].toList()[0].toMap()["msg"].toString();
 	}
+	
+	location()->setUpdating(false);
 	
 	if (!error.isEmpty()) {
 		location()->setError(true);
@@ -64,7 +66,9 @@ void WorldWeatherOnline::WorldWeatherOnline::onWeatherDownloaded(const QString& 
 		return;
 	}
 	
-	this->data()["weather"] = QVariant(data);
+	qDebug() << "Saving data: " << data;
+	this->data().insert("weather", data);
+	emit refreshed();
 }
 
 

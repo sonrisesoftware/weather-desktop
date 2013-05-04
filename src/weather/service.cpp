@@ -47,7 +47,7 @@ void Service::json_call(const QString& call, QObject *reciever, const char* slot
 	KIO::TransferJob *job = KIO::get(KUrl(prefix() + '/' + call), KIO::NoReload, KIO::HideProgressInfo);
 	
 	QObject::connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(process_query(KIO::Job*,QByteArray)));
-	m_slots[job] = SlotObject(reciever, slot);
+	m_slots[job] = new SlotObject(reciever, slot);
 }
 
 void Service::process_query(KIO::Job *job, const QByteArray& data) {
@@ -63,10 +63,11 @@ void Service::process_query(KIO::Job *job, const QByteArray& data) {
 				result["response"].toMap()["error"].toMap()["description"].toString();
 	}
 	
-	SlotObject obj = m_slots[job];
-	ok = QMetaObject::invokeMethod(obj.obj, obj.slot, Q_ARG(QString, error), Q_ARG(QVariantMap, result));
-	if (!ok) qDebug() << "Failed to call slot:" << obj.slot;
+	SlotObject *obj = m_slots[job];
+	obj->emit_signal(error, result);
+	
 	m_slots.remove(job);
+	delete obj;
 	delete job;
 }
 

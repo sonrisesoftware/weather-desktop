@@ -66,6 +66,7 @@ void Location::refresh()
 	else
 		setDisplay(location());
 	
+	setUpdating(true);
 	api()->refresh();
 	
 	emit refreshed();

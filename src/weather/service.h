@@ -38,15 +38,20 @@ namespace Weather
 		Wunderground
 	};
 	
-	class SlotObject: QObject {
+	class SlotObject: public QObject {
 		Q_OBJECT
 		
 	public:
-		SlotObject(QObject *obj, const char* slot) { this->obj = obj; this->slot = slot; }
-		SlotObject(SlotObject& copy) { this->obj = copy.obj; this->slot = copy.slot; }
+		SlotObject(QObject *reciever, const char *slot) {
+			QObject::connect(this, SIGNAL(data(QString,QVariantMap)), reciever, slot);
+		}
 		
-		const char *slot;
-		QObject *obj;
+		void emit_signal(QString error, QVariantMap map) {
+			emit data(error, map);
+		}
+		
+	signals:
+		void data(QString error, QVariantMap data);
 	};
 
 	class Service : public QObject
@@ -91,7 +96,7 @@ namespace Weather
 		static Weather::Provider m_provider;
 		static QString m_apiKey;
 		
-		QMap<KIO::Job *, SlotObject> m_slots;
+		QMap<KIO::Job *, SlotObject *> m_slots;
 		
 	private slots:
 		void process_query(KIO::Job *job, const QByteArray& data);
