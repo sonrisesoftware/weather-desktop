@@ -72,7 +72,7 @@ Rectangle {
 	
 	PlasmaComponents.ToolBar {
 		id: refreshToolBar
-		width: tools.width + 15
+		width: refreshButton.width + 15 // Hack to resize toolbar when button changes
 		
 		tools: Row {
 			anchors.leftMargin: 3
@@ -80,9 +80,11 @@ Rectangle {
 			spacing: 5
 
 			PlasmaComponents.ToolButton {
-				iconSource: "view-refresh"
-				text: i18n("Refresh")
-				onClicked: WeatherApp.currentLocation.refresh()
+				id: refreshButton
+				iconSource: (WeatherApp.currentLocation.updating) ?"process-stop" : "view-refresh"
+				text: (WeatherApp.currentLocation.updating) ? i18n("Stop") : i18n("Refresh")
+				onClicked: (WeatherApp.currentLocation.updating) ? 
+						WeatherApp.currentLocation.stopAllRefresh() : WeatherApp.currentLocation.refreshAll()
 				width: minimumWidth + 5
 			}
 		}

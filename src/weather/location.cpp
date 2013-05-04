@@ -28,6 +28,8 @@
 
 using namespace Weather;
 
+QList<Location *> Location::m_locations;
+
 Location::Location(const QString& name, const QString& location, QObject* parent)
 	: QObject(parent)
 {
@@ -43,6 +45,8 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 	setName(name);
 	setLocation(location);
 	//qDebug() << "Done.";
+	
+	m_locations.append(this);
 }
 
 Location::Location(QObject* parent): Location(i18nc("@title:tab", "Current"), "", parent)
@@ -53,7 +57,7 @@ Location::Location(QObject* parent): Location(i18nc("@title:tab", "Current"), ""
 
 Location::~Location()
 {
-
+	m_locations.removeOne(this);
 }
 
 void Location::refresh()
@@ -70,6 +74,26 @@ void Location::refresh()
 	api()->refresh();
 	
 	emit refreshed();
+}
+
+void Weather::Location::stopRefresh()
+{
+	api()->stopJobs();
+	setUpdating(false);
+}
+
+void Weather::Location::refreshAll()
+{
+	foreach (Location *location, m_locations) {
+		location->refresh();
+	}
+}
+
+void Weather::Location::stopAllRefresh()
+{
+	foreach (Location *location, m_locations) {
+		location->stopRefresh();
+	}
 }
 
 

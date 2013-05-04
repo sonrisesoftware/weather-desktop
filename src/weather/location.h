@@ -61,14 +61,19 @@ namespace Weather
 		explicit Location(QObject *parent = 0);
 		virtual ~Location();
 		
+		Q_INVOKABLE static void refreshAll();
+		Q_INVOKABLE static void stopAllRefresh();
+		
 	public slots:
-		void refresh();
+		void refresh();		
+		void stopRefresh();
 		
 	signals:		
 		void refreshed();
 		
 	private:		
 		bool m_updating = false;
+		static QList<Location *> m_locations;
 	
 	#include "weather/location.gen"
 	};

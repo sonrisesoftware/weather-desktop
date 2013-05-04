@@ -55,6 +55,17 @@ void Service::json_call(const QString& call, QObject *reciever, const char* slot
 	m_jobs[job] = new DownloadJob(reciever, slot);
 }
 
+void Service::stopJobs()
+{
+	while (!m_jobs.isEmpty()) {
+		KIO::Job *job = m_jobs.keys()[0];
+		job->kill();
+		job->deleteLater();
+		m_jobs[job]->deleteLater();
+		m_jobs.remove(job);
+	}
+}
+
 void Weather::Service::data_downloaded(KIO::Job* job, const QByteArray& data)
 {
 	DownloadJob *obj = m_jobs[job];

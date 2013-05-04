@@ -91,6 +91,7 @@ namespace Weather
 		
 	public slots:
 		virtual void refresh() = 0;
+		void stopJobs();
 		
 	signals:
 		void refreshed();
