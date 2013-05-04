@@ -17,61 +17,35 @@
  ***************************************************************************/
 
 
-#include "application.h"
-#include "api_key.h"
+#ifndef WUNDERGROUND_H
+#define WUNDERGROUND_H
 
-#include "weather/location.h"
 #include "weather/service.h"
-#include "weather/conditions.h"
 
-// Qt headers
-#include <QtDeclarative>
+namespace Wunderground {
+	class Wunderground : public Weather::Service
+	{
+		Q_OBJECT
 
-// KDE headers
-#include <KDE/KMessageBox>
-#include <kdeclarative.h>
-
-KMainWindow *Application::m_window = nullptr;
-
-Application::Application(): KApplication(true)
-{
-	registerQMLTypes();
-	Weather::Service::setWeatherProvider(Weather::Wunderground);
-	Weather::Service::setAPIKey(WUNDER_API_KEY);
+	public:
+		explicit Wunderground(Weather::Location* location);
+		virtual ~Wunderground();
+		
+		virtual Weather::Conditions* create_conditions();
+		virtual void json_query(const QString& query, const QString& params, QObject* reciever, const char* slot);
+	
+	public slots:
+		virtual void refresh();
+		
+	protected:
+		virtual QString internalLocation();
+		virtual QString prefix();
+		
+	private slots:
+		void onConditionsDownloaded(QString error, const QVariantMap& data);
+		
+	#include "wunderground/wunderground.gen"
+	};
 }
 
-Application::~Application()
-{
-
-}
-
-void Application::registerQMLTypes()
-{
-	qmlRegisterType<WeatherDesktop>();
-	qmlRegisterType<Weather::Location>();
-	qmlRegisterType<Weather::Service>();
-	qmlRegisterType<Weather::Conditions>();
-}
-
-void Application::setupDeclarativeBindings(QDeclarativeEngine* declarativeEngine)
-{
-    KDeclarative kDeclarative;
-    kDeclarative.setDeclarativeEngine(declarativeEngine);
-    kDeclarative.initialize();
-    kDeclarative.setupBindings();
-
-    QScriptEngine* engine = kDeclarative.scriptEngine();
-    QScriptValue globalObject = engine->globalObject();
-}
-
-void Application::error(const QString& msg, const QString& error) {
-	Application::error("<b>" + msg + "</b><p><p>" + error);
-}
-
-void Application::error(const QString& msg) {
-	KMessageBox::error(window(), msg);
-	//qFatal(msg.toUtf8());
-	::exit(-1);
-}
-
-#include "application.moc"
+#endif // WUNDERGROUND_H

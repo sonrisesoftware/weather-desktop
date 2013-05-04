@@ -10,11 +10,16 @@ set(weather-desktop_SRCS
 qclassgen(weather-desktop_SRCS
    application
    weather-desktop
+   
    weather/location
    weather/service
    weather/conditions
+   
    worldweather/worldweatheronline
    worldweather/conditions
+   
+   wunderground/wunderground
+   wunderground/conditions
  )
 
 # Run ui files through uic

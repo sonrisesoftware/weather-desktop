@@ -31,7 +31,10 @@ _**Warning:** this software is in a pre-release stage and is under active develo
 
  * Development by Michael Spencer (@iBeliever)
  * Design by Michael Spencer (@iBeliever) and Christopher Spencer
- * Powered by World Weather Online (Provider has not been selected yet).
+ * Powered by World Weather Online
+ * Powered by [Weather Underground](http://www.wunderground.com/?apiref=f7b0e81e954c09e8)
+
+   ![Weather Underground](http://icons-ak.wxug.com/graphics/wu2/logo_130x80.png)
 
 ### Licensing ###
 
@@ -49,11 +52,12 @@ If you are using Ubuntu, you can buy the application from the Ubuntu Software Ce
 
 **API Key**
 
-When building from source, you will need an API key from ???.
+When building from source, you will need an API key from World Weather Online or [Weather Underground](http://www.wunderground.com/?apiref=f7b0e81e954c09e8).
 
 Once you have an API key, create a file called `src/api_key.h` and add your API key to it:
 
-    #define API_KEY "<your-key-here>"
+    #define WWO_API_KEY "<your-key-here>" // For World Weather Online
+    #define WUNDER_API_KEY "<your-key-here>" // For Wunderground
 
     
 **Class Generator**

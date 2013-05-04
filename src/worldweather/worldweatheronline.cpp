@@ -23,7 +23,7 @@
 WorldWeatherOnline::WorldWeatherOnline::WorldWeatherOnline(Weather::Location* location): Weather::Service(location)
 {
 	qDebug() << "WorldWeatherOnline service!";
-	setLocation(location);
+	
 }
 
 QString WorldWeatherOnline::WorldWeatherOnline::prefix()
@@ -49,10 +49,10 @@ QString WorldWeatherOnline::WorldWeatherOnline::internalLocation()
 
 void WorldWeatherOnline::WorldWeatherOnline::refresh()
 {
-	json_query("weather", "", this, SLOT(onWeatherDownloaded(QString,QVariantMap)));
+	json_query("weather", "", this, SLOT(onConditionsDownloaded(QString,QVariantMap)));
 }
 
-void WorldWeatherOnline::WorldWeatherOnline::onWeatherDownloaded(QString error, const QVariantMap& data)
+void WorldWeatherOnline::WorldWeatherOnline::onConditionsDownloaded(QString error, const QVariantMap& data)
 {
 	if (error.isEmpty() && data["data"].toMap().contains("error")) {
 		error = data["data"].toMap()["error"].toList()[0].toMap()["msg"].toString();

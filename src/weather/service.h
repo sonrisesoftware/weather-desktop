@@ -22,6 +22,7 @@
 
 #include <QObject>
 #include <QVariantMap>
+#include <QByteArray>
 #include <qjson/parser.h>
 
 #include <KDE/KUrl>
@@ -38,17 +39,19 @@ namespace Weather
 		Wunderground
 	};
 	
-	class SlotObject: public QObject {
+	class DownloadJob: public QObject {
 		Q_OBJECT
 		
 	public:
-		SlotObject(QObject *reciever, const char *slot) {
+		DownloadJob(QObject *reciever, const char *slot) {
 			QObject::connect(this, SIGNAL(data(QString,QVariantMap)), reciever, slot);
 		}
 		
 		void emit_signal(QString error, QVariantMap map) {
 			emit data(error, map);
 		}
+		
+		QByteArray m_data;
 		
 	signals:
 		void data(QString error, QVariantMap data);
@@ -79,6 +82,8 @@ namespace Weather
 		static Weather::Provider weatherProvider() { return m_provider; }
 		static QString apiKey() { return m_apiKey; }
 		
+		QVariantMap data(const QString& type);
+		
 	public slots:
 		virtual void refresh() = 0;
 		
@@ -96,10 +101,11 @@ namespace Weather
 		static Weather::Provider m_provider;
 		static QString m_apiKey;
 		
-		QMap<KIO::Job *, SlotObject *> m_slots;
+		QMap<KIO::Job *, DownloadJob *> m_jobs;
 		
 	private slots:
-		void process_query(KIO::Job *job, const QByteArray& data);
+		void process_query(KJob *job);
+		void data_downloaded(KIO::Job* job, const QByteArray& data);
 		
 	#include "weather/service.gen"
 	};

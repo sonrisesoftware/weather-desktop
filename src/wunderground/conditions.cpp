@@ -16,62 +16,43 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-
-#include "application.h"
-#include "api_key.h"
-
-#include "weather/location.h"
-#include "weather/service.h"
+#include "wunderground/wunderground.h"
+#include "wunderground/conditions.h"
 #include "weather/conditions.h"
 
-// Qt headers
-#include <QtDeclarative>
+using namespace Wunderground;
 
-// KDE headers
-#include <KDE/KMessageBox>
-#include <kdeclarative.h>
-
-KMainWindow *Application::m_window = nullptr;
-
-Application::Application(): KApplication(true)
-{
-	registerQMLTypes();
-	Weather::Service::setWeatherProvider(Weather::Wunderground);
-	Weather::Service::setAPIKey(WUNDER_API_KEY);
-}
-
-Application::~Application()
+WundergroundConditions::WundergroundConditions(Weather::Location* location): Weather::Conditions(location)
 {
 
 }
 
-void Application::registerQMLTypes()
+WundergroundConditions::~WundergroundConditions()
 {
-	qmlRegisterType<WeatherDesktop>();
-	qmlRegisterType<Weather::Location>();
-	qmlRegisterType<Weather::Service>();
-	qmlRegisterType<Weather::Conditions>();
+
 }
 
-void Application::setupDeclarativeBindings(QDeclarativeEngine* declarativeEngine)
+void WundergroundConditions::refresh()
 {
-    KDeclarative kDeclarative;
-    kDeclarative.setDeclarativeEngine(declarativeEngine);
-    kDeclarative.initialize();
-    kDeclarative.setupBindings();
-
-    QScriptEngine* engine = kDeclarative.scriptEngine();
-    QScriptValue globalObject = engine->globalObject();
+	Weather::Conditions::refresh();
+	qDebug() << "Refreshing Wunderground conditions!";
+	
+	if (location()->hasError()) return;
+	
+	QVariantMap data = location()->api()->data("current_observation");
+	
+	setTemp(data["temp_f"].toString() + " *F"); // TODO: Unit conversion
+	setVisibility(data["visibility_mi"].toString() + " mi");
+	setWeather(data["weather"].toString());
+	setPressure(data["pressure_mb"].toString() + " millibars"); //TODO: Unit conversion
+	//setClouds(data["cloudcover"].toString() + "%");
+	setHumidity(data["relative_humidity"].toString() + "%");
+	setRainfall(data["precip_today_metric"].toString() + " mm"); //TODO: Unit conversion
+	setWind(data["wind_mph"].toString() + " mph from the " + data["wind_dir"].toString()); //TODO: Unit conversion
+	setWindgust(data["wind_gust_mph"].toString() + " mph");
+	setWindchill(data["feelslike_f"].toString() + " *F");
+	setDewpoint(data["dewpoint_f"].toString() + " *F");
 }
 
-void Application::error(const QString& msg, const QString& error) {
-	Application::error("<b>" + msg + "</b><p><p>" + error);
-}
 
-void Application::error(const QString& msg) {
-	KMessageBox::error(window(), msg);
-	//qFatal(msg.toUtf8());
-	::exit(-1);
-}
-
-#include "application.moc"
+#include "wunderground/conditions.moc"

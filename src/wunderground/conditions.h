@@ -17,61 +17,26 @@
  ***************************************************************************/
 
 
-#include "application.h"
-#include "api_key.h"
+#ifndef WUNDER_CONDITIONS_H
+#define WUNDER_CONDITIONS_H
 
-#include "weather/location.h"
-#include "weather/service.h"
 #include "weather/conditions.h"
 
-// Qt headers
-#include <QtDeclarative>
+namespace Wunderground {
+	class WundergroundConditions : public Weather::Conditions
+	{
+		Q_OBJECT
 
-// KDE headers
-#include <KDE/KMessageBox>
-#include <kdeclarative.h>
-
-KMainWindow *Application::m_window = nullptr;
-
-Application::Application(): KApplication(true)
-{
-	registerQMLTypes();
-	Weather::Service::setWeatherProvider(Weather::Wunderground);
-	Weather::Service::setAPIKey(WUNDER_API_KEY);
+	public:
+		explicit WundergroundConditions(Weather::Location* location);
+		virtual ~WundergroundConditions();
+	
+	public slots:
+		virtual void refresh();
+	
+	#include "wunderground/conditions.gen"
+	};
+	
 }
 
-Application::~Application()
-{
-
-}
-
-void Application::registerQMLTypes()
-{
-	qmlRegisterType<WeatherDesktop>();
-	qmlRegisterType<Weather::Location>();
-	qmlRegisterType<Weather::Service>();
-	qmlRegisterType<Weather::Conditions>();
-}
-
-void Application::setupDeclarativeBindings(QDeclarativeEngine* declarativeEngine)
-{
-    KDeclarative kDeclarative;
-    kDeclarative.setDeclarativeEngine(declarativeEngine);
-    kDeclarative.initialize();
-    kDeclarative.setupBindings();
-
-    QScriptEngine* engine = kDeclarative.scriptEngine();
-    QScriptValue globalObject = engine->globalObject();
-}
-
-void Application::error(const QString& msg, const QString& error) {
-	Application::error("<b>" + msg + "</b><p><p>" + error);
-}
-
-void Application::error(const QString& msg) {
-	KMessageBox::error(window(), msg);
-	//qFatal(msg.toUtf8());
-	::exit(-1);
-}
-
-#include "application.moc"
+#endif // WUNDER_CONDITIONS_H

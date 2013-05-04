@@ -44,7 +44,7 @@ namespace WorldWeatherOnline {
 		virtual QString internalLocation();
 		
 	private slots:
-		void onWeatherDownloaded(QString error, const QVariantMap& data);
+		void onConditionsDownloaded(QString error, const QVariantMap& data);
 		
 	#include "worldweather/worldweatheronline.gen"
 	};

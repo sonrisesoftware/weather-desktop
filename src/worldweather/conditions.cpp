@@ -18,7 +18,7 @@
 
 #include "main.h"
 #include "worldweather/conditions.h"
-#include <worldweather/worldweatheronline.h>
+#include "worldweather/worldweatheronline.h"
 #include "weather/service.h"
 
 using namespace WorldWeatherOnline;
@@ -40,14 +40,14 @@ void WorldWeatherConditions::refresh()
 
 	if (location()->hasError()) return;
 	
-	QVariantMap data = (*location()->api()->data())["weather"].toMap()["data"].toMap()["current_condition"].toList()[0].toMap();
+	QVariantMap data = location()->api()->data("weather")["data"].toMap()["current_condition"].toList()[0].toMap();
 	
 	//qDebug() << "List: " << (*location()->api()->data())["data"].toMap();
 	//qDebug() << "Data: " << data;
 	//return;
 	
 	setTemp(data["temp_F"].toString()); // TODO: Unit conversion
-	setVisibility(data["visibility"].toString() + "%");
+	setVisibility(data["visibility"].toString() + " mi");
 	setWeather(data["weatherDesc"].toList()[0].toMap()["value"].toString());
 	setPressure(data["pressure"].toString() + " millibars"); //TODO: Unit conversion
 	setClouds(data["cloudcover"].toString() + "%");

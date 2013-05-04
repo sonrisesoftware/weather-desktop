@@ -17,11 +17,13 @@
  ***************************************************************************/
 
 #include "main.h"
+#include "service.h"
 #include <application.h>
 #include "weather/service.h"
 #include "weather/location.h"
 #include "weather/conditions.h"
 #include "worldweather/worldweatheronline.h"
+#include "wunderground/wunderground.h"
 
 #include <QUrl>
 #include <QNetworkAccessManager>
@@ -34,24 +36,38 @@ Weather::Provider Weather::Service::m_provider = Weather::WorldWeatherOnline;
 Service::Service(Location* location): QObject(location)
 {
 	setData(new QVariantMap());
+	setLocation(location);
 }
 
 Service::~Service()
 {
-
+	delete data();
 }
 
 void Service::json_call(const QString& call, QObject *reciever, const char* slot)
 {
+	qDebug() << call;
 	//QString text = download(QUrl(prefix() + '/' + call), error);
 	KIO::TransferJob *job = KIO::get(KUrl(prefix() + '/' + call), KIO::NoReload, KIO::HideProgressInfo);
 	
-	QObject::connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(process_query(KIO::Job*,QByteArray)));
-	m_slots[job] = new SlotObject(reciever, slot);
+	QObject::connect(job, SIGNAL(result(KJob*)), this, SLOT(process_query(KJob*)));
+	QObject::connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(data_downloaded(KIO::Job*,QByteArray)));
+	m_jobs[job] = new DownloadJob(reciever, slot);
 }
 
-void Service::process_query(KIO::Job *job, const QByteArray& data) {
-	qDebug() << "Data:" << data;
+void Weather::Service::data_downloaded(KIO::Job* job, const QByteArray& data)
+{
+	DownloadJob *obj = m_jobs[job];
+	obj->m_data.append(data);
+}
+
+void Service::process_query(KJob *job) {
+	DownloadJob *obj = m_jobs[(KIO::Job *) job];
+	QByteArray data = obj->m_data;
+	
+	if (job->error()) {
+		obj->emit_signal(job->errorString(), QVariantMap());
+	}
 	
 	QString error; bool ok;
 	QJson::Parser parser;
@@ -64,12 +80,15 @@ void Service::process_query(KIO::Job *job, const QByteArray& data) {
 				result["response"].toMap()["error"].toMap()["description"].toString();
 	}
 	
-	SlotObject *obj = m_slots[job];
 	obj->emit_signal(error, result);
-	
-	m_slots.remove(job);
-	delete obj;
-	delete job;
+	m_jobs.remove((KIO::Job *) job);
+	obj->deleteLater();
+	job->deleteLater();
+}
+
+QVariantMap Service::data(const QString& type)
+{
+	return (*data())[type].toMap();
 }
 
 Service* Weather::Service::create(Location *location)
@@ -77,6 +96,8 @@ Service* Weather::Service::create(Location *location)
 	qDebug() << "Creating service provider...";
 	if (weatherProvider() == Weather::WorldWeatherOnline) {
 		return new WorldWeatherOnline::WorldWeatherOnline(location);
+	} else if (weatherProvider() == Weather::Wunderground) {
+		return new Wunderground::Wunderground(location);
 	} else {
 		qFatal("Invalid service provider!");
 		return nullptr;
