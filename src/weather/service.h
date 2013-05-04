@@ -59,7 +59,7 @@ namespace Weather
 		Q_OBJECT
 		
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
-		Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged)
+		Q_PROPERTY(QVariantMap *data READ data NOTIFY dataChanged)
 
 	public:
 		explicit Service(Location* location);

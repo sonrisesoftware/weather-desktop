@@ -67,9 +67,7 @@ namespace Weather
 	signals:		
 		void refreshed();
 		
-	private:
-		void internalRefresh();
-		
+	private:		
 		bool m_updating = false;
 	
 	#include "weather/location.gen"

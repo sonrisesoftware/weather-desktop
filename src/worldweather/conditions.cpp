@@ -40,12 +40,11 @@ void WorldWeatherConditions::refresh()
 
 	if (location()->hasError()) return;
 	
-	QVariantMap data = location()->api()->data();
+	QVariantMap data = (*location()->api()->data())["weather"].toMap()["data"].toMap()["current_condition"].toList()[0].toMap();
 	
-	//qDebug() << "List: " << data["data"].toMap()["current_condition"].toList();
-	qDebug() << "Data: " << data;
-	return;
-	data = data["data"].toMap()["current_condition"].toList()[0].toMap();
+	//qDebug() << "List: " << (*location()->api()->data())["data"].toMap();
+	//qDebug() << "Data: " << data;
+	//return;
 	
 	setTemp(data["temp_F"].toString()); // TODO: Unit conversion
 	setVisibility(data["visibility"].toString() + "%");

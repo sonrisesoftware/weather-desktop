@@ -66,8 +66,9 @@ void WorldWeatherOnline::WorldWeatherOnline::onWeatherDownloaded(QString error, 
 		return;
 	}
 	
-	qDebug() << "Saving data: " << data;
-	this->data().insert("weather", data);
+	//qDebug() << "Saving data: " << data;
+	this->data()->insert("weather", data);
+	qDebug() << "NEW Data: " << *this->data();
 	emit refreshed();
 }
 

@@ -33,7 +33,7 @@ Weather::Provider Weather::Service::m_provider = Weather::WorldWeatherOnline;
 
 Service::Service(Location* location): QObject(location)
 {
-
+	setData(new QVariantMap());
 }
 
 Service::~Service()
@@ -58,6 +58,7 @@ void Service::process_query(KIO::Job *job, const QByteArray& data) {
 	QVariantMap result = parser.parse(data, &ok).toMap();
 	if (!ok) {
 		error = "Unable to parse JSON response!";
+		qDebug() << "ERROR:" << error;
 	} else if (result["response"].toMap().contains("error")) {
 		error = "[" + result["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
 				result["response"].toMap()["error"].toMap()["description"].toString();
