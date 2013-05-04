@@ -102,20 +102,31 @@ Rectangle {
 			PlasmaComponents.ToolButton {
 				iconSource: "arrow-down-double"
 				text: i18n("Now")
-				onClicked: console.log("New doc!")
 				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "conditions"
+				}
+				checked: weatherView.view == "conditions"
 			}
 			
 			PlasmaComponents.ToolButton {
 				iconSource: "clock"
 				text: i18n("Hourly")
 				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "hourly"
+				}
+				checked: weatherView.view == "hourly"
 			}
 			
 			PlasmaComponents.ToolButton {
 				iconSource: "view-calendar-day"
 				text: i18n("Daily")
 				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "daily"
+				}
+				checked: weatherView.view == "daily"
 			}
 		}
 	}

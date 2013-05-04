@@ -41,18 +41,18 @@ void WundergroundConditions::refresh()
 	
 	QVariantMap data = location()->api()->data("current_observation");
 	
-	setTemp(data["temp_f"].toString() + " *F"); // TODO: Unit conversion
+	setIcon(Wunderground::Wunderground::icon(data["icon"].toString(), true));
+	setTemp(data["temp_f"].toString() + TEMP_F); // TODO: Unit conversion
 	setVisibility(data["visibility_mi"].toString() + " mi");
 	setWeather(data["weather"].toString());
 	setPressure(data["pressure_mb"].toString() + " millibars"); //TODO: Unit conversion
 	//setClouds(data["cloudcover"].toString() + "%");
-	setHumidity(data["relative_humidity"].toString() + "%");
+	setHumidity(data["relative_humidity"].toString());
 	setRainfall(data["precip_today_metric"].toString() + " mm"); //TODO: Unit conversion
 	setWind(data["wind_mph"].toString() + " mph from the " + data["wind_dir"].toString()); //TODO: Unit conversion
 	setWindgust(data["wind_gust_mph"].toString() + " mph");
-	setWindchill(data["feelslike_f"].toString() + " *F");
-	setDewpoint(data["dewpoint_f"].toString() + " *F");
-	setIcon(Wunderground::Wunderground::icon(data["icon"].toString(), true));
+	setWindchill(data["feelslike_f"].toString() + TEMP_F);
+	setDewpoint(data["dewpoint_f"].toString() + TEMP_F);
 }
 
 

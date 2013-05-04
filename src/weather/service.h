@@ -28,6 +28,11 @@
 #include <KDE/KUrl>
 #include <KIO/TransferJob>
 #include <KIO/Job>
+#include <KLocalizedString>
+
+#define DEG	"°"
+#define TEMP_F i18n(" °F")
+#define TEMP_C i18n(" °C")
 
 namespace Weather
 {
