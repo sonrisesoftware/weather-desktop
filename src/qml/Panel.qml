@@ -27,7 +27,7 @@ Rectangle {
 	implicitHeight: childrenRect.height + 20
 	
 	color: appStyle.panelColor;
-	radius: 4;
+	radius: appStyle.panelRadius;
 	
 	property alias title: header.text
 	property alias header: header

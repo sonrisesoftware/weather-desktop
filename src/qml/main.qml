@@ -82,7 +82,7 @@ Rectangle {
 			PlasmaComponents.ToolButton {
 				iconSource: "view-refresh"
 				text: i18n("Refresh")
-				onClicked: console.log("New doc!")
+				onClicked: WeatherApp.currentLocation.refresh()
 				width: minimumWidth + 5
 			}
 		}
@@ -100,7 +100,7 @@ Rectangle {
 			spacing: 5
 
 			PlasmaComponents.ToolButton {
-				iconSource: "download-later"
+				iconSource: "arrow-down-double"
 				text: i18n("Now")
 				onClicked: console.log("New doc!")
 				width: minimumWidth + 5

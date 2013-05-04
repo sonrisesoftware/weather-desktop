@@ -24,8 +24,8 @@ Rectangle {
 	id: root
 	//width: 400
 	//height: 64
-	color: appStyle.panelColor
-	radius: 4
+	color: appStyle.panelColor;
+	radius: appStyle.panelRadius;
 	
 	implicitWidth: 400
 	implicitHeight: 6 + Math.max(Math.max(icon.height, name.height + location.height), temp.height + weather.height)

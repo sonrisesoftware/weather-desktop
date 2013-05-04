@@ -25,5 +25,7 @@ QtObject {
 	property int headerFontSize: 16;
 	property int titleFontSize: 18;
 	property color textColor: "white";
-	property color panelColor: "#99333333";
+	//property color panelColor: "#99333333";
+	property color panelColor: Qt.rgba(0.2,0.2,0.2,0.75);
+	property int panelRadius: 6;
 }
