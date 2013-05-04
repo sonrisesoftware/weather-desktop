@@ -25,7 +25,6 @@ using namespace WorldWeatherOnline;
 
 WorldWeatherConditions::WorldWeatherConditions(Weather::Location* location): Conditions(location)
 {
-	qDebug() << "WWO Conditions!";
 }
 
 WorldWeatherConditions::~WorldWeatherConditions()
@@ -35,9 +34,6 @@ WorldWeatherConditions::~WorldWeatherConditions()
 
 void WorldWeatherConditions::refresh()
 {
-	Weather::Conditions::refresh();
-	qDebug() << "Refreshing WWO!";
-
 	if (location()->hasError()) return;
 	
 	QVariantMap data = location()->api()->data("weather")["data"].toMap()["current_condition"].toList()[0].toMap();

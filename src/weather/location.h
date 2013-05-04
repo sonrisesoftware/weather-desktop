@@ -27,6 +27,7 @@
 #include <QImage>
 #include <QIcon>
 #include <QDateTime>
+#include <QTimer>
 
 namespace Weather
 {
@@ -46,7 +47,8 @@ namespace Weather
 		Q_PROPERTY(QImage *background READ background WRITE setBackground NOTIFY backgroundChanged)
 		
 		Q_PROPERTY(int timezone READ timezone NOTIFY timezoneChanged)
-		Q_PROPERTY(QDateTime *lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged)
+		Q_PROPERTY(QTime lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged)
+		Q_PROPERTY(bool needsUpdate READ needsUpdate NOTIFY needsUpdateChanged)
 		Q_PROPERTY(bool day READ isDay NOTIFY dayChanged)
 		
 		Q_PROPERTY(Weather::Conditions *conditions READ conditions NOTIFY conditionsChanged)
@@ -63,6 +65,7 @@ namespace Weather
 		
 		Q_INVOKABLE static void refreshAll();
 		Q_INVOKABLE static void stopAllRefresh();
+		void finishedRefresh();
 		
 	public slots:
 		void refresh();		
@@ -74,6 +77,11 @@ namespace Weather
 	private:		
 		bool m_updating = false;
 		static QList<Location *> m_locations;
+		
+		QTimer m_updateTimer;
+		
+	private slots:
+		void timeToUpdate();
 	
 	#include "weather/location.gen"
 	};

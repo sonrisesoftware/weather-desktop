@@ -22,8 +22,6 @@
 
 WorldWeatherOnline::WorldWeatherOnline::WorldWeatherOnline(Weather::Location* location): Weather::Service(location)
 {
-	qDebug() << "WorldWeatherOnline service!";
-	
 }
 
 QString WorldWeatherOnline::WorldWeatherOnline::prefix()
@@ -33,7 +31,6 @@ QString WorldWeatherOnline::WorldWeatherOnline::prefix()
 
 Weather::Conditions* WorldWeatherOnline::WorldWeatherOnline::create_conditions()
 {
-	qDebug() << "Creating conditions for WWO";
 	return new WorldWeatherConditions(location());
 }
 
@@ -58,17 +55,15 @@ void WorldWeatherOnline::WorldWeatherOnline::onConditionsDownloaded(QString erro
 		error = data["data"].toMap()["error"].toList()[0].toMap()["msg"].toString();
 	}
 	
-	location()->setUpdating(false);
-	
 	if (!error.isEmpty()) {
 		location()->setError(true);
 		location()->setErrorMessage(error);
-		return;
+	} else {
+		//qDebug() << "Saving data: " << data;
+		this->data()->insert("weather", data);
 	}
 	
-	//qDebug() << "Saving data: " << data;
-	this->data()->insert("weather", data);
-	qDebug() << "NEW Data: " << *this->data();
+	location()->finishedRefresh();
 	emit refreshed();
 }
 

@@ -72,7 +72,7 @@ Rectangle {
 		opacity: 0
 		anchors.centerIn: root
 		title: i18n("Unable to access weather")
-		text: WeatherApp.currentLocation.errorMessage
+		text: WeatherApp.currentLocation.errorMessage;
 		
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }

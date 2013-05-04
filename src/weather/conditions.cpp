@@ -25,11 +25,11 @@ using namespace Weather;
 
 Conditions::Conditions(Weather::Location *location): QObject(location)
 {
-	qDebug() << "Generic conditions!";
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
 	QObject::connect(location->api(), SIGNAL(refreshed()), this, SLOT(refresh()));
 	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
+	refresh();
 }
 
 Conditions::~Conditions()
@@ -38,9 +38,7 @@ Conditions::~Conditions()
 }
 
 void Conditions::refresh()
-{
-	qDebug() << "Refreshing conditions...";
-	
+{	
 	setIcon(KIcon("weather-clouds"));
 	setWeather("<Weather>");	
 	setTemp("<Temp>");

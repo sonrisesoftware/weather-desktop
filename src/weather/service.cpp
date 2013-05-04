@@ -101,7 +101,7 @@ QVariantMap Service::data(const QString& type)
 
 Service* Weather::Service::create(Location *location)
 {
-	qDebug() << "Creating service provider...";
+	//qDebug() << "Creating service provider...";
 	if (weatherProvider() == Weather::WorldWeatherOnline) {
 		return new WorldWeatherOnline::WorldWeatherOnline(location);
 	} else if (weatherProvider() == Weather::Wunderground) {
@@ -120,7 +120,5 @@ void Weather::Service::setWeatherProvider(Weather::Provider provider)
 		Wunderground::Wunderground::init();
 	}
 }
-
-
 
 #include "weather/service.moc"

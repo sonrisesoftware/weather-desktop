@@ -26,6 +26,12 @@
 #include <qtimer.h>
 #include <KLocalizedString>
 
+// Update only once per hour
+#define UPDATE_TIME 60 * 60 * 1000
+
+// For testing only!
+//#define UPDATE_TIME 30 * 1000
+
 using namespace Weather;
 
 QList<Location *> Location::m_locations;
@@ -36,8 +42,10 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 	//qDebug() << "New location: " + name + " - " + (location.isEmpty() ? "Auto-IP" : location);
 	
 	// Whenever the location is changed, redownload the weather
+	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(timeToUpdate()));
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
 	
+	setNeedsUpdate(true);
 	setApi(Weather::Service::create(this));
 	m_conditions = api()->create_conditions();
 	//qDebug() << "Done with conditions.";
@@ -62,6 +70,11 @@ Location::~Location()
 
 void Location::refresh()
 {
+	if (!needsUpdate()) {
+		qDebug() << "No need to refresh!";
+		return;
+	}
+	
 	//qDebug() << "Refreshing...";
 	setError(false); // Start fresh
 	
@@ -72,9 +85,17 @@ void Location::refresh()
 	
 	setUpdating(true);
 	api()->refresh();
-	
+}
+
+void Weather::Location::finishedRefresh()
+{
+	setUpdating(false);
+	setNeedsUpdate(false);
+	setLastUpdated(QTime::currentTime());
+	QTimer::singleShot(UPDATE_TIME, this, SLOT(timeToUpdate()));
 	emit refreshed();
 }
+
 
 void Weather::Location::stopRefresh()
 {
@@ -96,5 +117,10 @@ void Weather::Location::stopAllRefresh()
 	}
 }
 
+void Weather::Location::timeToUpdate()
+{
+	qDebug() << "Time to update!";
+	setNeedsUpdate(true);
+}
 
 #include "weather/location.moc"

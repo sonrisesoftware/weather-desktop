@@ -28,7 +28,6 @@ QMap<QString, KIcon> Wunderground::Wunderground::icons_night;
 
 Wunderground::Wunderground::Wunderground(Weather::Location* location): Weather::Service(location)
 {
-	qDebug() << "Wunderground weather!";
 }
 
 Wunderground::Wunderground::~Wunderground()
@@ -78,18 +77,15 @@ void Wunderground::Wunderground::onConditionsDownloaded(QString error, const QVa
 		error = data["response"].toMap()["error"].toMap()["description"].toString();
 	}
 	
-	location()->setUpdating(false);
-	
 	if (!error.isEmpty()) {
 		location()->setError(true);
 		location()->setErrorMessage(error);
-		return;
+	} else {
+		delete this->data();
+		this->setData(new QVariantMap(data));
 	}
 	
-	//qDebug() << "Saving data: " << data;
-	delete this->data();
-	this->setData(new QVariantMap(data));
-	//qDebug() << "NEW Data: " << *this->data();
+	location()->finishedRefresh();
 	emit refreshed();
 }
 

@@ -72,7 +72,8 @@ Rectangle {
 	
 	PlasmaComponents.ToolBar {
 		id: refreshToolBar
-		width: refreshButton.width + 15 // Hack to resize toolbar when button changes
+		// Hack to resize toolbar when button changes or switches to text
+		width: (WeatherApp.currentLocation.needsUpdate ? refreshButton.width : lastUpdatedText.width) + 15
 		
 		tools: Row {
 			anchors.leftMargin: 3
@@ -86,6 +87,21 @@ Rectangle {
 				onClicked: (WeatherApp.currentLocation.updating) ? 
 						WeatherApp.currentLocation.stopAllRefresh() : WeatherApp.currentLocation.refreshAll()
 				width: minimumWidth + 5
+				opacity: (WeatherApp.currentLocation.needsUpdate) ? 1 : 0
+		
+				/*Behavior on opacity {
+					NumberAnimation { duration: 500 }
+				}*/
+			}
+			
+			Text {
+				id: lastUpdatedText
+				text: i18n("Last updated at %1", WeatherApp.currentLocation.lastUpdated)
+				opacity: (WeatherApp.currentLocation.needsUpdate) ? 0 : 1
+		
+				/*Behavior on opacity {
+					NumberAnimation { duration: 500 }
+				}*/
 			}
 		}
 	}
