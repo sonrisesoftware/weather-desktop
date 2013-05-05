@@ -96,7 +96,7 @@ Rectangle {
 			
 			Text {
 				id: lastUpdatedText
-				text: i18n("Last updated at %1", WeatherApp.currentLocation.lastUpdated)
+				text: i18n("Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
 				opacity: (WeatherApp.currentLocation.needsUpdate) ? 0 : 1
 		
 				/*Behavior on opacity {

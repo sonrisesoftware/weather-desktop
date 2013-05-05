@@ -19,6 +19,7 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
@@ -41,9 +42,8 @@ Rectangle {
 		anchors { horizontalCenter: root.horizontalCenter; top: root.top; topMargin: 5 }
 	}
 	
-	Line {
-		width: 100
-		color: Qt.rgba(1,1,1,0.75);
+	PlasmaWidgets.Separator {
+		width: header.width * 3/4
 		anchors { horizontalCenter: root.horizontalCenter; top: header.bottom; topMargin: 5 }
 	}
 }
