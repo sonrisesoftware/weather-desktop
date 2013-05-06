@@ -26,11 +26,7 @@
 #include <qtimer.h>
 #include <KLocalizedString>
 
-// Update only once per hour
-#define UPDATE_TIME 60 * 60 * 1000
-
-// For testing only!
-//#define UPDATE_TIME 30 * 1000
+#include "config.h"
 
 using namespace Weather;
 

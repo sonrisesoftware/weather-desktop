@@ -27,6 +27,10 @@ Rectangle {
 	color: appStyle.panelColor;
 	radius: appStyle.panelRadius;
 	
+	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_updating
+	property bool is_updating: (WeatherApp.currentLocation.updating == true)
+	property bool is_regular: !(is_error || is_updating)
+	
 	implicitWidth: 400
 	implicitHeight: 6 + Math.max(Math.max(icon.height, name.height + location.height), temp.height + weather.height)
 	
@@ -42,53 +46,83 @@ Rectangle {
 //  		anchors.fill: parent
 //  	}
 	
-	PlasmaCore.IconItem {
-		id: icon
-		width: 64; height: 64;
+	Text {
+		id: noneView
 		anchors.centerIn: root
+		opacity: (is_updating || is_error) ? 1 : 0
+		text: (root.name == "") ? root.location : (root.name + " - " + root.location)
+		color: appStyle.textColor
+		font.pixelSize: appStyle.mainTitleFontSize
 	}
 	
-	Text {
-		id: name
-		color: appStyle.textColor
-		font.pixelSize: 20
-		anchors {
-			bottom: root.verticalCenter
-			right: icon.left
-			rightMargin: 10
+	Item {
+		id: regularView
+		anchors.fill: root
+		opacity: is_regular ? 1 : 0
+	
+		PlasmaCore.IconItem {
+			id: icon
+			width: 64; height: 64;
+			anchors.centerIn: regularView
 		}
-	}
-	
-	Text {
-		id: location
-		color: appStyle.textColor
-		font.pixelSize: 16
-		anchors {
-			top: root.verticalCenter
-			right: icon.left
-			rightMargin: 10
+		
+		Text {
+			id: name
+			color: appStyle.textColor
+			font.pixelSize: 20
+			opacity: root.name == "" ? 0 : 1
+			anchors {
+				bottom: regularView.verticalCenter
+				right: icon.left
+				rightMargin: 10
+			}
 		}
-	}
-	
-	Text {
-		id: temp
-		color: appStyle.textColor
-		font.pixelSize: 20
-		anchors {
-			bottom: root.verticalCenter
-			left: icon.right
-			leftMargin: 10
+		
+		Text {
+			id: location
+			color: appStyle.textColor
+			font.pixelSize: 16
+			opacity: root.name == "" ? 0 : 1
+			anchors {
+				top: regularView.verticalCenter
+				right: icon.left
+				rightMargin: 10
+			}
 		}
-	}
-	
-	Text {
-		id: weather
-		font.pixelSize: 16
-		color: appStyle.textColor
-		anchors {
-			top: root.verticalCenter
-			left: icon.right
-			leftMargin: 10
+		
+		Text {
+			id: locationOnly
+			color: appStyle.textColor
+			text: root.location
+			font.pixelSize: 18
+			opacity: (root.name == "") ? 1 : 0
+			anchors {
+				verticalCenter: regularView.verticalCenter
+				right: icon.left
+				rightMargin: 10
+			}
+		}
+		
+		Text {
+			id: temp
+			color: appStyle.textColor
+			font.pixelSize: 20
+			anchors {
+				bottom: regularView.verticalCenter
+				left: icon.right
+				leftMargin: 10
+			}
+		}
+		
+		Text {
+			id: weather
+			font.pixelSize: 16
+			color: appStyle.textColor
+			anchors {
+				top: regularView.verticalCenter
+				left: icon.right
+				leftMargin: 10
+			}
 		}
 	}
 }

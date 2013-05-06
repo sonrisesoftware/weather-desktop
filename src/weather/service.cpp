@@ -28,10 +28,13 @@
 #include <QUrl>
 #include <QNetworkAccessManager>
 
+#include "config.h"
+
 using namespace Weather;
 
 QString Weather::Service::m_apiKey = "";
 Weather::Provider Weather::Service::m_provider = Weather::WorldWeatherOnline;
+int Weather::Service::m_accessCount = 0;
 
 Service::Service(Location* location): QObject(location)
 {
@@ -46,6 +49,16 @@ Service::~Service()
 
 void Service::json_call(const QString& call, QObject *reciever, const char* slot)
 {
+	m_accessCount++;
+	qDebug() << "API Call count:" << m_accessCount;
+	
+	if (m_accessCount > MAX_API_CALLS) {
+		location()->setError(true);
+		location()->setErrorMessage(i18n("You have accessed the weather service too many times today!"));
+		location()->setUpdating(false);
+		return;
+	}
+	
 	qDebug() << call;
 	//QString text = download(QUrl(prefix() + '/' + call), error);
 	KIO::TransferJob *job = KIO::get(KUrl(prefix() + '/' + call), KIO::NoReload, KIO::HideProgressInfo);

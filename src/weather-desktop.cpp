@@ -130,7 +130,7 @@ void WeatherDesktop::setLocation(const QString& location)
 		setCurrentLocation(autoLocation());
 	} else {
 		if (searchLocation() == nullptr) {
-			setSearchLocation(new Weather::Location("Manual", location, this));
+			setSearchLocation(new Weather::Location("", location, this));
 		} else {
 			searchLocation()->setLocation(location);
 		}

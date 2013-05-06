@@ -16,17 +16,16 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-import QtQuick 1.1
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.components 0.1 as PlasmaComponents
 
-QtObject {
-	property int dataFontSize: 14;
-	property int headerFontSize: 16;
-	property int titleFontSize: 18;
-	property int mainTitleFontSize: 20;
-	property color textColor: "white";
-	//property color panelColor: "#99333333";
-	property color panelColor: Qt.rgba(0.2,0.2,0.2,0.75);
-	property int panelRadius: 6;
-}
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// ***** Configuration Options ***** //
+
+// Max number of API calls
+#define MAX_API_CALLS 25
+
+// Time until refreshing is allowed
+#define UPDATE_TIME 60 * 60 * 1000
+
+#endif // CONFIG_H

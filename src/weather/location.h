@@ -78,7 +78,7 @@ namespace Weather
 		bool m_updating = false;
 		static QList<Location *> m_locations;
 		
-		QTimer m_updateTimer;
+		//QTimer m_updateTimer;
 		
 	private slots:
 		void timeToUpdate();

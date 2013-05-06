@@ -28,6 +28,10 @@
 #include <KDE/KAboutData>
 #include <KDE/KMainWindow>
 
+#define DEG	"°"
+#define TEMP_F i18n(" °F")
+#define TEMP_C i18n(" °C")
+
 #define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("data", 	\
 		KCmdLineArgs::aboutData()->appName() + QString("/") + file))
 		

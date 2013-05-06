@@ -30,10 +30,6 @@
 #include <KIO/Job>
 #include <KLocalizedString>
 
-#define DEG	"°"
-#define TEMP_F i18n(" °F")
-#define TEMP_C i18n(" °C")
-
 namespace Weather
 {
 	class Location;
@@ -106,8 +102,9 @@ namespace Weather
 	private:
 		static Weather::Provider m_provider;
 		static QString m_apiKey;
+		static int m_accessCount;
 		
-		QMap<KIO::Job *, DownloadJob *> m_jobs;
+		QMap<KIO::Job *, DownloadJob *> m_jobs;		
 		
 	private slots:
 		void process_query(KJob *job);
