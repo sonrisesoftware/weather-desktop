@@ -5,13 +5,13 @@ Check the weather in a simple and easy-to-use manner. With no ads and a beautifu
 
 Weather Desktop provides access to multiple named locations, with previews of all available at the same time. It displays detailed current conditions,  daily forecasts for the next seven days, and hourly forecasts for the next 24 hours. For people on the go, Weather Desktop can automatically determine your location using your IP address. In addition, users can easily add their own backgrounds, weather-related or not, to the application. 
 
-Don't want to open the application? Just enable to option to set your current wallpaper to depict the current weather conditions!
+Don't want to open the application? Just enable the option to set your current wallpaper to depict the current weather conditions!
 
 ### Features ###
 
 _**Warning:** this software is in a pre-release stage and is under active development! Most of the features listed below do not work yet or are in a non-working state._
 
- * Runs on any system that supports KDE
+ * Runs on any system that supports the KDE libraries
  * Multiple named locations
  * List of 10 recent locations
  * Current weather conditions
@@ -63,6 +63,12 @@ Once you have an API key, create a file called `src/api_key.h` and add your API 
 **Class Generator**
 
 Weather Desktop uses Class Generator to build some files, so [download it](https://github.com/iBeliever/qclassgen/archive/master.zip) and extract it to a directory called `classgen`.
+
+**Dependencies under Debian/Ubuntu**
+
+Under Debian, Ubuntu, or any of their derivatives, you can easily install the necessary dependencies as follows:
+
+    $ sudo apt-get install build-essential cmake kdelibs5-dev libqjson-dev
 
 **From the command line under Unix/Linux:**
 
