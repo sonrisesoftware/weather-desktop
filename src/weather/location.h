@@ -41,7 +41,7 @@ namespace Weather
 		Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 		
 		Q_PROPERTY(QString location READ location WRITE setLocation NOTIFY locationChanged)
-		Q_PROPERTY(QString display READ display NOTIFY displayChanged)
+		Q_PROPERTY(QString display READ display WRITE setDisplay NOTIFY displayChanged)
 		
 		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
 		Q_PROPERTY(QImage *background READ background WRITE setBackground NOTIFY backgroundChanged)

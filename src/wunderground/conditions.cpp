@@ -37,7 +37,8 @@ void WundergroundConditions::refresh()
 	if (location()->hasError()) return;
 	
 	QVariantMap data = location()->api()->data("current_observation");
-	
+
+	location()->setDisplay(data["display_location"].toMap()["full"].toString());
 	setIcon(Wunderground::Wunderground::icon(data["icon"].toString(), true));
 	setTemp(data["temp_f"].toString() + TEMP_F); // TODO: Unit conversion
 	setVisibility(data["visibility_mi"].toString() + " mi");
