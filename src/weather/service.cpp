@@ -34,6 +34,7 @@ using namespace Weather;
 
 QString Weather::Service::m_apiKey = "";
 Weather::Provider Weather::Service::m_provider = Weather::WorldWeatherOnline;
+int Weather::Service::m_maxCalls = 0;
 int Weather::Service::m_accessCount = 0;
 
 Service::Service(Location* location): QObject(location)
@@ -49,14 +50,16 @@ Service::~Service()
 
 void Service::json_call(const QString& call, QObject *reciever, const char* slot)
 {
-	m_accessCount++;
-	qDebug() << "API Call count:" << m_accessCount;
-	
-	if (m_accessCount > MAX_API_CALLS) {
-		location()->setError(true);
-		location()->setErrorMessage(i18n("You have accessed the weather service too many times today!"));
-		location()->setUpdating(false);
-		return;
+	if (maxCalls() > 0) {
+		setAccessCount(accessCount() + 1);
+		qDebug() << "API Call count:" << accessCount();
+		
+		if (accessCount() > maxCalls()) {
+			location()->setError(true);
+			location()->setErrorMessage(i18n("You have accessed the weather service too many times today!"));
+			location()->setUpdating(false);
+			return;
+		}
 	}
 	
 	qDebug() << call;
@@ -115,9 +118,9 @@ QVariantMap Service::data(const QString& type)
 Service* Weather::Service::create(Location *location)
 {
 	//qDebug() << "Creating service provider...";
-	if (weatherProvider() == Weather::WorldWeatherOnline) {
+	if (provider() == Weather::WorldWeatherOnline) {
 		return new WorldWeatherOnline::WorldWeatherOnline(location);
-	} else if (weatherProvider() == Weather::Wunderground) {
+	} else if (provider() == Weather::Wunderground) {
 		return new Wunderground::Wunderground(location);
 	} else {
 		qFatal("Invalid service provider!");
@@ -125,7 +128,7 @@ Service* Weather::Service::create(Location *location)
 	}
 }
 
-void Weather::Service::setWeatherProvider(Weather::Provider provider)
+void Weather::Service::setProvider(Weather::Provider provider)
 {
 	m_provider = provider;
 	

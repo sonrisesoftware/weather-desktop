@@ -28,4 +28,7 @@
 // Time until refreshing is allowed
 #define UPDATE_TIME 60 * 60 * 1000
 
+// Should weather be auto-refreshed?
+#define AUTO_REFRESH true
+
 #endif // CONFIG_H

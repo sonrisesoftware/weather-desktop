@@ -35,6 +35,31 @@
 #define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("data", 	\
 		KCmdLineArgs::aboutData()->appName() + QString("/") + file))
 		
+#define STATIC_PROPERTY(type, name, read, write)							\
+public:																		\
+	static void write(type name) { m_ ## name = name; }						\
+	static type read() { return m_ ## name; }								\
+																			\
+private:																	\
+	static type m_ ## name;
+	
+#define M_STATIC_PROPERTY(type, name, read, write)							\
+public:																		\
+	static void write(type name);											\
+	static type read() { return m_ ## name; }								\
+																			\
+private:																	\
+	static type m_ ## name;
+	
+#define P_STATIC_PROPERTY(type, name, read, write)							\
+protected:																	\
+	static void write(type name) { m_ ## name = name; }						\
+public:																		\
+	static type read() { return m_ ## name; }								\
+																			\
+private:																	\
+	static type m_ ## name;
+		
 QString download(const QUrl& url, QString *error);
 
 #endif

@@ -20,6 +20,8 @@
 #ifndef SERVICE_H
 #define SERVICE_H
 
+#include "main.h"
+
 #include <QObject>
 #include <QVariantMap>
 #include <QByteArray>
@@ -64,6 +66,11 @@ namespace Weather
 		
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
 		Q_PROPERTY(QVariantMap *data READ data NOTIFY dataChanged)
+		
+		M_STATIC_PROPERTY(Weather::Provider, provider, provider, setProvider)
+		STATIC_PROPERTY(QString, apiKey, apiKey, setAPIKey)
+		STATIC_PROPERTY(int, maxCalls, maxCalls, setMaxCalls)
+		P_STATIC_PROPERTY(int, accessCount, accessCount, setAccessCount)
 
 	public:
 		explicit Service(Location* location);
@@ -78,10 +85,6 @@ namespace Weather
 		virtual Weather::Conditions *create_conditions() = 0;
 		
 		static Service *create(Location *location);
-		static void setWeatherProvider(Weather::Provider provider);
-		static void setAPIKey(const QString& apiKey) { m_apiKey = apiKey; }
-		static Weather::Provider weatherProvider() { return m_provider; }
-		static QString apiKey() { return m_apiKey; }
 		
 		QVariantMap data(const QString& type);
 		
@@ -99,11 +102,7 @@ namespace Weather
 		
 		virtual QString internalLocation() = 0;
 		
-	private:
-		static Weather::Provider m_provider;
-		static QString m_apiKey;
-		static int m_accessCount;
-		
+	private:		
 		QMap<KIO::Job *, DownloadJob *> m_jobs;		
 		
 	private slots:

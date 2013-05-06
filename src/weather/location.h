@@ -57,6 +57,8 @@ namespace Weather
 		Q_PROPERTY(bool updating READ isUpdated WRITE setUpdating NOTIFY updatingChanged)
 		Q_PROPERTY(bool error READ hasError WRITE setError NOTIFY errorChanged)
 		Q_PROPERTY(QString errorMessage READ errorMessage WRITE setErrorMessage NOTIFY errorMessageChanged)
+		
+		STATIC_PROPERTY(bool, autoRefresh, autoRefresh, setAutoRefresh)
 
 	public:
 		explicit Location(const QString& name, const QString& location, QObject* parent = 0);

@@ -16,9 +16,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-
 #include "application.h"
 #include "api_key.h"
+#include "config.h"
 
 #include "weather/location.h"
 #include "weather/service.h"
@@ -36,8 +36,10 @@ KMainWindow *Application::m_window = nullptr;
 Application::Application(): KApplication(true)
 {
 	registerQMLTypes();
-	Weather::Service::setWeatherProvider(Weather::Wunderground);
+	Weather::Service::setProvider(Weather::Wunderground);
 	Weather::Service::setAPIKey(WUNDER_API_KEY);
+	Weather::Service::setMaxCalls(MAX_API_CALLS);
+	Weather::Location::setAutoRefresh(AUTO_REFRESH);
 }
 
 Application::~Application()

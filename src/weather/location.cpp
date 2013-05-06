@@ -31,6 +31,7 @@
 using namespace Weather;
 
 QList<Location *> Location::m_locations;
+bool Location::m_autoRefresh;
 
 Location::Location(const QString& name, const QString& location, QObject* parent)
 	: QObject(parent)
@@ -39,7 +40,9 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 	
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(timeToUpdate()));
-	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
+	if (!autoRefresh()) {
+		QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
+	}
 	
 	setNeedsUpdate(true);
 	setApi(Weather::Service::create(this));
@@ -71,7 +74,7 @@ void Location::refresh()
 		return;
 	}
 	
-	//qDebug() << "Refreshing...";
+	qDebug() << "Refreshing...";
 	setError(false); // Start fresh
 	
 	if (location().isEmpty())
@@ -88,6 +91,7 @@ void Weather::Location::finishedRefresh()
 	setUpdating(false);
 	setNeedsUpdate(false);
 	setLastUpdated(QTime::currentTime());
+	qDebug() << "Needs refresh in" << UPDATE_TIME/60000 << "minutes";
 	QTimer::singleShot(UPDATE_TIME, this, SLOT(timeToUpdate()));
 	emit refreshed();
 }
@@ -117,6 +121,9 @@ void Weather::Location::timeToUpdate()
 {
 	qDebug() << "Time to update!";
 	setNeedsUpdate(true);
+	if (autoRefresh()) {
+		refresh();
+	}
 }
 
 #include "weather/location.moc"
