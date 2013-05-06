@@ -31,7 +31,9 @@ Rectangle {
 	property bool is_updating: (WeatherApp.currentLocation.updating == true)
 	property bool is_regular: !(is_error || is_updating)
 	
-	implicitWidth: 400
+	implicitWidth: is_regular ? Math.max(400, icon.width + 80 + 2 * Math.max(
+			Math.max(location.width, name.width), 
+			Math.max(temp.width, weather.width))) : Math.max(400, noneView.width)
 	implicitHeight: 6 + Math.max(Math.max(icon.height, name.height + location.height), temp.height + weather.height)
 	
 	property alias name: name.text;

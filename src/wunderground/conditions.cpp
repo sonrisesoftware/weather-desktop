@@ -38,7 +38,14 @@ void WundergroundConditions::refresh()
 	
 	QVariantMap data = location()->api()->data("current_observation");
 
-	location()->setDisplay(data["display_location"].toMap()["full"].toString());
+	QString country =  data["display_location"].toMap()["country"].toString();
+	
+	if (country == "US") {
+		location()->setDisplay(data["display_location"].toMap()["full"].toString());
+	} else {
+		location()->setDisplay(data["display_location"].toMap()["city"].toString() + ", " + country);
+	}
+	
 	setIcon(Wunderground::Wunderground::icon(data["icon"].toString(), true));
 	setTemp(data["temp_f"].toString() + TEMP_F); // TODO: Unit conversion
 	setVisibility(data["visibility_mi"].toString() + " mi");
