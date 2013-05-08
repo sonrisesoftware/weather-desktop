@@ -19,6 +19,8 @@
 #include "main.h"
 #include "application.h"
 #include "weather-desktop.h"
+#include "weather/service.h"
+//#include "weather/cache.h"
 #include "settings.h"
 
 #include <QGraphicsObject>
@@ -38,10 +40,10 @@ WeatherDesktop::WeatherDesktop()
 	setupActions();
 	
 	setupGUI();
+	loadSettings();
 	
 	m_autoLocation = new Weather::Location(this);
 	setCurrentLocation(autoLocation());
-	loadSettings();
 	
 	m_view = new QDeclarativeView(this);
 	m_view->rootContext()->setContextProperty("WeatherApp", this);
@@ -101,6 +103,18 @@ void WeatherDesktop::loadSettings()
 		Q_ASSERT(list.length() == 2);
 		addLocation(list[0], list[1]);
 	}
+	
+	QStringList list = Settings::accessCount().split(":");
+	qDebug() << "List:" << list;
+	QDate current = QDate::currentDate();
+	QDate lastUsed = QDate::fromString(list[0]);
+	qDebug() << current << lastUsed << (lastUsed == current);
+	if (current == lastUsed) {
+		Weather::Service::setAccessCount(list[1].toInt() + Weather::Service::accessCount());
+		qDebug() << "Loading access count:" << Weather::Service::accessCount();
+	}
+	
+	//Weather::Cache::get()->setRecentLocations(Settings::recentLocations());
 }
 
 void WeatherDesktop::saveSettings()
@@ -111,6 +125,12 @@ void WeatherDesktop::saveSettings()
 		list.append(location->name() + ':' + location->location());
 	}
 	Settings::setLocations(list);
+	
+	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ":" + QString::number(Weather::Service::accessCount());
+	Settings::setAccessCount(QDate::currentDate().toString() + ":" + QString::number(Weather::Service::accessCount()));
+	
+	//Settings::setRecentLocations(Weather::Cache::get()->recentLocations());
+	
 	Settings::self()->writeConfig();
 }
 

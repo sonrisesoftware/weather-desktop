@@ -65,12 +65,12 @@ namespace Weather
 		Q_OBJECT
 		
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
-		Q_PROPERTY(QVariantMap *data READ data NOTIFY dataChanged)
+		Q_PROPERTY(QVariantMap data READ data NOTIFY dataChanged)
 		
 		M_STATIC_PROPERTY(Weather::Provider, provider, provider, setProvider)
 		STATIC_PROPERTY(QString, apiKey, apiKey, setAPIKey)
 		STATIC_PROPERTY(int, maxCalls, maxCalls, setMaxCalls)
-		P_STATIC_PROPERTY(int, accessCount, accessCount, setAccessCount)
+		STATIC_PROPERTY(int, accessCount, accessCount, setAccessCount)
 
 	public:
 		explicit Service(Location* location);
@@ -103,7 +103,9 @@ namespace Weather
 		virtual QString internalLocation() = 0;
 		
 	private:		
-		QMap<KIO::Job *, DownloadJob *> m_jobs;		
+		QMap<KIO::Job *, DownloadJob *> m_jobs;
+
+		static Cache cache(RESOURCE("weather-cache"));
 		
 	private slots:
 		void process_query(KJob *job);

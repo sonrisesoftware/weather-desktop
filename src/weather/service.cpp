@@ -39,13 +39,12 @@ int Weather::Service::m_accessCount = 0;
 
 Service::Service(Location* location): QObject(location)
 {
-	setData(new QVariantMap());
 	setLocation(location);
 }
 
 Service::~Service()
 {
-	delete data();
+	
 }
 
 void Service::json_call(const QString& call, QObject *reciever, const char* slot)
@@ -112,7 +111,7 @@ void Service::process_query(KJob *job) {
 
 QVariantMap Service::data(const QString& type)
 {
-	return (*data())[type].toMap();
+	return data()[type].toMap();
 }
 
 Service* Weather::Service::create(Location *location)

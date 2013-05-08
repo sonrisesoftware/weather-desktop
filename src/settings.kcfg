@@ -8,6 +8,12 @@
 		<entry name="Locations" type="StringList">
 			<label>The list of saved locations</label>
 		</entry>
+		<entry name="Recent Locations" type="StringList">
+			<label>The list of recent locations</label>
+		</entry>
+		<entry name="Access Count" type="String">
+			<label>The number of times the API has been called per day</label>
+		</entry>
 		<entry name="Units" type="Enum">
 			<label>The units used for displaying weather</label>
 			<default>English</default>

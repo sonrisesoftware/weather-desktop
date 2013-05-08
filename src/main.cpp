@@ -21,6 +21,7 @@
 #include "weather-desktop.h"
 
 #include "application.h"
+#include "cache.h"
 
 // KDE headers
 #include <KDE/KApplication>

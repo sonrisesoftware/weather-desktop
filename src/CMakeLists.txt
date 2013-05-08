@@ -10,6 +10,7 @@ set(weather-desktop_SRCS
 qclassgen(weather-desktop_SRCS
    application
    weather-desktop
+   cache
    
    weather/location
    weather/service
