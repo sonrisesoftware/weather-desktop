@@ -25,7 +25,8 @@ _**Warning:** this software is in a pre-release stage and is under active develo
  * QJson (http://qjson.sourceforge.net)
 
 ### Build Requirements ###
- * Class Generator (https://github.com/iBeliever/qclassgen)
+ * Code Units (to provide Class Generator) (https://github.com/iBeliever/code-units)
+ * or Class Generator (https://github.com/iBeliever/qclassgen)
 
 ### Acknowledgments ###
 
@@ -59,10 +60,13 @@ Once you have an API key, create a file called `src/api_key.h` and add your API 
     #define WWO_API_KEY "<your-key-here>" // For World Weather Online
     #define WUNDER_API_KEY "<your-key-here>" // For Wunderground
 
-    
 **Class Generator**
 
-Weather Desktop uses Class Generator to build some files, so [download it](https://github.com/iBeliever/qclassgen/archive/master.zip) and extract it to a directory called `classgen`.
+Weather Desktop uses Class Generator to build some files, so use Code Units to provide it:
+
+    $ code use qclassgen
+    
+Or, you can manually [download it](https://github.com/iBeliever/qclassgen/archive/master.zip) and extract it to a directory called `classgen`.
 
 **Dependencies under Debian/Ubuntu**
 
