@@ -9,6 +9,7 @@ set(weather-desktop_QML
    Style.qml
    WeatherConditions.qml
    WeatherHeader.qml
+   WeatherForecast.qml
    WeatherView.qml   
  )
 

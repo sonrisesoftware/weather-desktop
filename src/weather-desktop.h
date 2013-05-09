@@ -40,7 +40,8 @@ class WeatherDesktop : public KXmlGuiWindow
 	Q_PROPERTY(Weather::Location *searchLocation READ searchLocation WRITE setSearchLocation NOTIFY searchLocationChanged)
 	Q_PROPERTY(Weather::Location *autoLocation READ autoLocation)
 	Q_PROPERTY(QString homeLocation READ homeLocation WRITE setHomeLocation NOTIFY homeLocationChanged)
-	Q_PROPERTY(QList<Weather::Location *> locations READ locations)
+	Q_PROPERTY(QList<Weather::Location *> locations READ locations NOTIFY locationsChanged)
+	Q_PROPERTY(QStringList locationNames READ locationNames NOTIFY locationNamesChanged)
 	
 public:
 	/**
@@ -53,8 +54,13 @@ public:
 	 */
 	virtual ~WeatherDesktop();
 	
+	Q_INVOKABLE Weather::Location* location(QString name);
+	Q_INVOKABLE Weather::Location* location(int index);
+	
 public slots:
 	Weather::Location *addLocation(const QString& name, const QString &location);
+	void addCurrentLocation();
+	void removeCurrentLocation();
 	void setLocation(const QString& location);
 	
 private:

@@ -39,21 +39,18 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 {
 	Q_ASSERT(!location.isEmpty());
 	
-	//qDebug() << "New location: " + name + " - " + (location.isEmpty() ? "Auto-IP" : location);
-	
-	setApi(Weather::Service::create(this));
-	m_conditions = api()->create_conditions();
-	
-	setName(name);
-	setLocation(location);
-	setNeedsUpdate(true);
-	refresh();
-	
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(timeToUpdate()));
 	if (!autoRefresh()) {
 		QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
 	}
+	
+	setApi(Weather::Service::create(this));
+	m_conditions = api()->create_conditions();
+	
+	setName(name);
+	setNeedsUpdate(true);
+	setLocation(location);
 	
 	m_locations.append(this);
 }
@@ -81,6 +78,13 @@ void Location::refresh()
 			if (error.isEmpty())
 				setLastUpdated(lastUpdatedTime.time());
 			setNeedsUpdate(false);
+			
+			QDateTime then = lastUpdatedTime.addMSecs(UPDATE_TIME);
+			qDebug() << "Refresh at:" << then;
+			qDebug() << "Now:" << QDateTime::currentDateTime();
+			int time = QDateTime::currentDateTime().msecsTo(then);
+			qDebug() << "Needs refresh in" << time/(1000 * 60) << "minutes";
+			QTimer::singleShot(time, this, SLOT(timeToUpdate()));
 		} else {			
 			//if (!error.startsWith(NO_DATA) && !error.startsWith(OUTDATED_DATA)) {
 				qWarning("Unable to load data from cache: %s", qPrintable(error));

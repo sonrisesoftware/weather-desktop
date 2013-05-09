@@ -79,6 +79,16 @@ Rectangle {
 		}
 	}
 	
+	WeatherForecast {
+		id: forecast
+		anchors.centerIn: root
+		opacity: 0
+				
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
+	}
+	
 	states: [
 		State {
 			name: "conditions"
@@ -86,6 +96,13 @@ Rectangle {
 			PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: conditions.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: conditions.implicitHeight; }
+		},
+		State {
+			name: "daily"
+			when: is_regular && view == "daily"
+			PropertyChanges { target: forecast; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: forecast.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: forecast.implicitHeight; }
 		},
 		State {
 			name: "error"

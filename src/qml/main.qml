@@ -171,13 +171,38 @@ Rectangle {
 			anchors.leftMargin: 3
 			anchors.rightMargin: 3
 			spacing: 5
-
+			
+			PlasmaComponents.ToolButton {
+				iconSource: "list-add"
+				//text: i18n("Home")
+				onClicked: WeatherApp.addCurrentLocation()
+				width: minimumWidth + 5
+			}
+			
 			PlasmaComponents.ToolButton {
 				iconSource: "go-home"
 				text: i18n("Home")
-				onClicked: WeatherApp.setLocation(WeatherApp.homeLocation)
+				onClicked: {
+					if (WeatherApp.currentLocation.location != WeatherApp.homeLocation) {
+						WeatherApp.setLocation(WeatherApp.homeLocation)
+					}
+				}
 				checked: WeatherApp.currentLocation.location == WeatherApp.homeLocation
 				width: minimumWidth + 5
+			}
+			
+			Repeater {
+				model: WeatherApp.locationNames.length
+				
+				delegate: PlasmaComponents.ToolButton {
+					iconSource: WeatherApp.location(modelData).conditions.iconSource;
+					text: WeatherApp.location(modelData).name;
+					onClicked: {
+						WeatherApp.setCurrentLocation(WeatherApp.location(modelData))
+					}
+					checked: WeatherApp.currentLocation.location == modelData
+					width: minimumWidth + 5
+				}
 			}
 		}
 	}

@@ -33,6 +33,7 @@
 #include <KDE/KStandardAction>
 #include <KDE/KActionCollection>
 #include <KDE/KMenuBar>
+#include <KDE/KInputDialog>
 
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
@@ -131,7 +132,46 @@ Weather::Location *WeatherDesktop::addLocation(const QString& name, const QStrin
 	qDebug() << "Adding location: " + name + " - " + location;
 	Weather::Location *l = new Weather::Location(name, location, this);
 	locations().append(l);
+	locationNames().append(location);
 	return l;
+}
+
+void WeatherDesktop::addCurrentLocation()
+{
+	if (location(currentLocation()->location()) != nullptr) return;
+	
+	bool ok;	
+	QString name = KInputDialog::getText(i18n("New Location"),
+			i18n("Name for '%1':",currentLocation()->location()), 
+			currentLocation()->display(), &ok, this);
+	
+	if (!ok) return;
+	
+	addLocation(name, currentLocation()->location());
+}
+
+void WeatherDesktop::removeCurrentLocation()
+{
+	
+}
+
+
+Weather::Location* WeatherDesktop::location(QString name)
+{
+	if (locationNames().contains(name)) {
+		return locations()[locationNames().indexOf(name)];
+	} else {
+		return nullptr;
+	}
+}
+
+Weather::Location* WeatherDesktop::location(int index)
+{
+	if (index < locationNames().length()) {
+		return locations()[index];
+	} else {
+		return nullptr;
+	}
 }
 
 void WeatherDesktop::setLocation(const QString& location)
@@ -143,7 +183,7 @@ void WeatherDesktop::setLocation(const QString& location)
 	} else {
 		if (searchLocation() == nullptr) {
 			setSearchLocation(new Weather::Location("", location, this));
-		} else {
+		} else if (searchLocation()->location() != location) {
 			searchLocation()->setLocation(location);
 		}
 		setCurrentLocation(searchLocation());
