@@ -32,13 +32,6 @@ Rectangle {
 		id: style
 	}
 	
-	MouseArea {
-		anchors.fill: parent
-		onClicked: {
-			Qt.quit();
-		}
-	}
-	
 	Image {
 		id: background
 		//source: "images/background.jpg"
@@ -182,6 +175,8 @@ Rectangle {
 			PlasmaComponents.ToolButton {
 				iconSource: "go-home"
 				text: i18n("Home")
+				onClicked: WeatherApp.setLocation(WeatherApp.homeLocation)
+				checked: WeatherApp.currentLocation.location == WeatherApp.homeLocation
 				width: minimumWidth + 5
 			}
 		}

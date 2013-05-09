@@ -37,6 +37,8 @@ Cache Weather::Location::m_cache("/home/mspencer/weather-cache");
 Location::Location(const QString& name, const QString& location, QObject* parent)
 	: QObject(parent)
 {
+	Q_ASSERT(!location.isEmpty());
+	
 	//qDebug() << "New location: " + name + " - " + (location.isEmpty() ? "Auto-IP" : location);
 	
 	setApi(Weather::Service::create(this));

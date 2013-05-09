@@ -42,8 +42,10 @@ WeatherDesktop::WeatherDesktop()
 	setupGUI();
 	loadSettings();
 	
-	m_autoLocation = new Weather::Location(this);
-	setCurrentLocation(autoLocation());
+	//m_autoLocation = new Weather::Location(this);
+	//setCurrentLocation(autoLocation());
+	setHomeLocation(Settings::homeLocation());
+	setLocation(homeLocation());
 	
 	m_view = new QDeclarativeView(this);
 	m_view->rootContext()->setContextProperty("WeatherApp", this);
@@ -51,7 +53,7 @@ WeatherDesktop::WeatherDesktop()
 	m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 	
 	Application::setupDeclarativeBindings(m_view->engine());
-	QObject::connect(m_view->engine(), SIGNAL(quit()), this, SLOT(test()));
+	QObject::connect(m_view->engine(), SIGNAL(quit()), kapp, SLOT(quit()));
 	
 	m_view->setSource(RESOURCE("qml/main.qml"));
 	
@@ -88,12 +90,6 @@ void WeatherDesktop::onImplicitWidthChanged()
 void WeatherDesktop::onImplicitHeightChanged()
 {
 	m_view->setMinimumHeight(m_view->rootObject()->property("implicitHeight").toInt());
-}
-
-void WeatherDesktop::test()
-{
-	//delete currentLocation();
-	setCurrentLocation(new Weather::Location("Home", "Saint Louis, MO", this));
 }
 
 void WeatherDesktop::loadSettings()
@@ -142,7 +138,8 @@ void WeatherDesktop::setLocation(const QString& location)
 {
 	qDebug() << "Set location to:" << location;
 	if (location.isEmpty()) {
-		setCurrentLocation(autoLocation());
+		//setCurrentLocation(autoLocation());
+		return;
 	} else {
 		if (searchLocation() == nullptr) {
 			setSearchLocation(new Weather::Location("", location, this));

@@ -39,6 +39,7 @@ class WeatherDesktop : public KXmlGuiWindow
 	Q_PROPERTY(Weather::Location *currentLocation READ currentLocation WRITE setCurrentLocation NOTIFY currentLocationChanged)
 	Q_PROPERTY(Weather::Location *searchLocation READ searchLocation WRITE setSearchLocation NOTIFY searchLocationChanged)
 	Q_PROPERTY(Weather::Location *autoLocation READ autoLocation)
+	Q_PROPERTY(QString homeLocation READ homeLocation WRITE setHomeLocation NOTIFY homeLocationChanged)
 	Q_PROPERTY(QList<Weather::Location *> locations READ locations)
 	
 public:
@@ -64,7 +65,6 @@ private:
 private slots:
 	void onImplicitWidthChanged();
 	void onImplicitHeightChanged();
-	void test();
 	void loadSettings();
 	void saveSettings();
 	
