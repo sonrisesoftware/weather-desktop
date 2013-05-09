@@ -21,6 +21,7 @@
 #define LOCATION_H
 
 #include "main.h"
+#include "cache.h"
 
 #include <QObject>
 #include <QString>
@@ -77,8 +78,9 @@ namespace Weather
 		void refreshed();
 		
 	private:		
-		bool m_updating = false;
+		//bool m_updating = false;
 		static QList<Location *> m_locations;
+		static Cache m_cache;
 		
 		//QTimer m_updateTimer;
 		

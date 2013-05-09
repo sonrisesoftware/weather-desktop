@@ -81,7 +81,7 @@ Cache::Cache(const QString& directory, QObject *parent): QObject(parent)
 	
 	setDirectory(directory);
 	setSize(10);
-	setMaxTime(1000 * 10); // 10 S
+	setMaxTime(1000 * 60 * 60); // 1 hr
 }
 
 Cache::~Cache() {
@@ -198,5 +198,44 @@ void Cache::remove(QString name)
 		QFile::remove(directory() + "/" + name.replace("/", "-"));
 	}
 }
+
+
+QDateTime Cache::lastUpdated(QString name, QString *error)
+{
+	
+	// If the name is in the cache,
+	if (recent().contains(name)) {
+		QVariantMap result;
+		
+		// If the data is not loaded,
+		if (!data().contains(name)) {
+			// Load the data
+			QByteArray array = read_file(directory() + "/" + name.replace("/", "-"), error);
+			if (!error->isEmpty()) return QDateTime::currentDateTime();
+			
+			bool ok;
+			QJson::Parser parser;
+			result = parser.parse(array, &ok).toMap();
+			if (!ok) {
+				*error = INVALID_JSON + parser.errorString();
+				return QDateTime::currentDateTime();
+			}
+			
+			this->data()[name] = result;
+ 		} else {
+			result = this->data()[name].toMap();
+		}
+ 		
+ 		//qDebug() << "Saved:" << result["time"].toDateTime();
+		//qDebug() << "Now:" << QDateTime::currentDateTime();
+ 		
+		return result["time"].toDateTime();
+	} else { // Otherwise,
+		// Return no data, with error "No data in cache"
+		*error = NO_DATA;
+		return QDateTime::currentDateTime();
+	}
+}
+
 
 #include "cache.moc"

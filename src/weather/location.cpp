@@ -32,11 +32,41 @@ using namespace Weather;
 
 QList<Location *> Location::m_locations;
 bool Location::m_autoRefresh;
+Cache Weather::Location::m_cache("/home/mspencer/weather-cache");
 
 Location::Location(const QString& name, const QString& location, QObject* parent)
 	: QObject(parent)
 {
 	//qDebug() << "New location: " + name + " - " + (location.isEmpty() ? "Auto-IP" : location);
+	
+	setApi(Weather::Service::create(this));
+	m_conditions = api()->create_conditions();
+	//qDebug() << "Done with conditions.";
+	
+	if (!location.isEmpty()) {
+		QString error;
+		QVariant var = m_cache.load(location, &error);
+		if (error.isEmpty()) {
+			qDebug() << "Using location from cache:" << location;
+			api()->setData(var.toMap());
+			QDateTime lastUpdatedTime = m_cache.lastUpdated(location, &error);
+			if (error.isEmpty())
+				setLastUpdated(lastUpdatedTime.time());
+			setNeedsUpdate(false);
+		} else {
+			setNeedsUpdate(true);
+			
+			//if (!error.startsWith(NO_DATA) && !error.startsWith(OUTDATED_DATA)) {
+				qWarning("Unable to load data from cache: %s", qPrintable(error));
+			//}
+		}
+	} else {
+		setNeedsUpdate(true);
+	}
+	
+	setName(name);
+	setLocation(location);
+	refresh();
 	
 	// Whenever the location is changed, redownload the weather
 	QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(timeToUpdate()));
@@ -44,46 +74,38 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 		QObject::connect(this, SIGNAL(locationChanged(QString)), this, SLOT(refresh()));
 	}
 	
-	setNeedsUpdate(true);
-	setApi(Weather::Service::create(this));
-	m_conditions = api()->create_conditions();
-	//qDebug() << "Done with conditions.";
-	
-	setName(name);
-	setLocation(location);
-	//qDebug() << "Done.";
-	
 	m_locations.append(this);
 }
 
 Location::Location(QObject* parent): Location(i18nc("@title:tab", "Current"), "", parent)
 {
-
+	
 }
 
 
 Location::~Location()
-{
+{	
 	m_locations.removeOne(this);
 }
 
 void Location::refresh()
 {
-	if (!needsUpdate()) {
+	if (hasError() || needsUpdate()) {
+		qDebug() << "Refreshing...";
+		//qDebug() << "  Error? " << hasError();
+		//qDebug() << "  Update?" << needsUpdate();
+		setError(false); // Start fresh
+	
+		if (location().isEmpty())
+			setDisplay(i18nc("@label", "Auto IP"));
+		else
+			setDisplay(location());
+	
+		setUpdating(true);
+		api()->refresh();
+	} else {
 		qDebug() << "No need to refresh!";
-		return;
 	}
-	
-	qDebug() << "Refreshing...";
-	setError(false); // Start fresh
-	
-	if (location().isEmpty())
-		setDisplay(i18nc("@label", "Auto IP"));
-	else
-		setDisplay(location());
-	
-	setUpdating(true);
-	api()->refresh();
 }
 
 void Weather::Location::finishedRefresh()
@@ -91,6 +113,15 @@ void Weather::Location::finishedRefresh()
 	setUpdating(false);
 	setNeedsUpdate(false);
 	setLastUpdated(QTime::currentTime());
+	
+	QString error;
+	if (!location().isEmpty()) {
+		m_cache.save(location(), &error, api()->data());
+		if (!error.isEmpty()) {
+			qWarning("Unable to save location to cache: %s", qPrintable(error));
+		}
+	}
+	
 	qDebug() << "Needs refresh in" << UPDATE_TIME/60000 << "minutes";
 	QTimer::singleShot(UPDATE_TIME, this, SLOT(timeToUpdate()));
 	emit refreshed();

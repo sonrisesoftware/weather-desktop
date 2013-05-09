@@ -17,8 +17,8 @@
  ***************************************************************************/
 
 #include "main.h"
-#include "service.h"
-#include <application.h>
+#include "weather/service.h"
+#include "application.h"
 #include "weather/service.h"
 #include "weather/location.h"
 #include "weather/conditions.h"
@@ -61,8 +61,7 @@ void Service::json_call(const QString& call, QObject *reciever, const char* slot
 		}
 	}
 	
-	qDebug() << call;
-	//QString text = download(QUrl(prefix() + '/' + call), error);
+	qDebug() << "JSON Call >>>" << call;
 	KIO::TransferJob *job = KIO::get(KUrl(prefix() + '/' + call), KIO::NoReload, KIO::HideProgressInfo);
 	
 	QObject::connect(job, SIGNAL(result(KJob*)), this, SLOT(process_query(KJob*)));

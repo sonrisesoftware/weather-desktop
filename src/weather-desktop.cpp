@@ -105,16 +105,13 @@ void WeatherDesktop::loadSettings()
 	}
 	
 	QStringList list = Settings::accessCount().split(":");
-	qDebug() << "List:" << list;
 	QDate current = QDate::currentDate();
 	QDate lastUsed = QDate::fromString(list[0]);
-	qDebug() << current << lastUsed << (lastUsed == current);
+	
 	if (current == lastUsed) {
 		Weather::Service::setAccessCount(list[1].toInt() + Weather::Service::accessCount());
 		qDebug() << "Loading access count:" << Weather::Service::accessCount();
 	}
-	
-	//Weather::Cache::get()->setRecentLocations(Settings::recentLocations());
 }
 
 void WeatherDesktop::saveSettings()
@@ -128,8 +125,6 @@ void WeatherDesktop::saveSettings()
 	
 	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ":" + QString::number(Weather::Service::accessCount());
 	Settings::setAccessCount(QDate::currentDate().toString() + ":" + QString::number(Weather::Service::accessCount()));
-	
-	//Settings::setRecentLocations(Weather::Cache::get()->recentLocations());
 	
 	Settings::self()->writeConfig();
 }

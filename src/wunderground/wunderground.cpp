@@ -81,8 +81,7 @@ void Wunderground::Wunderground::onConditionsDownloaded(QString error, const QVa
 		location()->setError(true);
 		location()->setErrorMessage(error);
 	} else {
-		delete this->data();
-		this->setData(new QVariantMap(data));
+		this->setData(data);
 	}
 	
 	location()->finishedRefresh();

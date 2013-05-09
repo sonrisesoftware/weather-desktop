@@ -45,9 +45,11 @@ public:
 	
 	void save(QString name, QString *error, QVariant data);
 	
-	bool is_current(QString name);
+	//bool is_current(QString name);
 
 	void remove(QString name);
+	
+	QDateTime lastUpdated(QString name, QString *error);
 	
 	bool remove();
 

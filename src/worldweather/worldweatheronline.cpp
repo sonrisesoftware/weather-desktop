@@ -60,7 +60,7 @@ void WorldWeatherOnline::WorldWeatherOnline::onConditionsDownloaded(QString erro
 		location()->setErrorMessage(error);
 	} else {
 		//qDebug() << "Saving data: " << data;
-		this->data()->insert("weather", data);
+		this->data()["weather"] = data;
 	}
 	
 	location()->finishedRefresh();
