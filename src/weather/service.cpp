@@ -49,16 +49,18 @@ Service::~Service()
 
 void Service::json_call(const QString& call, QObject *reciever, const char* slot)
 {
+	if (!location()->needsUpdate()) return;
+	
 	if (maxCalls() > 0) {
-		setAccessCount(accessCount() + 1);
-		qDebug() << "API Call count:" << accessCount();
-		
-		if (accessCount() > maxCalls()) {
+		if (accessCount() + 1 > maxCalls()) {
 			location()->setError(true);
 			location()->setErrorMessage(i18n("You have accessed the weather service too many times today!"));
 			location()->setUpdating(false);
 			return;
 		}
+		
+		setAccessCount(accessCount() + 1);
+		qDebug() << "API Call count:" << accessCount();
 	}
 	
 	qDebug() << "JSON Call >>>" << call;

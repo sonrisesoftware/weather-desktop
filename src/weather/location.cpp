@@ -41,31 +41,10 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 	
 	setApi(Weather::Service::create(this));
 	m_conditions = api()->create_conditions();
-	//qDebug() << "Done with conditions.";
-	
-	if (!location.isEmpty()) {
-		QString error;
-		QVariant var = m_cache.load(location, &error);
-		if (error.isEmpty()) {
-			qDebug() << "Using location from cache:" << location;
-			api()->setData(var.toMap());
-			QDateTime lastUpdatedTime = m_cache.lastUpdated(location, &error);
-			if (error.isEmpty())
-				setLastUpdated(lastUpdatedTime.time());
-			setNeedsUpdate(false);
-		} else {
-			setNeedsUpdate(true);
-			
-			//if (!error.startsWith(NO_DATA) && !error.startsWith(OUTDATED_DATA)) {
-				qWarning("Unable to load data from cache: %s", qPrintable(error));
-			//}
-		}
-	} else {
-		setNeedsUpdate(true);
-	}
 	
 	setName(name);
 	setLocation(location);
+	setNeedsUpdate(true);
 	refresh();
 	
 	// Whenever the location is changed, redownload the weather
@@ -90,6 +69,23 @@ Location::~Location()
 
 void Location::refresh()
 {
+	if (!location().isEmpty()) {
+		QString error;
+		QVariant var = m_cache.load(location(), &error);
+		if (error.isEmpty()) {
+			qDebug() << "Using location from cache:" << location();
+			api()->setData(var.toMap());
+			QDateTime lastUpdatedTime = m_cache.lastUpdated(location(), &error);
+			if (error.isEmpty())
+				setLastUpdated(lastUpdatedTime.time());
+			setNeedsUpdate(false);
+		} else {			
+			//if (!error.startsWith(NO_DATA) && !error.startsWith(OUTDATED_DATA)) {
+				qWarning("Unable to load data from cache: %s", qPrintable(error));
+			//}
+		}
+	}
+	
 	if (hasError() || needsUpdate()) {
 		qDebug() << "Refreshing...";
 		//qDebug() << "  Error? " << hasError();

@@ -144,6 +144,8 @@ QVariant Cache::load(QString name, QString *error)
  		
  		//qDebug() << "Saved:" << result["time"].toDateTime();
 		//qDebug() << "Now:" << QDateTime::currentDateTime();
+		
+		qDebug() << "Data exists in cache:" << name;
  		
 		// If the data is current,
 		if (result["time"].toDateTime().msecsTo(QDateTime::currentDateTime()) < maxTime()) {
@@ -155,6 +157,7 @@ QVariant Cache::load(QString name, QString *error)
 			return QVariant();
 		}
 	} else { // Otherwise,
+		qDebug() << "Data is not in cache:" << name;
 		// Return no data, with error "No data in cache"
 		*error = NO_DATA;
 		return QVariant();
