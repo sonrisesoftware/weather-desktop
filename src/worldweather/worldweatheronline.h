@@ -31,7 +31,7 @@ namespace WorldWeatherOnline {
 	public:
 		explicit WorldWeatherOnline(Weather::Location* location);
 		
-		virtual void json_query(const QString& query, const QString& params, QObject *reciever, const char* slot);
+		virtual void json_query(const QString& query, const QString& params, QObject *receiver, const char* slot);
 		
 		virtual Weather::Conditions *create_conditions();
 

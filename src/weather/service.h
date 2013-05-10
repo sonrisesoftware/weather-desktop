@@ -47,8 +47,8 @@ namespace Weather
 		Q_OBJECT
 		
 	public:
-		DownloadJob(QObject *reciever, const char *slot) {
-			QObject::connect(this, SIGNAL(data(QString,QVariantMap)), reciever, slot);
+		DownloadJob(QObject *receiver, const char *slot) {
+			QObject::connect(this, SIGNAL(data(QString,QVariantMap)), receiver, slot);
 		}
 		
 		void emit_signal(QString error, QVariantMap map) {
@@ -77,10 +77,10 @@ namespace Weather
 		explicit Service(Location* location);
 		virtual ~Service();
 
-		virtual void json_query(const QString& query, const QString& params, QObject *reciever, const char* slot) = 0;
+		virtual void json_query(const QString& query, const QString& params, QObject *receiver, const char* slot) = 0;
 		
-		inline void json_query(const QString& query, QObject *reciever, const char* slot) {
-			json_query(query, "", reciever, slot);
+		inline void json_query(const QString& query, QObject *receiver, const char* slot) {
+			json_query(query, "", receiver, slot);
 		}
 		
 		virtual Weather::Conditions *create_conditions() = 0;
@@ -97,7 +97,7 @@ namespace Weather
 		void refreshed();
 		
 	protected:
-		void json_call(const QString& call, QObject *reciever, const char* slot);
+		void json_call(const QString& call, QObject *receiver, const char* slot);
 		
 		virtual QString prefix() = 0;
 		

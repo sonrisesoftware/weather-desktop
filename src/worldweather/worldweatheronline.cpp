@@ -34,9 +34,9 @@ Weather::Conditions* WorldWeatherOnline::WorldWeatherOnline::create_conditions()
 	return new WorldWeatherConditions(location());
 }
 
-void WorldWeatherOnline::WorldWeatherOnline::json_query(const QString& query, const QString& params, QObject* reciever, const char* slot)
+void WorldWeatherOnline::WorldWeatherOnline::json_query(const QString& query, const QString& params, QObject* receiver, const char* slot)
 {
-	json_call(query + ".ashx?q=" + internalLocation() + "&format=json&" + params + "&key=" + Weather::Service::apiKey(), reciever, slot);
+	json_call(query + ".ashx?q=" + internalLocation() + "&format=json&" + params + "&key=" + Weather::Service::apiKey(), receiver, slot);
 }
 
 QString WorldWeatherOnline::WorldWeatherOnline::internalLocation()

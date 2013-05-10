@@ -16,8 +16,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "main.h"
 #include "worldweather/conditions.h"
+
+#include "main.h"
 #include "worldweather/worldweatheronline.h"
 #include "weather/service.h"
 
@@ -46,8 +47,8 @@ void WorldWeatherConditions::refresh()
 	setVisibility(data["visibility"].toString() + " mi");
 	setWeather(data["weatherDesc"].toList()[0].toMap()["value"].toString());
 	setPressure(data["pressure"].toString() + " millibars"); //TODO: Unit conversion
-	setClouds(data["cloudcover"].toString() + "%");
-	setHumidity(data["humidity"].toString() + "%");
+	setClouds(data["cloudcover"].toString() + '%');
+	setHumidity(data["humidity"].toString() + '%');
 	setRainfall(data["precipMM"].toString() + " mm"); //TODO: Unit conversion
 	setWind(data["windspeedMiles"].toString() + " mph from the " + data["winddir16Point"].toString()); //TODO: Unit conversion
 }

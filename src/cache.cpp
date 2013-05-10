@@ -73,7 +73,7 @@ Cache::Cache(const QString& directory, QObject *parent): QObject(parent)
 		QString error;	
 		QByteArray data = read_file(directory + "/cache-info", &error);
 		if (error.isEmpty()) {
-			setRecent(QString(data).split("\n"));
+			setRecent(QString(data).split('\n'));
 		} else {
 			qFatal("Unable to create cache: %s", qPrintable(error));
 		}
@@ -99,7 +99,7 @@ Cache::~Cache() {
 		QVariantMap map = data()[name].toMap();
 		
 		QString error; bool ok; QJson::Serializer serializer;
-		write_file(directory() + "/" + name.replace("/", "-"), &error, serializer.serialize(map, &ok));
+		write_file(directory() + '/' + name.replace('/', '-'), &error, serializer.serialize(map, &ok));
 		if (!error.isEmpty()) {
 			qWarning() << "Error while saving cache: " + error;;
 			continue;
@@ -126,7 +126,7 @@ QVariant Cache::load(QString name, QString *error)
 		// If the data is not loaded,
 		if (!data().contains(name)) {
 			// Load the data
-			QByteArray array = read_file(directory() + "/" + name.replace("/", "-"), error);
+			QByteArray array = read_file(directory() + '/' + name.replace('/', '-'), error);
 			if (!error->isEmpty()) return QVariant();
 			
 			bool ok;
@@ -187,7 +187,7 @@ void Cache::save(QString name, QString* error, QVariant data)
 	recent().removeOne(name);
 	recent().prepend(name);
 	
-	// Write only on quiting...
+	// Write only on quitting...
 }
 
 void Cache::remove(QString name)
@@ -197,8 +197,8 @@ void Cache::remove(QString name)
 	
 	recent().removeOne(name);
 	data().remove(name);
-	if (QFile(directory() + "/" + name.replace("/", "-")).exists()) {
-		QFile::remove(directory() + "/" + name.replace("/", "-"));
+	if (QFile(directory() + '/' + name.replace('/', '-')).exists()) {
+		QFile::remove(directory() + '/' + name.replace('/', '-'));
 	}
 }
 
@@ -213,7 +213,7 @@ QDateTime Cache::lastUpdated(QString name, QString *error)
 		// If the data is not loaded,
 		if (!data().contains(name)) {
 			// Load the data
-			QByteArray array = read_file(directory() + "/" + name.replace("/", "-"), error);
+			QByteArray array = read_file(directory() + '/' + name.replace('/', '-'), error);
 			if (!error->isEmpty()) return QDateTime::currentDateTime();
 			
 			bool ok;

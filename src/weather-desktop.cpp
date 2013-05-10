@@ -16,9 +16,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
+#include "weather-desktop.h"
+
 #include "main.h"
 #include "application.h"
-#include "weather-desktop.h"
 #include "weather/service.h"
 #include "cache.h"
 #include "settings.h"
@@ -101,13 +102,13 @@ void WeatherDesktop::onImplicitHeightChanged()
 
 void WeatherDesktop::loadSettings()
 {
-	foreach(QString str, Settings::locations()) {
-		QStringList list = str.split(":");
+	foreach(const QString& str, Settings::locations()) {
+		QStringList list = str.split(':');
 		Q_ASSERT(list.length() == 2);
 		addLocation(list[0], list[1]);
 	}
 	
-	QStringList list = Settings::accessCount().split(":");
+	QStringList list = Settings::accessCount().split(':');
 	QDate current = QDate::currentDate();
 	QDate lastUsed = QDate::fromString(list[0]);
 	
@@ -126,8 +127,8 @@ void WeatherDesktop::saveSettings()
 	}
 	Settings::setLocations(list);
 	
-	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ":" + QString::number(Weather::Service::accessCount());
-	Settings::setAccessCount(QDate::currentDate().toString() + ":" + QString::number(Weather::Service::accessCount()));
+	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ':' + QString::number(Weather::Service::accessCount());
+	Settings::setAccessCount(QDate::currentDate().toString() + ':' + QString::number(Weather::Service::accessCount()));
 	
 	Settings::self()->writeConfig();
 }

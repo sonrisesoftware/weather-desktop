@@ -16,8 +16,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "wunderground/wunderground.h"
 #include "wunderground/conditions.h"
+
+#include "wunderground/wunderground.h"
 #include "weather/conditions.h"
 
 using namespace Wunderground;

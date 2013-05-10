@@ -55,7 +55,7 @@ Location::Location(const QString& name, const QString& location, QObject* parent
 	m_locations.append(this);
 }
 
-Location::Location(QObject* parent): Location(i18nc("@title:tab", "Current"), "", parent)
+Location::Location(QObject* parent): Location(i18nc("The current location based on the IP address", "Current"), "", parent)
 {
 	
 }

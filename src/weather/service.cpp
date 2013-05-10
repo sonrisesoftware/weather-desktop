@@ -16,10 +16,10 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
+#include "weather/service.h"
+
 #include "main.h"
-#include "weather/service.h"
 #include "application.h"
-#include "weather/service.h"
 #include "weather/location.h"
 #include "weather/conditions.h"
 #include "worldweather/worldweatheronline.h"
@@ -47,7 +47,7 @@ Service::~Service()
 	
 }
 
-void Service::json_call(const QString& call, QObject *reciever, const char* slot)
+void Service::json_call(const QString& call, QObject *receiver, const char* slot)
 {
 	if (!location()->needsUpdate()) return;
 	
@@ -68,7 +68,7 @@ void Service::json_call(const QString& call, QObject *reciever, const char* slot
 	
 	QObject::connect(job, SIGNAL(result(KJob*)), this, SLOT(process_query(KJob*)));
 	QObject::connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(data_downloaded(KIO::Job*,QByteArray)));
-	m_jobs[job] = new DownloadJob(reciever, slot);
+	m_jobs[job] = new DownloadJob(receiver, slot);
 }
 
 void Service::stopJobs()

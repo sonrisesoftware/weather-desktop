@@ -16,8 +16,9 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "main.h"
 #include "wunderground/wunderground.h"
+
+#include "main.h"
 #include "wunderground/conditions.h"
 
 using namespace Wunderground;
@@ -40,9 +41,9 @@ QString Wunderground::Wunderground::internalLocation()
 	if (location()->location().isEmpty()) {
 		return "autoip";
 	} else {
-		QStringList list = location()->location().split(",");
+		QStringList list = location()->location().split(',');
 		if (list.size() == 2) {
-			return list.at(1) + "/" + list.at(0);
+			return list.at(1) + '/' + list.at(0);
 		} else {
 			return location()->location();
 		}
@@ -64,9 +65,9 @@ Weather::Conditions* Wunderground::Wunderground::create_conditions()
 	return new WundergroundConditions(location());
 }
 
-void Wunderground::Wunderground::json_query(const QString& query, const QString& params, QObject* reciever, const char* slot)
+void Wunderground::Wunderground::json_query(const QString& query, const QString& params, QObject* receiver, const char* slot)
 {
-	json_call(Weather::Service::apiKey() + "/" + query + "/q/" + internalLocation() + ".json?" + params, reciever, slot);
+	json_call(Weather::Service::apiKey() + '/' + query + "/q/" + internalLocation() + ".json?" + params, receiver, slot);
 }
 
 void Wunderground::Wunderground::onConditionsDownloaded(QString error, const QVariantMap& data)

@@ -34,7 +34,7 @@ namespace Wunderground {
 		virtual ~Wunderground();
 		
 		virtual Weather::Conditions* create_conditions();
-		virtual void json_query(const QString& query, const QString& params, QObject* reciever, const char* slot);
+		virtual void json_query(const QString& query, const QString& params, QObject* receiver, const char* slot);
 	
 		static void init();
 		static KIcon icon(const QString &weather, const bool day);
