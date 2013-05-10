@@ -133,6 +133,8 @@ Weather::Location *WeatherDesktop::addLocation(const QString& name, const QStrin
 	Weather::Location *l = new Weather::Location(name, location, this);
 	locations().append(l);
 	locationNames().append(location);
+	emit locationsChanged(locations());
+	emit locationNamesChanged(locationNames());
 	return l;
 }
 
@@ -152,7 +154,12 @@ void WeatherDesktop::addCurrentLocation()
 
 void WeatherDesktop::removeCurrentLocation()
 {
-	
+	Weather::Location *l = location(currentLocation()->location());
+	locations().removeOne(l);
+	locationNames().removeOne(l->location());
+	emit locationsChanged(locations());
+	emit locationNamesChanged(locationNames());
+	delete l;
 }
 
 

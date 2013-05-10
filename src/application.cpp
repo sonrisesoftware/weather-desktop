@@ -26,6 +26,8 @@
 
 // Qt headers
 #include <QtDeclarative>
+#include <QMetaType>
+#include <QList>
 
 // KDE headers
 #include <KDE/KMessageBox>

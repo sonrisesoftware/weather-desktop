@@ -168,6 +168,7 @@ Rectangle {
 		anchors.bottom: root.bottom
 	
 		tools: Row {
+			id: toolsRow;
 			anchors.leftMargin: 3
 			anchors.rightMargin: 3
 			spacing: 5
@@ -176,6 +177,13 @@ Rectangle {
 				iconSource: "list-add"
 				//text: i18n("Home")
 				onClicked: WeatherApp.addCurrentLocation()
+				width: minimumWidth + 5
+			}
+			
+			PlasmaComponents.ToolButton {
+				iconSource: "list-remove"
+				//text: i18n("Home")
+				onClicked: WeatherApp.removeCurrentLocation()
 				width: minimumWidth + 5
 			}
 			
@@ -194,13 +202,17 @@ Rectangle {
 			Repeater {
 				model: WeatherApp.locationNames.length
 				
+				/*onItemAdded: {
+					locationsToolBar.width = toolsRow.width + 15
+				}*/
+				
 				delegate: PlasmaComponents.ToolButton {
-					iconSource: WeatherApp.location(modelData).conditions.iconSource;
+					iconSource: WeatherApp.location(modelData).conditions.icon;
 					text: WeatherApp.location(modelData).name;
 					onClicked: {
 						WeatherApp.setCurrentLocation(WeatherApp.location(modelData))
 					}
-					checked: WeatherApp.currentLocation.location == modelData
+					checked: WeatherApp.currentLocation == WeatherApp.location(modelData)
 					width: minimumWidth + 5
 				}
 			}
