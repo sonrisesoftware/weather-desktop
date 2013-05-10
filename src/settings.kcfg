@@ -5,10 +5,6 @@
 							http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
 	<kcfgfile/>
 	<group name="weather">
-		<entry name="Home Location" type="String">
-			<label>Your home location</label>
-			<default>St. Louis, MO</default>
-		</entry>
 		<entry name="Locations" type="StringList">
 			<label>The list of saved locations</label>
 		</entry>

@@ -70,6 +70,8 @@ namespace Weather
 		Q_INVOKABLE static void stopAllRefresh();
 		void finishedRefresh();
 		
+		static Cache& cache() { return m_cache; }
+		
 	public slots:
 		void refresh();		
 		void stopRefresh();

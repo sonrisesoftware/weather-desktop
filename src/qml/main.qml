@@ -187,24 +187,8 @@ Rectangle {
 				width: minimumWidth + 5
 			}
 			
-			PlasmaComponents.ToolButton {
-				iconSource: "go-home"
-				text: i18n("Home")
-				onClicked: {
-					if (WeatherApp.currentLocation.location != WeatherApp.homeLocation) {
-						WeatherApp.setLocation(WeatherApp.homeLocation)
-					}
-				}
-				checked: WeatherApp.currentLocation.location == WeatherApp.homeLocation
-				width: minimumWidth + 5
-			}
-			
 			Repeater {
 				model: WeatherApp.locationNames.length
-				
-				/*onItemAdded: {
-					locationsToolBar.width = toolsRow.width + 15
-				}*/
 				
 				delegate: PlasmaComponents.ToolButton {
 					iconSource: WeatherApp.location(modelData).conditions.icon;

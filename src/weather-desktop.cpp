@@ -20,7 +20,7 @@
 #include "application.h"
 #include "weather-desktop.h"
 #include "weather/service.h"
-//#include "weather/cache.h"
+#include "cache.h"
 #include "settings.h"
 
 #include <QGraphicsObject>
@@ -43,10 +43,16 @@ WeatherDesktop::WeatherDesktop()
 	setupGUI();
 	loadSettings();
 	
-	//m_autoLocation = new Weather::Location(this);
-	//setCurrentLocation(autoLocation());
-	setHomeLocation(Settings::homeLocation());
-	setLocation(homeLocation());
+	if (locations().length() == 0) {
+		if (Weather::Location::cache().recent().length() > 0) {
+			setLocation(Weather::Location::cache().recent()[0]);
+		} else {
+			//TODO: Set up a home location
+			setLocation("St. Louis, MO");
+		}
+	} else {
+		setCurrentLocation(locations()[0]);
+	}
 	
 	m_view = new QDeclarativeView(this);
 	m_view->rootContext()->setContextProperty("WeatherApp", this);
@@ -135,6 +141,7 @@ Weather::Location *WeatherDesktop::addLocation(const QString& name, const QStrin
 	locationNames().append(location);
 	emit locationsChanged(locations());
 	emit locationNamesChanged(locationNames());
+	setCurrentLocation(l);
 	return l;
 }
 
@@ -159,6 +166,11 @@ void WeatherDesktop::removeCurrentLocation()
 	locationNames().removeOne(l->location());
 	emit locationsChanged(locations());
 	emit locationNamesChanged(locationNames());
+	
+	if (locations().length() > 0) {
+		setCurrentLocation(locations()[0]);
+	}
+	
 	delete l;
 }
 
@@ -188,12 +200,17 @@ void WeatherDesktop::setLocation(const QString& location)
 		//setCurrentLocation(autoLocation());
 		return;
 	} else {
-		if (searchLocation() == nullptr) {
-			setSearchLocation(new Weather::Location("", location, this));
-		} else if (searchLocation()->location() != location) {
-			searchLocation()->setLocation(location);
+		Weather::Location *l = this->location(location);
+		if (l != nullptr) {
+			setCurrentLocation(l);
+		} else {		
+			if (searchLocation() == nullptr) {
+				setSearchLocation(new Weather::Location("", location, this));
+			} else if (searchLocation()->location() != location) {
+				searchLocation()->setLocation(location);
+			}
+			setCurrentLocation(searchLocation());
 		}
-		setCurrentLocation(searchLocation());
 	}
 }
 
