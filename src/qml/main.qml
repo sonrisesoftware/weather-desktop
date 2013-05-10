@@ -23,10 +23,14 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
-	implicitWidth: Math.max(Math.max(Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40),
+	/*implicitWidth: Math.max(Math.max(Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40),
 									 2 * Math.max(refreshToolBar.width, settingsToolBar.width) + viewToolBar.width +  30),
 						    locationsToolBar.width + searchBar.width + 20);
-	implicitHeight: viewToolBar.height + header.height + weatherView.implicitHeight + locationsToolBar.height + 60;
+	implicitHeight: viewToolBar.height + header.height + weatherView.implicitHeight + locationsToolBar.height + 60;*/
+	
+	implicitWidth: Math.max(Math.max(Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40),
+							refreshToolBar.width + 20), locationsToolBar.width + searchBar.width + 20);
+	implicitHeight: refreshToolBar.height + header.height + weatherView.implicitHeight + locationsToolBar.height + 60;
 	
 	property variant appStyle: Style {
 		id: style
@@ -41,7 +45,7 @@ Rectangle {
 	
 	WeatherHeader {
 		id: header
-		anchors.top: viewToolBar.bottom
+		anchors.top: root.top
 		anchors.horizontalCenter: root.horizontalCenter
 		anchors.topMargin: 20
 		
@@ -67,6 +71,7 @@ Rectangle {
 		id: refreshToolBar
 		// Hack to resize toolbar when button changes or switches to text
 		width: (WeatherApp.currentLocation.needsUpdate ? refreshButton.width : lastUpdatedText.width) + 15
+		opacity: (root.width > (header.width + 40 + 2 * refreshToolBar.width)) ? 1 :0
 		
 		tools: Row {
 			anchors.leftMargin: 3
@@ -98,7 +103,7 @@ Rectangle {
 			}
 		}
 	}
-	
+	/*
 	PlasmaComponents.ToolBar {
 		id: viewToolBar
 		width: tools.width + 15
@@ -159,7 +164,7 @@ Rectangle {
 				width: minimumWidth + 5
 			}
 		}
-	}
+	}*/
 	
 	PlasmaComponents.ToolBar {
 		id: locationsToolBar
