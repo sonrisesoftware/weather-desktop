@@ -70,7 +70,7 @@ Rectangle {
 	PlasmaComponents.ToolBar {
 		id: refreshToolBar
 		// Hack to resize toolbar when button changes or switches to text
-		width: (WeatherApp.currentLocation.needsUpdate ? refreshButton.width : lastUpdatedText.width) + 15
+		width: tools.implicitWidth + 15
 		opacity: (root.width > (header.width + 40 + 2 * refreshToolBar.width)) ? 1 :0
 		
 		tools: Row {
@@ -107,7 +107,7 @@ Rectangle {
 	/*
 	PlasmaComponents.ToolBar {
 		id: viewToolBar
-		width: tools.width + 15
+		width: tools.implicitWidth + 15
 	
 		anchors.horizontalCenter: root.horizontalCenter
 	
@@ -150,7 +150,7 @@ Rectangle {
 	
 	PlasmaComponents.ToolBar {
 		id: settingsToolBar
-		width: tools.width + 15
+		width: tools.implicitWidth + 15
 	
 		anchors.right: root.right
 	
@@ -169,7 +169,7 @@ Rectangle {
 	
 	PlasmaComponents.ToolBar {
 		id: locationsToolBar
-		width: tools.width + 15
+		width: tools.implicitWidth + 15
 	
 		anchors.bottom: root.bottom
 	
@@ -211,7 +211,7 @@ Rectangle {
 	
 	PlasmaComponents.ToolBar {
 		id: searchBar
-		width: tools.width + 15
+		width: tools.implicitWidth + 15
 	
 		anchors.bottom: root.bottom
 		anchors.right: root.right
@@ -226,7 +226,6 @@ Rectangle {
 				clickMessage: i18n("Search...")
 				clearButtonShown: true
 				onReturnPressed: WeatherApp.setLocation(text)
-				width: minimumWidth + 5
 			}
 		}
 	}

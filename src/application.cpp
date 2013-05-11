@@ -46,7 +46,7 @@ Application::Application(): KApplication(true)
 
 Application::~Application()
 {
-
+	delete Weather::Location::cache();
 }
 
 void Application::registerQMLTypes()

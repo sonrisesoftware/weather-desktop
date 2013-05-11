@@ -79,7 +79,7 @@ Rectangle {
 		}
 	}
 	
-	WeatherForecast {
+	/*WeatherForecast {
 		id: forecast
 		anchors.centerIn: root
 		opacity: 0
@@ -87,7 +87,7 @@ Rectangle {
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }
 		}
-	}
+	}*/
 	
 	states: [
 		State {
