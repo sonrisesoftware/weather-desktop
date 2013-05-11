@@ -9,16 +9,16 @@ Don't want to open the application? Just enable the option to set your current w
 
 ### Features ###
 
-_**Warning:** this software is in a pre-release stage and is under active development! Most of the features listed below do not work yet or are in a non-working state._
+_**Note:** the features marked below in italics do not exist yet but are scheduled to be added in future releases!_
 
  * Runs on any system that supports the KDE libraries
  * Multiple named locations
- * List of 10 recent locations
+ * _List of 10 recent locations_
  * Current weather conditions
- * Weather forecasts for 10 days
- * Severe weather alerts
- * Background of app depicts current conditions
- * User can add additional backgrounds (weather-related or not)
+ * _Weather forecasts for 10 days_
+ * _Severe weather alerts_
+ * _Background of app depicts current conditions_
+ * _User can add additional backgrounds (weather-related or not)_
 
 ### Requirements ###
  * KDE 4.x
