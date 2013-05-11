@@ -173,6 +173,8 @@ void WeatherDesktop::removeCurrentLocation()
 	
 	if (locations().length() > 0) {
 		setCurrentLocation(locations()[0]);
+	} else {
+		setLocation(l->location());
 	}
 	
 	delete l;
