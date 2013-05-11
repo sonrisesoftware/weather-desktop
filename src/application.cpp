@@ -24,6 +24,8 @@
 #include "weather/service.h"
 #include "weather/conditions.h"
 
+#include "wunderground/wunderground.h"
+
 // Qt headers
 #include <QtDeclarative>
 #include <QMetaType>
@@ -38,9 +40,7 @@ KMainWindow *Application::m_window = nullptr;
 Application::Application(): KApplication(true)
 {
 	registerQMLTypes();
-	Weather::Service::setProvider(Weather::Wunderground);
-	Weather::Service::setAPIKey(WUNDER_API_KEY);
-	Weather::Service::setMaxCalls(MAX_API_CALLS);
+	Weather::Location::setDefaultService(new Wunderground::Wunderground(WUNDER_API_KEY, MAX_API_CALLS));
 	Weather::Location::setAutoRefresh(AUTO_REFRESH);
 }
 

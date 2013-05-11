@@ -34,9 +34,8 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	
 	// Use the default location if none is given
 	if (service == nullptr) {
-		if (defaultService() == nullptr) {
-			setDefaultService(new Wunderground::Wunderground(this));
-		}
+		Q_ASSERT(defaultService() != nullptr);
+		
 		service = defaultService();
 	}
 	

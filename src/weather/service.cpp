@@ -32,14 +32,9 @@
 
 using namespace Weather;
 
-QString Weather::Service::m_apiKey = "";
-Weather::Provider Weather::Service::m_provider = Weather::WorldWeatherOnline;
-int Weather::Service::m_maxCalls = 0;
-int Weather::Service::m_accessCount = 0;
-
-Service::Service(Location* location): QObject(location)
+Service::Service(QObject *parent): QObject(parent)
 {
-	setLocation(location);
+	
 }
 
 Service::~Service()
@@ -47,15 +42,11 @@ Service::~Service()
 	
 }
 
-void Service::json_call(const QString& call, QObject *receiver, const char* slot)
-{
-	if (!location()->needsUpdate()) return;
-	
+void Service::json_call(Weather::Location *location, const QString& call, QObject *receiver, const char* slot)
+{	
 	if (maxCalls() > 0) {
 		if (accessCount() + 1 > maxCalls()) {
-			location()->setError(true);
-			location()->setErrorMessage(i18n("You have accessed the weather service too many times today!"));
-			location()->setUpdating(false);
+			location->finishRefresh(QVariantMap(), i18n("You have accessed the weather service too many times today!"));
 			return;
 		}
 		
@@ -63,22 +54,38 @@ void Service::json_call(const QString& call, QObject *receiver, const char* slot
 		qDebug() << "API Call count:" << accessCount();
 	}
 	
+	if (accessMinuteCount() + 1 > 5) {
+		location->finishRefresh(QVariantMap(), i18n("You have accessed the weather service too many times within the last minute!"));
+		return;
+	}
+	
+	setAccessMinuteCount(accessMinuteCount() + 1);
+	qDebug() << "API Call count per minute:" << accessMinuteCount();
+	
+	
 	qDebug() << "JSON Call >>>" << call;
 	KIO::TransferJob *job = KIO::get(KUrl(prefix() + '/' + call), KIO::NoReload, KIO::HideProgressInfo);
 	
 	QObject::connect(job, SIGNAL(result(KJob*)), this, SLOT(process_query(KJob*)));
 	QObject::connect(job, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(data_downloaded(KIO::Job*,QByteArray)));
-	m_jobs[job] = new DownloadJob(receiver, slot);
+	m_jobs[job] = new DownloadJob(location, receiver, slot);
 }
 
-void Service::stopJobs()
+void Service::stopJobs(Weather::Location *location)
 {
-	while (!m_jobs.isEmpty()) {
-		KIO::Job *job = m_jobs.keys()[0];
-		job->kill();
-		job->deleteLater();
-		m_jobs[job]->deleteLater();
-		m_jobs.remove(job);
+	int index = 0;
+	
+	while (index <= m_jobs.size()) {
+		KIO::Job *job = m_jobs.keys()[index];
+		
+		if (m_jobs[job].m_location == location) {
+			job->kill();
+			job->deleteLater();
+			m_jobs[job]->deleteLater();
+			m_jobs.remove(job);
+		} else {
+			index++;
+		}
 	}
 }
 
@@ -108,33 +115,6 @@ void Service::process_query(KJob *job) {
 	m_jobs.remove((KIO::Job *) job);
 	obj->deleteLater();
 	job->deleteLater();
-}
-
-QVariantMap Service::data(const QString& type)
-{
-	return data()[type].toMap();
-}
-
-Service* Weather::Service::create(Location *location)
-{
-	//qDebug() << "Creating service provider...";
-	if (provider() == Weather::WorldWeatherOnline) {
-		return new WorldWeatherOnline::WorldWeatherOnline(location);
-	} else if (provider() == Weather::Wunderground) {
-		return new Wunderground::Wunderground(location);
-	} else {
-		qFatal("Invalid service provider!");
-		return nullptr;
-	}
-}
-
-void Weather::Service::setProvider(Weather::Provider provider)
-{
-	m_provider = provider;
-	
-	if (provider == Weather::Wunderground) {
-		Wunderground::Wunderground::init();
-	}
 }
 
 #include "weather/service.moc"
