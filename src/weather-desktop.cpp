@@ -45,8 +45,8 @@ WeatherDesktop::WeatherDesktop()
 	loadSettings();
 	
 	if (locations().length() == 0) {
-		if (Weather::Location::cache().recent().length() > 0) {
-			setLocation(Weather::Location::cache().recent()[0]);
+		if (Weather::Location::cache()->recent().length() > 0) {
+			setLocation(Weather::Location::cache()->recent()[0]);
 		} else {
 			//TODO: Set up a home location
 			setLocation("St. Louis, MO");
@@ -163,6 +163,9 @@ void WeatherDesktop::addCurrentLocation()
 void WeatherDesktop::removeCurrentLocation()
 {
 	Weather::Location *l = location(currentLocation()->location());
+	
+	if (l == nullptr) return;
+	
 	locations().removeOne(l);
 	locationNames().removeOne(l->location());
 	emit locationsChanged(locations());

@@ -32,7 +32,7 @@ using namespace Weather;
 
 QList<Location *> Location::m_locations;
 bool Location::m_autoRefresh;
-Cache Weather::Location::m_cache("/home/mspencer/weather-cache");
+Cache *Weather::Location::m_cache = nullptr;
 
 Location::Location(const QString& name, const QString& location, QObject* parent)
 	: QObject(parent)
@@ -70,11 +70,11 @@ void Location::refresh()
 {
 	if (!location().isEmpty()) {
 		QString error;
-		QVariant var = m_cache.load(location(), &error);
+		QVariant var = cache()->load(location(), &error);
 		if (error.isEmpty()) {
 			qDebug() << "Using location from cache:" << location();
 			api()->setData(var.toMap());
-			QDateTime lastUpdatedTime = m_cache.lastUpdated(location(), &error);
+			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
 			if (error.isEmpty())
 				setLastUpdated(lastUpdatedTime.time());
 			setNeedsUpdate(false);
@@ -118,7 +118,7 @@ void Weather::Location::finishedRefresh()
 	
 	QString error;
 	if (!location().isEmpty()) {
-		m_cache.save(location(), &error, api()->data());
+		cache()->save(location(), &error, api()->data());
 		if (!error.isEmpty()) {
 			qWarning("Unable to save location to cache: %s", qPrintable(error));
 		}

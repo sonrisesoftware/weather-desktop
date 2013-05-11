@@ -70,7 +70,12 @@ namespace Weather
 		Q_INVOKABLE static void stopAllRefresh();
 		void finishedRefresh();
 		
-		static Cache& cache() { return m_cache; }
+		static Cache *cache() {
+			if (m_cache == nullptr)
+				m_cache = new Cache(KStandardDirs::locateLocal("appdata", "cache"));
+			
+			return m_cache;
+		}
 		
 	public slots:
 		void refresh();		
@@ -82,7 +87,7 @@ namespace Weather
 	private:		
 		//bool m_updating = false;
 		static QList<Location *> m_locations;
-		static Cache m_cache;
+		static Cache *m_cache;
 		
 		//QTimer m_updateTimer;
 		
