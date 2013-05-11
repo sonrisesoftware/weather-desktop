@@ -39,7 +39,7 @@ Rectangle {
 	Image {
 		id: background
 		//source: "images/background.jpg"
-		source: "/home/mspencer/Pictures/weather-cloudy-001.jpg"
+		source: "images/weather-clear.jpg"
 		anchors.fill: parent
 	}
 	
