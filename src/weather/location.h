@@ -20,15 +20,10 @@
 #ifndef LOCATION_H
 #define LOCATION_H
 
-#include "main.h"
 #include "cache.h"
 
 #include <QObject>
-#include <QString>
-#include <QImage>
-#include <QIcon>
-#include <QDateTime>
-#include <QTimer>
+#include <QVariantMap>
 
 namespace Weather
 {
@@ -40,59 +35,26 @@ namespace Weather
 		Q_OBJECT
 		
 		Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-		
 		Q_PROPERTY(QString location READ location WRITE setLocation NOTIFY locationChanged)
 		Q_PROPERTY(QString display READ display WRITE setDisplay NOTIFY displayChanged)
 		
-		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged)
-		Q_PROPERTY(QImage *background READ background WRITE setBackground NOTIFY backgroundChanged)
-		
-		Q_PROPERTY(int timezone READ timezone NOTIFY timezoneChanged)
-		Q_PROPERTY(QTime lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged)
-		Q_PROPERTY(bool needsUpdate READ needsUpdate NOTIFY needsUpdateChanged)
-		Q_PROPERTY(bool day READ isDay NOTIFY dayChanged)
+		Q_PROPERTY(Weather::Service *service READ service WRITE setService NOTIFY serviceChanged)
+		Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged)
+		Q_PROPERTY(Cache *cache READ cache NOTIFY cacheChanged)
 		
 		Q_PROPERTY(Weather::Conditions *conditions READ conditions NOTIFY conditionsChanged)
-		Q_PROPERTY(Weather::Service *api READ api NOTIFY apiChanged)
+		// TODO: Add more weather types here
 		
-		Q_PROPERTY(bool updating READ isUpdated WRITE setUpdating NOTIFY updatingChanged)
-		Q_PROPERTY(bool error READ hasError WRITE setError NOTIFY errorChanged)
-		Q_PROPERTY(QString errorMessage READ errorMessage WRITE setErrorMessage NOTIFY errorMessageChanged)
+		Q_PROPERTY(bool refreshing READ isRefreshing NOTIFY refreshingChanged)
+		Q_PROPERTY(bool error READ hasError NOTIFY errorChanged)
+		Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged)
 		
-		STATIC_PROPERTY(bool, autoRefresh, autoRefresh, setAutoRefresh)
-
-	public:
-		explicit Location(const QString& name, const QString& location, QObject* parent = 0);
-		explicit Location(QObject *parent = 0);
-		virtual ~Location();
+		Q_PROPERTY(bool day READ isDay NOTIFY dayChanged)
 		
-		Q_INVOKABLE static void refreshAll();
-		Q_INVOKABLE static void stopAllRefresh();
-		void finishedRefresh();
-		
-		static Cache *cache() {
-			if (m_cache == nullptr)
-				m_cache = new Cache(KStandardDirs::locateLocal("appdata", "cache"));
+		Q_PROPERTY(QString lastUpdated READ lastUpdated NOTIFY lastUpdatedChanged)
 			
-			return m_cache;
-		}
-		
-	public slots:
-		void refresh();		
-		void stopRefresh();
-		
-	signals:		
-		void refreshed();
-		
-	private:		
-		//bool m_updating = false;
-		static QList<Location *> m_locations;
-		static Cache *m_cache;
-		
-		//QTimer m_updateTimer;
-		
-	private slots:
-		void timeToUpdate();
+	public:
+		explicit Location(const QString& name, const QString& location, Service *service, QObject *parent = 0);
 	
 	#include "weather/location.gen"
 	};
