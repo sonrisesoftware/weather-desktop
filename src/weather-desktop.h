@@ -56,6 +56,8 @@ public:
 	Q_INVOKABLE Weather::Location* location(QString name);
 	Q_INVOKABLE Weather::Location* location(int index);
 	
+	Q_INVOKABLE void initialSetup();
+	
 public slots:
 	Weather::Location *addLocation(const QString& name, const QString &location);
 	void addCurrentLocation();
