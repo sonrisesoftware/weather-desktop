@@ -24,8 +24,11 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Rectangle {
 	id: root;
 	
-	//color: alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1)
-	color: alert ? Qt.rgba(0.75,0.25,0.25,1) : appStyle.panelColor
+	color: selected ?
+			(alert ? Qt.rgba(0.75,0.25,0.25,1) : "blue") :
+			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
+			
+	//color: alert ? Qt.rgba(0.75,0.25,0.25,1) : appStyle.panelColor
 	smooth: true
 	width: 200
 	height: 100
@@ -36,6 +39,7 @@ Rectangle {
 	property alias weather: weather.text;
 	
 	property bool alert: false;
+	property bool selected: false;
 	
 	Text {
 		id: title
@@ -96,7 +100,7 @@ Rectangle {
 				top: parent.verticalCenter;
 			}
 			
-			font.pixelSize: appStyle.headerFontSize;
+			font.pixelSize: appStyle.headerFontSize - 2;
 			color: appStyle.textColor;
 		}
 	}
@@ -118,11 +122,11 @@ Rectangle {
 		}
 	}
 	
-	/*MouseArea {
+	MouseArea {
 		id: mouseArea
 		hoverEnabled: true
 		anchors.fill: parent
-	}*/
+	}
 	
 	states: [
 		State {

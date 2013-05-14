@@ -23,99 +23,168 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
+	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40) + listPanel.width;
+	implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
 	
 	property variant appStyle: Style {
 		id: style
 	}
 	
-	Image {
-		id: background
-		//source: "images/background.jpg"
-		source: "images/weather-clear.jpg"
-		anchors.fill: parent
+	Item {
+		id: content
+		anchors {
+			left: listPanel.right;
+			top: parent.top;
+			bottom: parent.bottom;
+			right: parent.right;
+		}
+		
+		Image {
+			id: background
+			//source: "images/background.jpg"
+			source: "images/weather-clear.jpg"
+			anchors.fill: parent
+		}
+		
+		WeatherHeader {
+			id: header
+			anchors.top: parent.top
+			anchors.horizontalCenter: parent.horizontalCenter
+			anchors.topMargin: 20
+			
+			name: WeatherApp.currentLocation.name;
+			location: WeatherApp.currentLocation.display;
+			temp: WeatherApp.currentLocation.conditions.temp;
+			weather: WeatherApp.currentLocation.conditions.weather;
+			icon: WeatherApp.currentLocation.conditions.icon;
+		}
+			
+		WeatherView {
+			id: weatherView
+				
+			anchors {
+				top: header.bottom; topMargin: 20;
+				bottom: parent.bottom; bottomMargin: 20;
+				left: parent.left; leftMargin: 20;
+				right: parent.right; rightMargin: 20;
+			}
+		}
+		
+		PlasmaComponents.ToolBar {
+			id: topToolBar
+			//width: parent.width
+			
+			tools: Row {
+				anchors.leftMargin: 3
+				anchors.rightMargin: 3
+				spacing: 5
+
+				PlasmaComponents.ToolButton {
+					id: refreshButton
+					iconSource: (WeatherApp.currentLocation.updating) ?"process-stop" : "view-refresh"
+					text: (WeatherApp.currentLocation.updating) ? i18n("Stop") : i18n("Refresh")
+					onClicked: (WeatherApp.currentLocation.updating) ? 
+							WeatherApp.currentLocation.stopAllRefresh() : WeatherApp.currentLocation.refreshAll()
+					width: minimumWidth + 5
+					opacity: (WeatherApp.currentLocation.needsUpdate) ? 1 : 0
+				}
+				
+				Text {
+					id: lastUpdatedText
+					text: i18nc("The time the weather was last downloaded", 
+								"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+					opacity: (WeatherApp.currentLocation.needsUpdate) ? 0 : 1
+				}
+				
+				PlasmaComponents.ToolButton {
+					iconSource: "arrow-down-double"
+					text: i18n("Now")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "conditions"
+					}
+					checked: weatherView.view == "conditions"
+				}
+				
+				PlasmaComponents.ToolButton {
+					iconSource: "clock"
+					text: i18n("Hourly")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "hourly"
+					}
+					checked: weatherView.view == "hourly"
+				}
+				
+				PlasmaComponents.ToolButton {
+					iconSource: "view-calendar-day"
+					text: i18n("Daily")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "daily"
+					}
+					checked: weatherView.view == "daily"
+				}
+			}
+		}
 	}
 	
-	Component {
-        id: widgetdelegate
-        Item {
-            width: grid.cellWidth; height: grid.cellHeight
-            WeatherTile {
-                id: im
-                
-                anchors.centerIn: parent
-                width: grid.cellWidth - 10; height: grid.cellHeight - 10
-                
-                title: modelData.name
-                
-                Rectangle {
-                    id: imRect
-                    anchors.fill: parent; radius: 0
-                    anchors.centerIn: parent
-                    border.color: "#326487"; color: "transparent"; border.width: 2;
-                    opacity: 0
-                }
-            }
-            Rectangle {
-                id: iWasHere
-                width: 20; height: 20; radius: 20
-                smooth: true
-                anchors.centerIn: parent
-                color: "white";
-                opacity: 0
-            }
-            states: [
-                State {
-                    name: "inDrag"
-                    when: index == grid.firstIndexDrag
-                    PropertyChanges { target: iWasHere; opacity: 1 }
-                    PropertyChanges { target: imRect; opacity: 1 }
-                    PropertyChanges { target: im; parent: container }
-                    PropertyChanges { target: im; width: (grid.cellWidth - 10) / 2 }
-                    PropertyChanges { target: im; height: (grid.cellHeight - 10) / 2 }
-                    PropertyChanges { target: im; anchors.centerIn: undefined }
-                    PropertyChanges { target: im; x: coords.mouseX - im.width/2 }
-                    PropertyChanges { target: im; y: coords.mouseY - im.height/2 }
-                }
-            ]
-            transitions: [
-                Transition { NumberAnimation { properties: "width, height, opacity"; duration: 300; easing.type: Easing.InOutQuad } }
-            ]
-        }
-    }
- 
-    GridView {
-        property int firstIndexDrag: -1
- 
-        id: grid
-        x: 0; y: 0
-        interactive: false
- 
-        anchors.rightMargin: 200
-        anchors.bottomMargin: 100
-        anchors.leftMargin: 200
-        anchors.topMargin: 100
-        anchors.fill: parent
-        cellWidth: 220; cellHeight: 120;
- 
-        model: WeatherApp.locations
-        delegate: widgetdelegate
-        Item {
-            id: container
-            anchors.fill: parent
-        }
-        MouseArea {
-            id: coords
-            anchors.fill: parent
- 
-            onReleased: {
-				console.log("Swapping " + grid.firstIndexDrag + " with " + grid.indexAt(mouseX, mouseY))
-                if (grid.firstIndexDrag != -1)
-                    WeatherApp.move_location(grid.firstIndexDrag,grid.indexAt(mouseX, mouseY), 1)
-                grid.firstIndexDrag = -1
-            }
-            onPressed: {
-                grid.firstIndexDrag=grid.indexAt(mouseX, mouseY)
-            }
-        }
-    }
+	Component  {
+		id: tileitem
+		
+		Item {
+			width: 210
+			height: 110
+			
+			WeatherTile {
+				anchors.centerIn: parent;
+				title: modelData.name;
+				temp: modelData.conditions.temp;
+				icon: modelData.conditions.icon;
+				weather: modelData.conditions.weather;
+			}
+		}
+	}
+	
+	Rectangle {
+		id: listPanel
+		color: "lightblue"
+		//color: appStyle.panelColor;
+		anchors {
+			left: root.left;
+			top: root.top;
+			bottom: root.bottom;
+		}
+		
+		width: 210
+	
+		PlasmaWidgets.LineEdit {
+			id: searchBox;
+			//anchors.verticalCenter: parent.verticalCenter
+			anchors.top: parent.top
+			
+			width: parent.width
+			//iconSource: "go-home"
+			clickMessage: i18n("Search...")
+			clearButtonShown: true
+			onReturnPressed: WeatherApp.setLocation(text)
+		}
+		
+		ListView {
+			id: list
+			clip: true
+			anchors {
+				left: parent.left;
+				top: searchBox.bottom;
+				right: parent.right;
+				bottom: parent.bottom;
+			}
+			
+			model: WeatherApp.locations;
+			delegate: tileitem;
+			
+			highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+			focus: true
+		}
+	}
 }
