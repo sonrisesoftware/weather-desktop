@@ -176,7 +176,7 @@ Rectangle {
 	
 	Rectangle {
 		id: listPanel
-		color: "lightblue"
+		color: "#3e3d39"
 		//color: appStyle.panelColor;
 		anchors {
 			left: root.left;

@@ -24,9 +24,13 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Rectangle {
 	id: root;
 	
-	color: selected || state == "mouse-over" ?
-			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(3/256,96/256,175/256,1)) :
-			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
+// 	color: selected || state == "mouse-over" ?
+// 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(0/256,86/256,165/256,1)) :
+// 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
+	
+		color: selected || state == "mouse-over" ?
+				(alert ? Qt.rgba(0.75,0.25,0.25,1) : "#ef7645") :
+				(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
 			
 	//color: alert ? Qt.rgba(0.75,0.25,0.25,1) : appStyle.panelColor
 	smooth: true
