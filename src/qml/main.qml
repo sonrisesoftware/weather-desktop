@@ -24,7 +24,8 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Rectangle {
 	id: root
 	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40) + listPanel.width;
-	implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
+	//implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
+	implicitHeight: header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property variant appStyle: Style {
 		id: style
@@ -41,14 +42,14 @@ Rectangle {
 		
 		Image {
 			id: background
-			//source: "images/background.jpg"
 			source: "images/weather-clear.jpg"
 			anchors.fill: parent
 		}
 		
 		WeatherHeader {
 			id: header
-			anchors.top: topToolBar.bottom
+			//anchors.top: topToolBar.bottom
+			anchors.top: parent.top
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.topMargin: 20
 			
@@ -64,13 +65,13 @@ Rectangle {
 				
 			anchors {
 				top: header.bottom; topMargin: 20;
-				bottom: parent.bottom; bottomMargin: 20;
+				bottom: bottomToolBar.top; bottomMargin: 20;
 				left: parent.left; leftMargin: 20;
 				right: parent.right; rightMargin: 20;
 			}
 		}
 		
-		PlasmaComponents.ToolBar {
+		/*PlasmaComponents.ToolBar {
 			id: topToolBar
 			//width: parent.width
 			
@@ -109,12 +110,11 @@ Rectangle {
 					checked: weatherView.view == "daily"
 				}
 			}
-		}
+		}*/
 		
 		PlasmaComponents.ToolBar {
 			id: bottomToolBar
 			width: tools.implicitWidth + 10
-			
 			anchors.bottom: parent.bottom
 			
 			tools: Row {
@@ -162,7 +162,6 @@ Rectangle {
 				}
 				
 				onClicked: {
-					console.log("Clicked: " + wrapper.ListView.view);
 					wrapper.ListView.view.currentIndex = index
 				}
 				
@@ -177,7 +176,8 @@ Rectangle {
 	Rectangle {
 		id: listPanel
 		color: "#3e3d39"
-		//color: appStyle.panelColor;
+		//source: "images/Background Tile.png"
+		//fillMode: Image.Tile
 		anchors {
 			left: root.left;
 			top: root.top;
