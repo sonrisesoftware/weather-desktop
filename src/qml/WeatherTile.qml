@@ -25,14 +25,11 @@ Rectangle {
 	id: root;
 	
 // 	color: selected || state == "mouse-over" ?
-// 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(0/256,86/256,165/256,1)) :
+// 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : "#ef7645") :
 // 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
-	
-		color: selected || state == "mouse-over" ?
-				(alert ? Qt.rgba(0.75,0.25,0.25,1) : "#ef7645") :
-				(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
 			
-	//color: alert ? Qt.rgba(0.75,0.25,0.25,1) : appStyle.panelColor
+	color: selected || state == "mouse-over" ? "#ef7645" : Qt.rgba(33/256,126/256,205/256,1)
+			
 	smooth: true
 	width: 200
 	height: 100
@@ -56,16 +53,28 @@ Rectangle {
 			left: root.left;
 			leftMargin: 5;
 			topMargin: 2;
-			//horizontalCenter: root.horizontalCenter;
 		}
 		
 		font.pixelSize: appStyle.titleFontSize;
 		color: appStyle.textColor;
 	}
 	
+	PlasmaCore.IconItem {
+		id: alertIcon
+		source: root.alert ? "emblem-important" : ""
+		width: 16; height: 16;
+		
+		anchors {
+			top: parent.top;
+			right: parent.right;
+			topMargin: 5;
+			rightMargin: 5;
+		}
+	}
+	
 	Item {
 		id: conditions
-		opacity: 0
+		opacity: 1
 		
 		anchors {
 			top: title.bottom;
@@ -146,12 +155,12 @@ Rectangle {
 		State {
 			name: "default"
 			when: !mouseArea.containsMouse
-			PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
+			//PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
 		},	
 		State {
 			name: "mouse-over"
 			when: mouseArea.containsMouse
-			PropertyChanges { target: forecast; opacity: 1; restoreEntryValues: true; }
+			//PropertyChanges { target: forecast; opacity: 1; restoreEntryValues: true; }
 		}
 	]
 	
