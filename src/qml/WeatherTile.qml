@@ -22,9 +22,11 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
-	id: root
+	id: root;
 	
-	color: alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1)
+	//color: alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1)
+	color: alert ? Qt.rgba(0.75,0.25,0.25,1) : appStyle.panelColor
+	smooth: true
 	width: 200
 	height: 100
 	
@@ -94,14 +96,14 @@ Rectangle {
 				top: parent.verticalCenter;
 			}
 			
-			font.pixelSize: appStyle.titleFontSize;
+			font.pixelSize: appStyle.headerFontSize;
 			color: appStyle.textColor;
 		}
 	}
 	
 	Item {
 		id: forecast
-		
+		opacity: 0
 		
 		anchors {
 			top: title.bottom;
@@ -110,16 +112,17 @@ Rectangle {
 			right: root.right;
 		}
 		
-		opacity: 0
-		
-		
+		Text {
+			anchors.centerIn: parent;
+			text: "Weather Forecast!"
+		}
 	}
 	
-	MouseArea {
+	/*MouseArea {
 		id: mouseArea
 		hoverEnabled: true
 		anchors.fill: parent
-	}
+	}*/
 	
 	states: [
 		State {
@@ -137,7 +140,7 @@ Rectangle {
 	transitions: [
 		Transition {
 			to:	"*"
-			NumberAnimation { property: "opacity"; duration: 150 }
+			NumberAnimation { property: "opacity"; duration: 300 }
 		}
 	]
 }

@@ -7,6 +7,7 @@ set(weather-desktop_QML
    Line.qml
    Panel.qml
    Style.qml
+   TileItem.qml
    WeatherConditions.qml
    WeatherHeader.qml
    WeatherForecast.qml
