@@ -153,16 +153,18 @@ Rectangle {
 			
 			WeatherTile {
 				anchors.centerIn: parent;
-				selected: wrapper.ListView.isCurrentItem;
+				selected: modelData.location == WeatherApp.currentLocation.location;
 				
 				onSelectedChanged: {
-					if (selected == true) {
-						WeatherApp.setCurrentLocation(modelData)
+					if (selected) {
+						wrapper.ListView.view.currentIndex = index
+					} else {
+						wrapper.ListView.view.currentIndex = -1
 					}
 				}
 				
 				onClicked: {
-					wrapper.ListView.view.currentIndex = index
+					WeatherApp.currentLocation = modelData
 				}
 				
 				title: modelData.name;
@@ -176,8 +178,6 @@ Rectangle {
 	Rectangle {
 		id: listPanel
 		color: "#3e3d39"
-		//source: "images/Background Tile.png"
-		//fillMode: Image.Tile
 		anchors {
 			left: root.left;
 			top: root.top;
@@ -210,13 +210,43 @@ Rectangle {
 				top: searchBox.bottom;
 				topMargin: 5;
 				right: parent.right;
-				bottom: parent.bottom;
+				bottom: listActions.top;
+				bottomMargin: 5;
 			}
 			
 			model: WeatherApp.locations;
 			delegate: tileitem;
 			
 			focus: true
+		}
+		
+		Row {
+			id: listActions
+			anchors {
+				//left: parent.left;
+				//leftMargin: 5;
+				//right: parent.right;
+				//rightMargin: 5;
+				bottom: parent.bottom;
+				bottomMargin: 5;
+				horizontalCenter: parent.horizontalCenter
+			}
+			
+			spacing: 5
+			
+			PlasmaComponents.ToolButton {
+				iconSource: "list-add"
+				text: i18n("Add")
+				onClicked: WeatherApp.addCurrentLocation()
+				width: minimumWidth + 5
+			}
+			
+			PlasmaComponents.ToolButton {
+				iconSource: "list-remove"
+				text: i18n("Delete")
+				onClicked: WeatherApp.removeCurrentLocation()
+				width: minimumWidth + 5
+			}
 		}
 	}
 }

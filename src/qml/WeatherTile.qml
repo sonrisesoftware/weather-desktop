@@ -126,6 +126,8 @@ Rectangle {
 		Text {
 			anchors.centerIn: parent;
 			text: "Weather Forecast!"
+			font.pixelSize: appStyle.headerFontSize;
+			color: appStyle.textColor;
 		}
 	}
 	

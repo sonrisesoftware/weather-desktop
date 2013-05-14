@@ -143,7 +143,9 @@ Weather::Location *WeatherDesktop::addLocation(const QString& name, const QStrin
 
 void WeatherDesktop::addCurrentLocation()
 {
-	if (location(currentLocation()->location()) != nullptr) return;
+	if (location(currentLocation()->location()) != nullptr) {
+		return;
+	}
 	
 	bool ok;	
 	QString name = KInputDialog::getText(i18n("New Location"),
@@ -178,7 +180,7 @@ Weather::Location* WeatherDesktop::location(QString name)
 {
 	foreach(QObject *obj, locations()) {
 		Weather::Location *location = (Weather::Location *) obj;
-		if (location->name() == name)
+		if (location->location() == name)
 			return location;
 	}
 	
