@@ -10,6 +10,7 @@ set(weather-desktop_QML
    WeatherConditions.qml
    WeatherHeader.qml
    WeatherForecast.qml
+   WeatherTile.qml
    WeatherView.qml   
  )
 
