@@ -48,7 +48,7 @@ Rectangle {
 		
 		WeatherHeader {
 			id: header
-			anchors.top: parent.top
+			anchors.top: topToolBar.bottom
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.topMargin: 20
 			
@@ -133,11 +133,26 @@ Rectangle {
 		id: tileitem
 		
 		Item {
+			id: wrapper
+			
 			width: 210
 			height: 110
 			
 			WeatherTile {
 				anchors.centerIn: parent;
+				selected: wrapper.ListView.isCurrentItem;
+				
+				onSelectedChanged: {
+					if (selected == true) {
+						WeatherApp.setCurrentLocation(modelData)
+					}
+				}
+				
+				onClicked: {
+					console.log("Clicked: " + wrapper.ListView.view);
+					wrapper.ListView.view.currentIndex = index
+				}
+				
 				title: modelData.name;
 				temp: modelData.conditions.temp;
 				icon: modelData.conditions.icon;
@@ -156,7 +171,7 @@ Rectangle {
 			bottom: root.bottom;
 		}
 		
-		width: 210
+		width: 0
 	
 		PlasmaWidgets.LineEdit {
 			id: searchBox;
@@ -185,6 +200,12 @@ Rectangle {
 			
 			highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 			focus: true
+		}
+		
+		Component.onCompleted: width = 210
+		
+		Behavior on width {
+			NumberAnimation { duration: 560 }
 		}
 	}
 }

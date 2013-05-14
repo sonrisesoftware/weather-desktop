@@ -25,13 +25,15 @@ Rectangle {
 	id: root;
 	
 	color: selected ?
-			(alert ? Qt.rgba(0.75,0.25,0.25,1) : "blue") :
+			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(3/256,96/256,175/256,1)) :
 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
 			
 	//color: alert ? Qt.rgba(0.75,0.25,0.25,1) : appStyle.panelColor
 	smooth: true
 	width: 200
 	height: 100
+	
+	signal clicked
 	
 	property alias icon: icon.source;
 	property alias title: title.text;
@@ -126,6 +128,7 @@ Rectangle {
 		id: mouseArea
 		hoverEnabled: true
 		anchors.fill: parent
+		onClicked: root.clicked()
 	}
 	
 	states: [
