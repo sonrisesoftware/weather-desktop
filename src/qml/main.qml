@@ -80,23 +80,6 @@ Rectangle {
 				spacing: 5
 
 				PlasmaComponents.ToolButton {
-					id: refreshButton
-					iconSource: (WeatherApp.currentLocation.updating) ?"process-stop" : "view-refresh"
-					text: (WeatherApp.currentLocation.updating) ? i18n("Stop") : i18n("Refresh")
-					onClicked: (WeatherApp.currentLocation.updating) ? 
-							WeatherApp.currentLocation.stopAllRefresh() : WeatherApp.currentLocation.refreshAll()
-					width: minimumWidth + 5
-					opacity: (WeatherApp.currentLocation.needsUpdate) ? 1 : 0
-				}
-				
-				Text {
-					id: lastUpdatedText
-					text: i18nc("The time the weather was last downloaded", 
-								"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
-					opacity: (WeatherApp.currentLocation.needsUpdate) ? 0 : 1
-				}
-				
-				PlasmaComponents.ToolButton {
 					iconSource: "arrow-down-double"
 					text: i18n("Now")
 					width: minimumWidth + 5
@@ -127,6 +110,36 @@ Rectangle {
 				}
 			}
 		}
+		
+		PlasmaComponents.ToolBar {
+			id: bottomToolBar
+			width: tools.implicitWidth + 10
+			
+			anchors.bottom: parent.bottom
+			
+			tools: Row {
+				anchors.leftMargin: 3
+				anchors.rightMargin: 3
+				spacing: 5
+
+				PlasmaComponents.ToolButton {
+					id: refreshButton
+					iconSource: (WeatherApp.currentLocation.updating) ?"process-stop" : "view-refresh"
+					text: (WeatherApp.currentLocation.updating) ? i18n("Stop") : i18n("Refresh")
+					onClicked: (WeatherApp.currentLocation.updating) ? 
+							WeatherApp.currentLocation.stopAllRefresh() : WeatherApp.currentLocation.refreshAll()
+					width: minimumWidth + 5
+					opacity: (WeatherApp.currentLocation.needsUpdate) ? 1 : 0
+				}
+				
+				Text {
+					id: lastUpdatedText
+					text: i18nc("The time the weather was last downloaded", 
+								"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+					opacity: (WeatherApp.currentLocation.needsUpdate) ? 0 : 1
+				}
+			}
+		}
 	}
 	
 	Component  {
@@ -136,7 +149,7 @@ Rectangle {
 			id: wrapper
 			
 			width: 210
-			height: 110
+			height: 100
 			
 			WeatherTile {
 				anchors.centerIn: parent;
@@ -171,15 +184,18 @@ Rectangle {
 			bottom: root.bottom;
 		}
 		
-		width: 0
+		width: 210
 	
 		PlasmaWidgets.LineEdit {
 			id: searchBox;
-			//anchors.verticalCenter: parent.verticalCenter
-			anchors.top: parent.top
-			
-			width: parent.width
-			//iconSource: "go-home"
+			anchors {
+				top: parent.top;
+				topMargin: 5;
+				left: parent.left
+				leftMargin: 5;
+				right: parent.right;
+				rightMargin: 5;
+			}
 			clickMessage: i18n("Search...")
 			clearButtonShown: true
 			onReturnPressed: WeatherApp.setLocation(text)
@@ -188,9 +204,11 @@ Rectangle {
 		ListView {
 			id: list
 			clip: true
+			spacing: 5
 			anchors {
 				left: parent.left;
 				top: searchBox.bottom;
+				topMargin: 5;
 				right: parent.right;
 				bottom: parent.bottom;
 			}
@@ -198,14 +216,7 @@ Rectangle {
 			model: WeatherApp.locations;
 			delegate: tileitem;
 			
-			highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 			focus: true
-		}
-		
-		Component.onCompleted: width = 210
-		
-		Behavior on width {
-			NumberAnimation { duration: 560 }
 		}
 	}
 }
