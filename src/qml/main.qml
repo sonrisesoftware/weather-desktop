@@ -23,209 +23,229 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
-	/*implicitWidth: Math.max(Math.max(Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40),
-									 2 * Math.max(refreshToolBar.width, settingsToolBar.width) + viewToolBar.width +  30),
-						    locationsToolBar.width + searchBar.width + 20);
-	implicitHeight: viewToolBar.height + header.height + weatherView.implicitHeight + locationsToolBar.height + 60;*/
-	
-	implicitWidth: Math.max(Math.max(Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40),
-							refreshToolBar.width + 20), locationsToolBar.width + searchBar.width + 20);
-	implicitHeight: refreshToolBar.height + header.height + weatherView.implicitHeight + locationsToolBar.height + 60;
+	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40) + listPanel.width;
+	//implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
+	implicitHeight: header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property variant appStyle: Style {
 		id: style
 	}
 	
-	Image {
-		id: background
-		//source: "images/background.jpg"
-		source: "images/weather-clear.jpg"
-		anchors.fill: parent
-	}
-	
-	WeatherHeader {
-		id: header
-		anchors.top: root.top
-		anchors.horizontalCenter: root.horizontalCenter
-		anchors.topMargin: 20
-		
-		name: WeatherApp.currentLocation.name;
-		location: WeatherApp.currentLocation.display;
-		temp: WeatherApp.currentLocation.conditions.temp;
-		weather: WeatherApp.currentLocation.conditions.weather;
-		icon: WeatherApp.currentLocation.conditions.icon;
-	}
-		
-	WeatherView {
-		id: weatherView
-			
+	Item {
+		id: content
 		anchors {
-			top: header.bottom; topMargin: 20;
-			bottom: locationsToolBar.top; bottomMargin: 20;
-			left: root.left; leftMargin: 20;
-			right: root.right; rightMargin: 20;
+			left: listPanel.right;
+			top: parent.top;
+			bottom: parent.bottom;
+			right: parent.right;
+		}
+		
+		Image {
+			id: background
+			source: "images/weather-clear.jpg"
+			anchors.fill: parent
+		}
+		
+		WeatherHeader {
+			id: header
+			//anchors.top: topToolBar.bottom
+			anchors.top: parent.top
+			anchors.horizontalCenter: parent.horizontalCenter
+			anchors.topMargin: 20
+			
+			name: WeatherApp.currentLocation.name;
+			location: WeatherApp.currentLocation.display;
+			temp: WeatherApp.currentLocation.conditions.temp;
+			weather: WeatherApp.currentLocation.conditions.weather;
+			icon: WeatherApp.currentLocation.conditions.icon;
+		}
+			
+		WeatherView {
+			id: weatherView
+				
+			anchors {
+				top: header.bottom; topMargin: 20;
+				bottom: bottomToolBar.top; bottomMargin: 20;
+				left: parent.left; leftMargin: 20;
+				right: parent.right; rightMargin: 20;
+			}
+		}
+		
+		/*PlasmaComponents.ToolBar {
+			id: topToolBar
+			//width: parent.width
+			
+			tools: Row {
+				anchors.leftMargin: 3
+				anchors.rightMargin: 3
+				spacing: 5
+
+				PlasmaComponents.ToolButton {
+					iconSource: "arrow-down-double"
+					text: i18n("Now")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "conditions"
+					}
+					checked: weatherView.view == "conditions"
+				}
+				
+				PlasmaComponents.ToolButton {
+					iconSource: "clock"
+					text: i18n("Hourly")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "hourly"
+					}
+					checked: weatherView.view == "hourly"
+				}
+				
+				PlasmaComponents.ToolButton {
+					iconSource: "view-calendar-day"
+					text: i18n("Daily")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "daily"
+					}
+					checked: weatherView.view == "daily"
+				}
+			}
+		}*/
+		
+		PlasmaComponents.ToolBar {
+			id: bottomToolBar
+			width: tools.implicitWidth + 10
+			anchors.bottom: parent.bottom
+			
+			tools: Row {
+				anchors.leftMargin: 3
+				anchors.rightMargin: 3
+				spacing: 5
+
+				PlasmaComponents.ToolButton {
+					id: refreshButton
+					iconSource: (WeatherApp.currentLocation.updating) ?"process-stop" : "view-refresh"
+					text: (WeatherApp.currentLocation.updating) ? i18n("Stop") : i18n("Refresh")
+					onClicked: (WeatherApp.currentLocation.updating) ? 
+							WeatherApp.currentLocation.stopAllRefresh() : WeatherApp.currentLocation.refreshAll()
+					width: minimumWidth + 5
+					opacity: (WeatherApp.currentLocation.needsUpdate) ? 1 : 0
+				}
+				
+				Text {
+					id: lastUpdatedText
+					text: i18nc("The time the weather was last downloaded", 
+								"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+					opacity: (WeatherApp.currentLocation.needsUpdate) ? 0 : 1
+				}
+			}
 		}
 	}
 	
-	PlasmaComponents.ToolBar {
-		id: refreshToolBar
-		// Hack to resize toolbar when button changes or switches to text
-		width: tools.implicitWidth + 15
-		opacity: (root.width > (header.width + 40 + 2 * refreshToolBar.width)) ? 1 :0
+	Component  {
+		id: tileitem
 		
-		tools: Row {
-			anchors.leftMargin: 3
-			anchors.rightMargin: 3
-			spacing: 5
-
-			PlasmaComponents.ToolButton {
-				id: refreshButton
-				iconSource: (WeatherApp.currentLocation.updating) ?"process-stop" : "view-refresh"
-				text: (WeatherApp.currentLocation.updating) ? i18n("Stop") : i18n("Refresh")
-				onClicked: (WeatherApp.currentLocation.updating) ? 
-						WeatherApp.currentLocation.stopAllRefresh() : WeatherApp.currentLocation.refreshAll()
-				width: minimumWidth + 5
-				opacity: (WeatherApp.currentLocation.needsUpdate) ? 1 : 0
-		
-				/*Behavior on opacity {
-					NumberAnimation { duration: 500 }
-				}*/
-			}
+		Item {
+			id: wrapper
 			
-			Text {
-				id: lastUpdatedText
-				text: i18nc("The time the weather was last downloaded", 
-							"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
-				opacity: (WeatherApp.currentLocation.needsUpdate) ? 0 : 1
-		
-				/*Behavior on opacity {
-					NumberAnimation { duration: 500 }
-				}*/
-			}
-		}
-	}
-	/*
-	PlasmaComponents.ToolBar {
-		id: viewToolBar
-		width: tools.implicitWidth + 15
-	
-		anchors.horizontalCenter: root.horizontalCenter
-	
-		tools: Row {
-			anchors.leftMargin: 3
-			anchors.rightMargin: 3
-			spacing: 5
-
-			PlasmaComponents.ToolButton {
-				iconSource: "arrow-down-double"
-				text: i18n("Now")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "conditions"
-				}
-				checked: weatherView.view == "conditions"
-			}
+			width: 210
+			height: 100
 			
-			PlasmaComponents.ToolButton {
-				iconSource: "clock"
-				text: i18n("Hourly")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "hourly"
+			WeatherTile {
+				anchors.centerIn: parent;
+				selected: modelData.location == WeatherApp.currentLocation.location;
+				
+				onSelectedChanged: {
+					if (selected) {
+						wrapper.ListView.view.currentIndex = index
+					} else {
+						wrapper.ListView.view.currentIndex = -1
+					}
 				}
-				checked: weatherView.view == "hourly"
-			}
-			
-			PlasmaComponents.ToolButton {
-				iconSource: "view-calendar-day"
-				text: i18n("Daily")
-				width: minimumWidth + 5
+				
 				onClicked: {
-					weatherView.view = "daily"
+					WeatherApp.currentLocation = modelData
 				}
-				checked: weatherView.view == "daily"
+				
+				title: modelData.name;
+				temp: modelData.conditions.temp;
+				icon: modelData.conditions.icon;
+				weather: modelData.conditions.weather;
 			}
 		}
 	}
 	
-	PlasmaComponents.ToolBar {
-		id: settingsToolBar
-		width: tools.implicitWidth + 15
-	
-		anchors.right: root.right
-	
-		tools: Row {
-			anchors.leftMargin: 3
-			anchors.rightMargin: 3
-			spacing: 5
-
-			PlasmaComponents.ToolButton {
-				iconSource: "configure"
-				text: i18n("Configure")
-				width: minimumWidth + 5
-			}
+	Rectangle {
+		id: listPanel
+		color: "#3e3d39"
+		anchors {
+			left: root.left;
+			top: root.top;
+			bottom: root.bottom;
 		}
-	}*/
+		
+		width: 210
 	
-	PlasmaComponents.ToolBar {
-		id: locationsToolBar
-		width: tools.implicitWidth + 15
-	
-		anchors.bottom: root.bottom
-	
-		tools: Row {
-			id: toolsRow;
-			anchors.leftMargin: 3
-			anchors.rightMargin: 3
+		PlasmaWidgets.LineEdit {
+			id: searchBox;
+			anchors {
+				top: parent.top;
+				topMargin: 5;
+				left: parent.left
+				leftMargin: 5;
+				right: parent.right;
+				rightMargin: 5;
+			}
+			clickMessage: i18n("Search...")
+			clearButtonShown: true
+			onReturnPressed: WeatherApp.setLocation(text)
+		}
+		
+		ListView {
+			id: list
+			clip: true
+			spacing: 5
+			anchors {
+				left: parent.left;
+				top: searchBox.bottom;
+				topMargin: 5;
+				right: parent.right;
+				bottom: listActions.top;
+				bottomMargin: 5;
+			}
+			
+			model: WeatherApp.locations;
+			delegate: tileitem;
+			
+			focus: true
+		}
+		
+		Row {
+			id: listActions
+			anchors {
+				//left: parent.left;
+				//leftMargin: 5;
+				//right: parent.right;
+				//rightMargin: 5;
+				bottom: parent.bottom;
+				bottomMargin: 5;
+				horizontalCenter: parent.horizontalCenter
+			}
+			
 			spacing: 5
 			
 			PlasmaComponents.ToolButton {
 				iconSource: "list-add"
-				//text: i18n("Home")
+				text: i18n("Add")
 				onClicked: WeatherApp.addCurrentLocation()
 				width: minimumWidth + 5
 			}
 			
 			PlasmaComponents.ToolButton {
 				iconSource: "list-remove"
-				//text: i18n("Home")
+				text: i18n("Delete")
 				onClicked: WeatherApp.removeCurrentLocation()
 				width: minimumWidth + 5
-			}
-			
-			Repeater {
-				model: WeatherApp.locationNames.length
-				
-				delegate: PlasmaComponents.ToolButton {
-					iconSource: WeatherApp.location(modelData).conditions.icon;
-					text: WeatherApp.location(modelData).name;
-					onClicked: {
-						WeatherApp.setCurrentLocation(WeatherApp.location(modelData))
-					}
-					checked: WeatherApp.currentLocation == WeatherApp.location(modelData)
-					width: minimumWidth + 5
-				}
-			}
-		}
-	}
-	
-	PlasmaComponents.ToolBar {
-		id: searchBar
-		width: tools.implicitWidth + 15
-	
-		anchors.bottom: root.bottom
-		anchors.right: root.right
-	
-		tools: Row {
-			anchors.leftMargin: 3
-			anchors.rightMargin: 3
-			spacing: 5
-
-			PlasmaWidgets.LineEdit {
-				//iconSource: "go-home"
-				clickMessage: i18n("Search...")
-				clearButtonShown: true
-				onReturnPressed: WeatherApp.setLocation(text)
 			}
 		}
 	}

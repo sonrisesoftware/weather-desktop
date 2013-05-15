@@ -48,7 +48,7 @@ WeatherDesktop::WeatherDesktop()
 		setLocation("St. Louis, MO");
 		initialSetup();
 	} else {
-		setCurrentLocation(locations()[0]);
+		setCurrentLocation((Weather::Location *) locations()[0]);
 	}
 	
 	m_view = new QDeclarativeView(this);
@@ -117,7 +117,8 @@ void WeatherDesktop::loadSettings()
 void WeatherDesktop::saveSettings()
 {
 	QStringList list;
-	foreach(Weather::Location *location, locations()) {
+	foreach(QObject *obj, locations()) {
+		Weather::Location *location = (Weather::Location *) obj;
 		if (location->location().isEmpty()) continue;
 		list.append(location->name() + ':' + location->location());
 	}
@@ -135,16 +136,16 @@ Weather::Location *WeatherDesktop::addLocation(const QString& name, const QStrin
 	qDebug() << "Adding location: " + name + " - " + location;
 	Weather::Location *l = new Weather::Location(name, location, this);
 	locations().append(l);
-	locationNames().append(location);
 	emit locationsChanged(locations());
-	emit locationNamesChanged(locationNames());
 	setCurrentLocation(l);
 	return l;
 }
 
 void WeatherDesktop::addCurrentLocation()
 {
-	if (location(currentLocation()->location()) != nullptr) return;
+	if (location(currentLocation()->location()) != nullptr) {
+		return;
+	}
 	
 	bool ok;	
 	QString name = KInputDialog::getText(i18n("New Location"),
@@ -163,12 +164,10 @@ void WeatherDesktop::removeCurrentLocation()
 	if (l == nullptr) return;
 	
 	locations().removeOne(l);
-	locationNames().removeOne(l->location());
 	emit locationsChanged(locations());
-	emit locationNamesChanged(locationNames());
 	
 	if (locations().length() > 0) {
-		setCurrentLocation(locations()[0]);
+		setCurrentLocation((Weather::Location *) locations()[0]);
 	} else {
 		setLocation(l->location());
 	}
@@ -179,17 +178,32 @@ void WeatherDesktop::removeCurrentLocation()
 
 Weather::Location* WeatherDesktop::location(QString name)
 {
-	if (locationNames().contains(name)) {
-		return locations()[locationNames().indexOf(name)];
-	} else {
-		return nullptr;
+	foreach(QObject *obj, locations()) {
+		Weather::Location *location = (Weather::Location *) obj;
+		if (location->location() == name)
+			return location;
 	}
+	
+	return nullptr;
+}
+
+void WeatherDesktop::move_location(int to, int from, int n)
+{
+	QList<QObject *> list;
+	for (int i = 0; i < n; i++) {
+		list.append(locations().takeAt(from));
+	}
+	if (to - n < from) to -= n;
+	while (!list.isEmpty()) {
+		locations().insert(to, list[0]);
+	}
+	emit locationsChanged(locations());
 }
 
 Weather::Location* WeatherDesktop::location(int index)
 {
-	if (index < locationNames().length()) {
-		return locations()[index];
+	if (index < locations().length()) {
+		return (Weather::Location*) locations()[index];
 	} else {
 		return nullptr;
 	}
