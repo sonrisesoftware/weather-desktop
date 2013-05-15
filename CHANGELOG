@@ -1,0 +1,8 @@
+weather-desktop (0.1.1); urgency=low
+
+ * Added new UI to show saved locations.
+ * Added new background and icon.
+ * Fixed some minor bugs.
+
+-- Michael Spencer <spencers1993@gmail.com>  Tue, 14 May 2013 19:47:37 -0500
+
