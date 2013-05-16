@@ -248,5 +248,43 @@ Rectangle {
 				width: minimumWidth + 5
 			}
 		}
+		
+		Rectangle {
+			anchors {
+				left: parent.left;
+				right: parent.right;
+				top: list.top;
+			}
+			
+			height: list.atYBeginning ? 0 : 20
+		
+			gradient: Gradient {
+				GradientStop { position: 0.0; color: listPanel.color }
+				GradientStop { position: 1.0; color: "transparent" }
+			}
+			
+			Behavior on height {
+				NumberAnimation { duration: 300 }
+			}
+		}
+		
+		Rectangle {
+			anchors {
+				left: parent.left;
+				right: parent.right;
+				bottom: list.bottom;
+			}
+			
+			height: list.atYEnd ? 0 : 20
+					
+			gradient: Gradient {
+				GradientStop { position: 0.0; color: "transparent" }
+				GradientStop { position: 1.0; color: listPanel.color }
+			}
+			
+			Behavior on height {
+				NumberAnimation { duration: 300 }
+			}
+		}
 	}
 }
