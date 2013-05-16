@@ -28,12 +28,17 @@ Rectangle {
 // 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : "#ef7645") :
 // 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
 			
-	color: selected || state == "mouse-over" ? "#ef7645" : Qt.rgba(33/256,126/256,205/256,1)
+	color: selected || state == "mouse-over" ? "#ef7645" : //"white"
+			Qt.rgba(33/256,126/256,205/256,1)
+	
+	property color textColor: appStyle.textColor;
+	//property color textColor: "black";
 			
 	smooth: true
 	width: 200
 	height: 100
-	radius: 3
+	//border.color: "gray"
+	//radius: 3
 	
 	signal clicked
 	
@@ -56,7 +61,7 @@ Rectangle {
 		}
 		
 		font.pixelSize: appStyle.titleFontSize;
-		color: appStyle.textColor;
+		color: textColor;
 	}
 	
 	PlasmaCore.IconItem {
@@ -104,7 +109,7 @@ Rectangle {
 			}
 			
 			font.pixelSize: appStyle.titleFontSize;
-			color: appStyle.textColor;
+			color: textColor;
 		}
 		
 		Text {
@@ -117,7 +122,7 @@ Rectangle {
 			}
 			
 			font.pixelSize: appStyle.headerFontSize - 2;
-			color: appStyle.textColor;
+			color: textColor;
 		}
 	}
 	
@@ -136,7 +141,7 @@ Rectangle {
 			anchors.centerIn: parent;
 			text: "Weather Forecast!"
 			font.pixelSize: appStyle.headerFontSize;
-			color: appStyle.textColor;
+			color: textColor;
 		}
 	}
 	
