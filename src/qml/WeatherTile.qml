@@ -38,7 +38,7 @@ Rectangle {
 	width: 200
 	height: 100
 	//border.color: "gray"
-	//radius: 3
+	radius: 3
 	
 	signal clicked
 	
