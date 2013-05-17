@@ -40,7 +40,9 @@ Application::Application(): KApplication(true)
 {
 	registerQMLTypes();
 	setService(new Wunderground::Wunderground(this));
-	service()->setMaxCalls(25);
+	service()->setObjectName("Test Service!");
+	service()->setMaxCalls(MAX_API_CALLS);
+	service()->setApiKey(WUNDER_API_KEY);
 	Weather::Location::setDefaultService(service());
 	Weather::Location::setAutoRefresh(AUTO_REFRESH);
 }

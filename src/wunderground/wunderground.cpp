@@ -41,7 +41,7 @@ QString Wunderground::Wunderground::internalLocation(Weather::Location *location
 	if (location->location().isEmpty()) {
 		return "autoip";
 	} else {
-		QStringList list = location->location().split(',');
+		QStringList list = location->location().split(",");
 		if (list.size() == 2) {
 			return list.at(1) + '/' + list.at(0);
 		} else {
@@ -57,6 +57,7 @@ QString Wunderground::Wunderground::prefix()
 
 void Wunderground::Wunderground::download(Weather::Location *location)
 {
+	qDebug() << "Downloading:" << location->location();
 	json_query(location, "conditions/forecast", "", this, SLOT(onConditionsDownloaded(Weather::Location *,QString,QVariantMap)));
 }
 
@@ -72,6 +73,7 @@ void Wunderground::Wunderground::json_query(Weather::Location *location, const Q
 
 void Wunderground::Wunderground::onConditionsDownloaded(Weather::Location *location, QString error, const QVariantMap& data)
 {	
+	qDebug() << "Conditions downloaded!";
 	if (data["response"].toMap().contains("error")) {
 		//error = "[" + data["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
 		//		data["response"].toMap()["error"].toMap()["description"].toString();

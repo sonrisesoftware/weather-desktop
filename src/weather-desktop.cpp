@@ -128,6 +128,7 @@ void WeatherDesktop::saveSettings()
 	Settings::setLocations(list);
 	
 	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount());
+	qDebug() << "Service:" << App->service()->objectName();
 	Settings::setAccessCount(QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount()));
 	
 	Settings::self()->writeConfig();

@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 
 	qDebug() << "Debugging is enabled.";
 	
-	qDebug() << "Cache location:" << KStandardDirs::locateLocal("appdata", "cache");
+	//qDebug() << "Cache location:" << KStandardDirs::locateLocal("appdata", "cache");
 	//qDebug() << "Cache location:" << KStandardDirs::locateLocal("cache", "weather-desktop"); /// Use this instead????
 	
 	// See if we are starting with session management

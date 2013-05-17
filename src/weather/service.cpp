@@ -31,11 +31,13 @@
 using namespace Weather;
 
 Weather::DownloadJob::DownloadJob(Weather::Location *location, QObject *receiver, const char *slot) {
+	qDebug() << "New DownloadJob!";
 	m_location = location;
 	QObject::connect(this, SIGNAL(data(Weather::Location *,QString,QVariantMap)), receiver, slot);
 }
 
 void Weather::DownloadJob::emit_signal(QString error, QVariantMap map) {
+	qDebug() << "Emitting signal:" << error;
 	emit data(m_location, error, map);
 }
 
@@ -58,6 +60,7 @@ void Service::json_call(Weather::Location *location, const QString& call, QObjec
 		}
 		
 		setAccessCount(accessCount() + 1);
+		qDebug() << "Using default service:" << this->objectName();
 		qDebug() << "API Call count:" << accessCount();
 	}
 	

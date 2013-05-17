@@ -38,6 +38,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 		Q_ASSERT(defaultService() != nullptr);
 		
 		service = defaultService();
+		qDebug() << "Using default service:" << service->objectName();
 	}
 	
 	// TODO: Normalize the location
@@ -70,6 +71,7 @@ Weather::Location::~Location()
 
 void Weather::Location::refresh()
 {
+	setError(false);
 	// If the location is known (not IP-based),
 	if (!location().isEmpty()) {
 		// Load  the data from the cache
@@ -108,8 +110,7 @@ void Weather::Location::refresh()
 
 	if (hasError() || needsRefresh()) {
 		qDebug() << "Refreshing...";
-		setError(false); // Start fresh
-
+		
 		if (location().isEmpty())
 			setDisplay(i18nc("@label", "Auto IP"));
 		else
@@ -131,7 +132,8 @@ void Weather::Location::cancelRefresh()
 
 void Weather::Location::finishRefresh(QVariantMap data, QString error)
 {
-		if (error.isEmpty()) {
+	qDebug() << "Refresh finished:" << error;
+	if (error.isEmpty()) {
 		setData(data);
 		setLastUpdated(QTime::currentTime());
 		setNeedsRefresh(false);
@@ -147,10 +149,12 @@ void Weather::Location::finishRefresh(QVariantMap data, QString error)
 		qDebug() << "Needs refresh in" << refreshTime()/60000 << "minutes";
 		QTimer::singleShot(refreshTime(), this, SLOT(timeToUpdate()));
 	} else {
+		qDebug() << error;
 		setError(true);
 		setErrorString(error);
 	}
 	
+	qDebug() << "Emitting finished!";
 	setRefreshing(false);
 	emit refreshed();
 }

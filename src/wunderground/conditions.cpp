@@ -35,6 +35,7 @@ WundergroundConditions::~WundergroundConditions()
 
 void WundergroundConditions::refresh()
 {
+	qDebug() << "Refreshed and time to load weather!";
 	if (location()->hasError()) return;
 	
 	QVariantMap data = location()->data()["current_observation"].toMap();

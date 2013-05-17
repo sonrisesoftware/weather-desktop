@@ -74,6 +74,7 @@ Cache::Cache(const QString& directory, QObject *parent): QObject(parent)
 		QByteArray data = read_file(directory + "/cache-info", &error);
 		if (error.isEmpty()) {
 			setRecent(QString(data).split('\n'));
+			qDebug() << recent();
 		} else {
 			qFatal("Unable to create cache: %s", qPrintable(error));
 		}
