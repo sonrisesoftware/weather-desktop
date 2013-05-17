@@ -61,4 +61,8 @@ private:																	\
 		
 QString download(const QUrl& url, QString *error);
 
+class Application;
+
+extern Application *App;
+
 #endif

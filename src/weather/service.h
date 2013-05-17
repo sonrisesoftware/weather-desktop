@@ -42,14 +42,9 @@ namespace Weather
 		Q_OBJECT
 		
 	public:
-		DownloadJob(Weather::Location *location, QObject *receiver, const char *slot) {
-			m_location = location;
-			QObject::connect(this, SIGNAL(data(QString,QVariantMap)), receiver, slot);
-		}
+		DownloadJob(Weather::Location *location, QObject *receiver, const char *slot);
 		
-		void emit_signal(QString error, QVariantMap map) {
-			emit data(m_location, error, map);
-		}
+		void emit_signal(QString error, QVariantMap map);
 		
 		QByteArray m_data;
 		Weather::Location *m_location;
@@ -87,7 +82,7 @@ namespace Weather
 		void refreshed();
 		
 	protected:
-		void json_call(const QString& call, QObject *receiver, const char* slot);
+		void json_call(Weather::Location *location, const QString& call, QObject *receiver, const char* slot);
 		
 		virtual QString prefix() = 0;
 		

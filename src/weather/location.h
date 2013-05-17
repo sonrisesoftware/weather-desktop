@@ -67,6 +67,10 @@ namespace Weather
 		
 		virtual ~Location();
 		
+		QVariantMap data(const QString& weather) {
+			return data()[weather].toMap();
+		}
+		
 		/**
 		 * Called from Service when new weather data is completly downloaded.
 		 */

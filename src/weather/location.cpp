@@ -26,6 +26,7 @@
 bool Weather::Location::s_autoRefresh = false;
 int Weather::Location::s_refreshTime = 60 * 60 * 1000; // 1 hour
 Cache *Weather::Location::s_cache = nullptr;
+Weather::Service *Weather::Location::s_defaultService = nullptr;
 
 Weather::Location::Location(const QString& name, const QString& location, Weather::Service *service, QObject* parent)
 	: QObject(parent)
@@ -46,7 +47,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	// Set the service
 	setService(service);
 	// Create the necessary weather types
-	setConditions(this->service()->create_conditions());
+	setConditions(this->service()->create_conditions(this));
 	// Needs an refresh
 	setNeedsRefresh(true);
 	// Refresh
@@ -76,14 +77,18 @@ void Weather::Location::refresh()
 		QVariant var = cache()->load(location(), &error);
 		
 		// If the data is valid,
-		if (error.isEmpty()) {
+		if (error.isEmpty() || error.startsWith(OUTDATED_DATA)) {
 			qDebug() << "Using location from cache:" << location();
 			setData(var.toMap());
 			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
 			if (error.isEmpty())
 				setLastUpdated(lastUpdatedTime.time());
+		}
+		
+		if (error.isEmpty()) {
 			setNeedsRefresh(false);
 
+			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
 			// Request an update at the specified time
 			QDateTime then = lastUpdatedTime.addMSecs(refreshTime());
 			//qDebug() << "Refresh at:" << then;
@@ -95,9 +100,9 @@ void Weather::Location::refresh()
 			emit refreshed();
 			return;
 		} else {	
-			if (!error.startsWith(NO_DATA) && !error.startsWith(OUTDATED_DATA)) {
+			//if (!error.startsWith(NO_DATA) && !error.startsWith(OUTDATED_DATA)) {
 				qWarning("Unable to load data from cache: %s", qPrintable(error));
-			}
+			//}
 		}
 	}
 
@@ -111,7 +116,7 @@ void Weather::Location::refresh()
 			setDisplay(location());
 
 		setRefreshing(true);
-		service()->download();
+		service()->download(this);
 	} else {
 		qDebug() << "No need to refresh!";
 	}
@@ -119,7 +124,7 @@ void Weather::Location::refresh()
 
 void Weather::Location::cancelRefresh()
 {
-	service()->stopJobs();
+	service()->stopJobs(this);
 	setRefreshing(false);
 }
 

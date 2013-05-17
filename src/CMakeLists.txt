@@ -16,8 +16,8 @@ qclassgen(weather-desktop_SRCS
    weather/service
    weather/conditions
    
-   worldweather/worldweatheronline
-   worldweather/conditions
+   #worldweather/worldweatheronline
+   #worldweather/conditions
    
    wunderground/wunderground
    wunderground/conditions

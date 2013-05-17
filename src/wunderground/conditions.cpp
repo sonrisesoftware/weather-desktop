@@ -37,7 +37,7 @@ void WundergroundConditions::refresh()
 {
 	if (location()->hasError()) return;
 	
-	QVariantMap data = location()->api()->data("current_observation");
+	QVariantMap data = location()->data()["current_observation"].toMap();
 
 	QString country =  data["display_location"].toMap()["country"].toString();
 	

@@ -21,7 +21,6 @@
 #include "config.h"
 
 #include "weather/location.h"
-#include "weather/service.h"
 #include "weather/conditions.h"
 
 #include "wunderground/wunderground.h"
@@ -40,7 +39,9 @@ KMainWindow *Application::m_window = nullptr;
 Application::Application(): KApplication(true)
 {
 	registerQMLTypes();
-	Weather::Location::setDefaultService(new Wunderground::Wunderground(WUNDER_API_KEY, MAX_API_CALLS));
+	setService(new Wunderground::Wunderground(this));
+	service()->setMaxCalls(25);
+	Weather::Location::setDefaultService(service());
 	Weather::Location::setAutoRefresh(AUTO_REFRESH);
 }
 

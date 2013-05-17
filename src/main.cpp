@@ -34,6 +34,7 @@ static const char description[] =
 		I18N_NOOP("An advanced, cross-platform weather application.");
 
 static const char version[] = "0.1";
+Application *App;
 
 int main(int argc, char **argv)
 {
@@ -53,6 +54,7 @@ int main(int argc, char **argv)
 	KCmdLineOptions options;
 	KCmdLineArgs::addCmdLineOptions(options);
 	Application app;
+	App = &app;
 
 	qDebug() << "Debugging is enabled.";
 	

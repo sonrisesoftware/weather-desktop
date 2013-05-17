@@ -22,8 +22,6 @@
 #include "application.h"
 #include "weather/location.h"
 #include "weather/conditions.h"
-#include "worldweather/worldweatheronline.h"
-#include "wunderground/wunderground.h"
 
 #include <QUrl>
 #include <QNetworkAccessManager>
@@ -31,6 +29,15 @@
 #include "config.h"
 
 using namespace Weather;
+
+Weather::DownloadJob::DownloadJob(Weather::Location *location, QObject *receiver, const char *slot) {
+	m_location = location;
+	QObject::connect(this, SIGNAL(data(Weather::Location *,QString,QVariantMap)), receiver, slot);
+}
+
+void Weather::DownloadJob::emit_signal(QString error, QVariantMap map) {
+	emit data(m_location, error, map);
+}
 
 Service::Service(QObject *parent): QObject(parent)
 {
@@ -78,7 +85,7 @@ void Service::stopJobs(Weather::Location *location)
 	while (index <= m_jobs.size()) {
 		KIO::Job *job = m_jobs.keys()[index];
 		
-		if (m_jobs[job].m_location == location) {
+		if (m_jobs[job]->m_location == location) {
 			job->kill();
 			job->deleteLater();
 			m_jobs[job]->deleteLater();

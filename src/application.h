@@ -25,10 +25,13 @@
 
 #include <QDeclarativeEngine>
 #include "weather-desktop.h"
+#include "weather/service.h"
 
 class Application : public KApplication
 {
 	Q_OBJECT
+	
+	Q_PROPERTY(Weather::Service *service READ service WRITE setService NOTIFY serviceChanged)
 
 public:
 	Application();
@@ -52,6 +55,8 @@ private:
 	void registerQMLTypes();
 	
 	static KMainWindow *m_window;
+	
+#include "application.gen"
 };
 
 #endif // APPLICATION_H
