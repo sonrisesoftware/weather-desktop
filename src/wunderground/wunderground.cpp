@@ -25,10 +25,14 @@ using namespace Wunderground;
 
 QMap<QString, KIcon> Wunderground::Wunderground::icons_day;
 QMap<QString, KIcon> Wunderground::Wunderground::icons_night;
-
+bool Wunderground::Wunderground::s_initialized = false;
 
 Wunderground::Wunderground::Wunderground(QObject *parent): Weather::Service(parent)
 {
+	if (!s_initialized) {
+		init();
+		s_initialized = true;
+	}
 }
 
 Wunderground::Wunderground::~Wunderground()

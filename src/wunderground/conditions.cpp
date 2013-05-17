@@ -49,6 +49,7 @@ void WundergroundConditions::refresh()
 	}
 	
 	setIcon(Wunderground::Wunderground::icon(data["icon"].toString(), true));
+	qDebug() << Wunderground::Wunderground::icon(data["icon"].toString(), true);
 	setTemp(data["temp_f"].toString() + TEMP_F); // TODO: Unit conversion
 	setVisibility(data["visibility_mi"].toString() + " mi");
 	setWeather(data["weather"].toString());

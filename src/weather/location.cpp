@@ -97,7 +97,7 @@ void Weather::Location::refresh()
 			//qDebug() << "Now:" << QDateTime::currentDateTime();
 			int time = QDateTime::currentDateTime().msecsTo(then);
 			qDebug() << "Needs refresh in" << time/(1000 * 60) << "minutes";
-			QTimer::singleShot(time, this, SLOT(timeToUpdate()));
+			QTimer::singleShot(time, this, SLOT(timeToRefresh()));
 			
 			emit refreshed();
 			return;

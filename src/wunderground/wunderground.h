@@ -52,6 +52,7 @@ namespace Wunderground {
 	private:
 		static QMap<QString, KIcon> icons_day;
 		static QMap<QString, KIcon> icons_night;
+		static bool s_initialized;
 		
 	#include "wunderground/wunderground.gen"
 	};
