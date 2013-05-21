@@ -6,3 +6,4 @@ Type=Application
 X-DocPath=weather-desktop/index.html
 GenericName=Weather Viewer
 Categories=Network;
+X-Unity-IconBackgroundColor=#217ecd

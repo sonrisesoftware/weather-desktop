@@ -26,7 +26,7 @@
  
 #define NO_DATA 		"No data in cache!"
 #define INVALID_JSON 	"Unable to parse JSON data: "
-#define OUTDATED_DATA	"Date is outdated!"
+#define OUTDATED_DATA	"Data is outdated!"
  
 class Cache: QObject {
 	Q_OBJECT
