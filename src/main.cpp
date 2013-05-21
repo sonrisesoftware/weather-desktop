@@ -41,8 +41,8 @@ int main(int argc, char **argv)
 	KAboutData about("weather-desktop", 0, ki18nc("@title", "Weather Desktop"),
 			version, ki18nc("@title", description), KAboutData::License_GPL_V3, 
 			ki18nc("@info", "(C) 2013 Michael Spencer"), ki18nc("@info", "Powered by World Weather Online"),
-			"https://github.com/iBeliever/weather-desktop", 
-			"https://github.com/iBeliever/weather-desktop/issues");
+			"https://github.com/iBeliever/weather-desktop" /* Home page */,
+			"https://github.com/iBeliever/weather-desktop/issues" /* Reporting bugs */);
 	about.addAuthor(ki18nc("@info:credit", "Michael Spencer"),
 			ki18nc("@info:credit", "Maintainer, developer, and designer"),
 			"spencers1993@gmail.com");

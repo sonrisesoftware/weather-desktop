@@ -25,6 +25,8 @@
 
 #include <QObject>
 #include <QVariantMap>
+#include <QTimer>
+#include <QDateTime>
 #include <QByteArray>
 #include <qjson/parser.h>
 
@@ -77,6 +79,16 @@ namespace Weather
 	public slots:
 		virtual void download(Weather::Location *location) = 0;
 		void stopJobs(Weather::Location *location);
+		
+		void resetAccessCount() {
+			setAccessCount(0);
+			QTimer::singleShot(QDateTime::currentDateTime().msecsTo(QDateTime(QDate::currentDate().addDays(1))), this, SLOT(resetAccessCount()));
+		}
+		
+		void resetAccessMinuteCount() {
+			setAccessMinuteCount(0);
+			QTimer::singleShot(60 * 1000, this, SLOT(resetAccessMinuteCount()));
+		}
 		
 	signals:
 		void refreshed();

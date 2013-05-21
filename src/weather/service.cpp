@@ -43,7 +43,8 @@ void Weather::DownloadJob::emit_signal(QString error, QVariantMap map) {
 
 Service::Service(QObject *parent): QObject(parent)
 {
-	
+	QTimer::singleShot(QDateTime::currentDateTime().msecsTo(QDateTime(QDate::currentDate().addDays(1))), this, SLOT(resetAccessCount()));
+	QTimer::singleShot(60 * 1000, this, SLOT(resetAccessMinuteCount()));
 }
 
 Service::~Service()

@@ -29,7 +29,7 @@ Rectangle {
 	
 	property string view: "conditions"
 	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_updating
-	property bool is_updating: (WeatherApp.currentLocation.updating == true)
+	property bool is_updating: (WeatherApp.currentLocation.refreshing == true)
 	property bool is_regular: !(is_error || is_updating)
 	
 	PlasmaWidgets.BusyWidget {

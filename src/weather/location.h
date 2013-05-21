@@ -63,7 +63,9 @@ namespace Weather
 			
 	public:
 		explicit Location(const QString& name, const QString& location, Service *service, QObject *parent = 0);
-		explicit Location(const QString& name, const QString& location, QObject *parent = 0);
+		explicit Location(const QString& name, const QString& location, QObject *parent = 0): Location(name, location, nullptr, parent) {}
+		explicit Location(const QString& location, QObject *parent = 0): Location("", location, parent) {}
+		explicit Location(const QString& location, Service *service, QObject *parent = 0): Location("", location, service, parent) {}
 		
 		virtual ~Location();
 		

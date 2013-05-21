@@ -58,12 +58,6 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	// TODO: Add to global list (if there is one)
 }
 
-Weather::Location::Location(const QString& name, const QString& location, QObject* parent)
-	: Location(name, location, nullptr, parent)
-{
-	
-}
-
 Weather::Location::~Location()
 {
 	// TODO: Remove from global list (if there is one)
@@ -109,6 +103,7 @@ void Weather::Location::refresh()
 	}
 
 	if (hasError() || needsRefresh()) {
+		setRefreshing(true);
 		qDebug() << "Refreshing...";
 		
 		if (location().isEmpty())
@@ -147,7 +142,7 @@ void Weather::Location::finishRefresh(QVariantMap data, QString error)
 		}
 
 		qDebug() << "Needs refresh in" << refreshTime()/60000 << "minutes";
-		QTimer::singleShot(refreshTime(), this, SLOT(timeToUpdate()));
+		QTimer::singleShot(refreshTime(), this, SLOT(timeToRefresh()));
 	} else {
 		qDebug() << error;
 		setError(true);
