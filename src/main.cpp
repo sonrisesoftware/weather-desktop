@@ -33,15 +33,16 @@
 static const char description[] =
 		I18N_NOOP("An advanced, cross-platform weather application.");
 
-static const char version[] = "0.1.1";
+static const char version[] = "0.1";
+Application *App;
 
 int main(int argc, char **argv)
 {
 	KAboutData about("weather-desktop", 0, ki18nc("@title", "Weather Desktop"),
 			version, ki18nc("@title", description), KAboutData::License_GPL_V3, 
 			ki18nc("@info", "(C) 2013 Michael Spencer"), ki18nc("@info", "Powered by World Weather Online"),
-			"https://github.com/iBeliever/weather-desktop", 
-			"https://github.com/iBeliever/weather-desktop/issues");
+			"https://github.com/iBeliever/weather-desktop" /* Home page */,
+			"https://github.com/iBeliever/weather-desktop/issues" /* Reporting bugs */);
 	about.addAuthor(ki18nc("@info:credit", "Michael Spencer"),
 			ki18nc("@info:credit", "Maintainer, developer, and designer"),
 			"spencers1993@gmail.com");
@@ -53,10 +54,11 @@ int main(int argc, char **argv)
 	KCmdLineOptions options;
 	KCmdLineArgs::addCmdLineOptions(options);
 	Application app;
+	App = &app;
 
 	qDebug() << "Debugging is enabled.";
 	
-	qDebug() << "Cache location:" << KStandardDirs::locateLocal("appdata", "cache");
+	//qDebug() << "Cache location:" << KStandardDirs::locateLocal("appdata", "cache");
 	//qDebug() << "Cache location:" << KStandardDirs::locateLocal("cache", "weather-desktop"); /// Use this instead????
 	
 	// See if we are starting with session management

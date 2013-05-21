@@ -25,83 +25,78 @@
 
 #include <QObject>
 #include <QVariantMap>
+#include <QTimer>
+#include <QDateTime>
 #include <QByteArray>
 #include <qjson/parser.h>
 
 #include <KDE/KUrl>
 #include <KIO/TransferJob>
 #include <KIO/Job>
-#include <KLocalizedString>
+#include <KDE/KLocalizedString>
 
 namespace Weather
 {
 	class Location;
 	class Conditions;
 	
-	enum Provider {
-		WorldWeatherOnline,
-		Wunderground
-	};
-	
 	class DownloadJob: public QObject {
 		Q_OBJECT
 		
 	public:
-		DownloadJob(QObject *receiver, const char *slot) {
-			QObject::connect(this, SIGNAL(data(QString,QVariantMap)), receiver, slot);
-		}
+		DownloadJob(Weather::Location *location, QObject *receiver, const char *slot);
 		
-		void emit_signal(QString error, QVariantMap map) {
-			emit data(error, map);
-		}
+		void emit_signal(QString error, QVariantMap map);
 		
 		QByteArray m_data;
+		Weather::Location *m_location;
 		
 	signals:
-		void data(QString error, QVariantMap data);
+		void data(Weather::Location *location, QString error, QVariantMap data);
 	};
 
 	class Service : public QObject
 	{
 		Q_OBJECT
 		
-		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
-		Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged)
-		
-		M_STATIC_PROPERTY(Weather::Provider, provider, provider, setProvider)
-		STATIC_PROPERTY(QString, apiKey, apiKey, setAPIKey)
-		STATIC_PROPERTY(int, maxCalls, maxCalls, setMaxCalls)
-		STATIC_PROPERTY(int, accessCount, accessCount, setAccessCount)
+		Q_PROPERTY(QString apiKey READ apiKey WRITE setApiKey NOTIFY apiKeyChanged)
+		Q_PROPERTY(int maxCalls READ maxCalls WRITE setMaxCalls NOTIFY maxCallsChanged)
+		Q_PROPERTY(int accessCount READ accessCount WRITE setAccessCount NOTIFY accessCountChanged)
+		Q_PROPERTY(int accessMinuteCount READ accessMinuteCount WRITE setAccessMinuteCount NOTIFY accessMinuteCountChanged)
 
 	public:
-		explicit Service(Location* location);
+		explicit Service(QObject *parent = 0);
 		virtual ~Service();
 
-		virtual void json_query(const QString& query, const QString& params, QObject *receiver, const char* slot) = 0;
+		virtual void json_query(Weather::Location *location, const QString& query, const QString& params, QObject *receiver, const char* slot) = 0;
 		
-		inline void json_query(const QString& query, QObject *receiver, const char* slot) {
-			json_query(query, "", receiver, slot);
+		inline void json_query(Weather::Location *location, const QString& query, QObject *receiver, const char* slot) {
+			json_query(location, query, "", receiver, slot);
 		}
 		
-		virtual Weather::Conditions *create_conditions() = 0;
-		
-		static Service *create(Location *location);
-		
-		QVariantMap data(const QString& type);
+		virtual Weather::Conditions *create_conditions(Weather::Location *location) = 0;
 		
 	public slots:
-		virtual void refresh() = 0;
-		void stopJobs();
+		virtual void download(Weather::Location *location) = 0;
+		void stopJobs(Weather::Location *location);
+		
+		void resetAccessCount() {
+			setAccessCount(0);
+			QTimer::singleShot(QDateTime::currentDateTime().msecsTo(QDateTime(QDate::currentDate().addDays(1))), this, SLOT(resetAccessCount()));
+		}
+		
+		void resetAccessMinuteCount() {
+			setAccessMinuteCount(0);
+			QTimer::singleShot(60 * 1000, this, SLOT(resetAccessMinuteCount()));
+		}
 		
 	signals:
 		void refreshed();
 		
 	protected:
-		void json_call(const QString& call, QObject *receiver, const char* slot);
+		void json_call(Weather::Location *location, const QString& call, QObject *receiver, const char* slot);
 		
 		virtual QString prefix() = 0;
-		
-		virtual QString internalLocation() = 0;
 		
 	private:		
 		QMap<KIO::Job *, DownloadJob *> m_jobs;

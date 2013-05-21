@@ -29,7 +29,7 @@ Rectangle {
 	
 	property string view: "conditions"
 	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_updating
-	property bool is_updating: (WeatherApp.currentLocation.updating == true)
+	property bool is_updating: (WeatherApp.currentLocation.refreshing == true)
 	property bool is_regular: !(is_error || is_updating)
 	
 	PlasmaWidgets.BusyWidget {
@@ -72,7 +72,7 @@ Rectangle {
 		opacity: 0
 		anchors.centerIn: root
 		title: i18n("Unable to access weather")
-		text: WeatherApp.currentLocation.errorMessage;
+		text: WeatherApp.currentLocation.errorString;
 		
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }

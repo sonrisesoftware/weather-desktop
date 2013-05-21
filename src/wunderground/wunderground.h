@@ -30,28 +30,29 @@ namespace Wunderground {
 		Q_OBJECT
 
 	public:
-		explicit Wunderground(Weather::Location* location);
+		explicit Wunderground(QObject *parent = 0);
 		virtual ~Wunderground();
 		
-		virtual Weather::Conditions* create_conditions();
-		virtual void json_query(const QString& query, const QString& params, QObject* receiver, const char* slot);
+		virtual void json_query(Weather::Location *location, const QString& query, const QString& params, QObject *receiver, const char* slot);
+		virtual Weather::Conditions *create_conditions(Weather::Location *location);
 	
 		static void init();
 		static KIcon icon(const QString &weather, const bool day);
 		
 	public slots:
-		virtual void refresh();
+		virtual void download(Weather::Location *location);
 		
 	protected:
-		virtual QString internalLocation();
+		QString internalLocation(Weather::Location *location);
 		virtual QString prefix();
 		
 	private slots:
-		void onConditionsDownloaded(QString error, const QVariantMap& data);
+		void onConditionsDownloaded(Weather::Location *location, QString error, const QVariantMap& data);
 		
 	private:
 		static QMap<QString, KIcon> icons_day;
 		static QMap<QString, KIcon> icons_night;
+		static bool s_initialized;
 		
 	#include "wunderground/wunderground.gen"
 	};

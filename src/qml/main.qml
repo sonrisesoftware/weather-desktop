@@ -52,7 +52,6 @@ Rectangle {
 			anchors.top: parent.top
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.topMargin: 20
-			
 			name: WeatherApp.currentLocation.name;
 			location: WeatherApp.currentLocation.display;
 			temp: WeatherApp.currentLocation.conditions.temp;
@@ -124,19 +123,19 @@ Rectangle {
 
 				PlasmaComponents.ToolButton {
 					id: refreshButton
-					iconSource: (WeatherApp.currentLocation.updating) ?"process-stop" : "view-refresh"
-					text: (WeatherApp.currentLocation.updating) ? i18n("Stop") : i18n("Refresh")
-					onClicked: (WeatherApp.currentLocation.updating) ? 
-							WeatherApp.currentLocation.stopAllRefresh() : WeatherApp.currentLocation.refreshAll()
+					iconSource: (WeatherApp.currentLocation.refreshing) ?"process-stop" : "view-refresh"
+					text: (WeatherApp.currentLocation.refreshing) ? i18n("Stop") : i18n("Refresh")
+					onClicked: (WeatherApp.currentLocation.refreshing) ? 
+							WeatherApp.currentLocation.stopRefresh() : WeatherApp.currentLocation.refresh()
 					width: minimumWidth + 5
-					opacity: (WeatherApp.currentLocation.needsUpdate) ? 1 : 0
+					opacity: (WeatherApp.currentLocation.needsRefresh) ? 1 : 0
 				}
 				
 				Text {
 					id: lastUpdatedText
 					text: i18nc("The time the weather was last downloaded", 
 								"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
-					opacity: (WeatherApp.currentLocation.needsUpdate) ? 0 : 1
+					opacity: (WeatherApp.currentLocation.needsRefresh) ? 0 : 1
 				}
 			}
 		}

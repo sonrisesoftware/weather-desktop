@@ -25,10 +25,14 @@ using namespace Wunderground;
 
 QMap<QString, KIcon> Wunderground::Wunderground::icons_day;
 QMap<QString, KIcon> Wunderground::Wunderground::icons_night;
+bool Wunderground::Wunderground::s_initialized = false;
 
-
-Wunderground::Wunderground::Wunderground(Weather::Location* location): Weather::Service(location)
+Wunderground::Wunderground::Wunderground(QObject *parent): Weather::Service(parent)
 {
+	if (!s_initialized) {
+		init();
+		s_initialized = true;
+	}
 }
 
 Wunderground::Wunderground::~Wunderground()
@@ -36,16 +40,16 @@ Wunderground::Wunderground::~Wunderground()
 
 }
 
-QString Wunderground::Wunderground::internalLocation()
+QString Wunderground::Wunderground::internalLocation(Weather::Location *location)
 {
-	if (location()->location().isEmpty()) {
+	if (location->location().isEmpty()) {
 		return "autoip";
 	} else {
-		QStringList list = location()->location().split(',');
+		QStringList list = location->location().split(",");
 		if (list.size() == 2) {
 			return list.at(1) + '/' + list.at(0);
 		} else {
-			return location()->location();
+			return location->location();
 		}
 	}
 }
@@ -55,37 +59,32 @@ QString Wunderground::Wunderground::prefix()
 	return "http://api.wunderground.com/api/";
 }
 
-void Wunderground::Wunderground::refresh()
+void Wunderground::Wunderground::download(Weather::Location *location)
 {
-	json_query("conditions/forecast", "", this, SLOT(onConditionsDownloaded(QString,QVariantMap)));
+	qDebug() << "Downloading:" << location->location();
+	json_query(location, "conditions/forecast", "", this, SLOT(onConditionsDownloaded(Weather::Location *,QString,QVariantMap)));
 }
 
-Weather::Conditions* Wunderground::Wunderground::create_conditions()
+Weather::Conditions* Wunderground::Wunderground::create_conditions(Weather::Location *location)
 {
-	return new WundergroundConditions(location());
+	return new WundergroundConditions(location);
 }
 
-void Wunderground::Wunderground::json_query(const QString& query, const QString& params, QObject* receiver, const char* slot)
+void Wunderground::Wunderground::json_query(Weather::Location *location, const QString& query, const QString& params, QObject* receiver, const char* slot)
 {
-	json_call(Weather::Service::apiKey() + '/' + query + "/q/" + internalLocation() + ".json?" + params, receiver, slot);
+	json_call(location, Weather::Service::apiKey() + '/' + query + "/q/" + internalLocation(location) + ".json?" + params, receiver, slot);
 }
 
-void Wunderground::Wunderground::onConditionsDownloaded(QString error, const QVariantMap& data)
+void Wunderground::Wunderground::onConditionsDownloaded(Weather::Location *location, QString error, const QVariantMap& data)
 {	
+	qDebug() << "Conditions downloaded!";
 	if (data["response"].toMap().contains("error")) {
 		//error = "[" + data["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
 		//		data["response"].toMap()["error"].toMap()["description"].toString();
 		error = data["response"].toMap()["error"].toMap()["description"].toString();
 	}
 	
-	if (!error.isEmpty()) {
-		location()->setError(true);
-		location()->setErrorMessage(error);
-	} else {
-		this->setData(data);
-	}
-	
-	location()->finishedRefresh();
+	location->finishRefresh(data, error);
 	emit refreshed();
 }
 

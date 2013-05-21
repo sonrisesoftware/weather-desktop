@@ -109,8 +109,8 @@ void WeatherDesktop::loadSettings()
 	QDate lastUsed = QDate::fromString(list[0]);
 	
 	if (current == lastUsed) {
-		Weather::Service::setAccessCount(list[1].toInt() + Weather::Service::accessCount());
-		qDebug() << "Loading access count:" << Weather::Service::accessCount();
+		App->service()->setAccessCount(list[1].toInt() + App->service()->accessCount());
+		qDebug() << "Loading access count:" << App->service()->accessCount();
 	}
 }
 
@@ -124,8 +124,8 @@ void WeatherDesktop::saveSettings()
 	}
 	Settings::setLocations(list);
 	
-	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ':' + QString::number(Weather::Service::accessCount());
-	Settings::setAccessCount(QDate::currentDate().toString() + ':' + QString::number(Weather::Service::accessCount()));
+	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount());
+	Settings::setAccessCount(QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount()));
 	
 	Settings::self()->writeConfig();
 }
@@ -133,7 +133,6 @@ void WeatherDesktop::saveSettings()
 Weather::Location *WeatherDesktop::addLocation(const QString& name, const QString& location)
 {
 	if (location.isEmpty()) return nullptr;
-	qDebug() << "Adding location: " + name + " - " + location;
 	Weather::Location *l = new Weather::Location(name, location, this);
 	locations().append(l);
 	emit locationsChanged(locations());

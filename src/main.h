@@ -36,29 +36,33 @@
 		
 #define STATIC_PROPERTY(type, name, read, write)							\
 public:																		\
-	static void write(type name) { m_ ## name = name; }						\
-	static type read() { return m_ ## name; }								\
+	static void write(type name) { s_ ## name = name; }						\
+	static type read() { return s_ ## name; }								\
 																			\
 private:																	\
-	static type m_ ## name;
+	static type s_ ## name;
 	
 #define M_STATIC_PROPERTY(type, name, read, write)							\
 public:																		\
 	static void write(type name);											\
-	static type read() { return m_ ## name; }								\
+	static type read() { return s_ ## name; }								\
 																			\
 private:																	\
-	static type m_ ## name;
+	static type s_ ## name;
 	
 #define P_STATIC_PROPERTY(type, name, read, write)							\
 protected:																	\
-	static void write(type name) { m_ ## name = name; }						\
+	static void write(type name) { s_ ## name = name; }						\
 public:																		\
-	static type read() { return m_ ## name; }								\
+	static type read() { return s_ ## name; }								\
 																			\
 private:																	\
-	static type m_ ## name;
+	static type s_ ## name;
 		
 QString download(const QUrl& url, QString *error);
+
+class Application;
+
+extern Application *App;
 
 #endif

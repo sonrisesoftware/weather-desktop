@@ -28,7 +28,7 @@ Conditions::Conditions(Weather::Location *location): QObject(location)
 {
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
-	QObject::connect(location->api(), SIGNAL(dataChanged(QVariantMap)), this, SLOT(refresh()));
+	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
 	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
 	refresh();
 }

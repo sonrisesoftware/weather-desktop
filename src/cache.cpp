@@ -74,6 +74,7 @@ Cache::Cache(const QString& directory, QObject *parent): QObject(parent)
 		QByteArray data = read_file(directory + "/cache-info", &error);
 		if (error.isEmpty()) {
 			setRecent(QString(data).split('\n'));
+			qDebug() << recent();
 		} else {
 			qFatal("Unable to create cache: %s", qPrintable(error));
 		}
@@ -154,7 +155,7 @@ QVariant Cache::load(QString name, QString *error)
 		} else { // Otherwise,	
 			// Return no data, with error "Outdated data"
 			*error = OUTDATED_DATA;
-			return QVariant();
+			return result["data"];
 		}
 	} else { // Otherwise,
 		qDebug() << "Data is not in cache:" << name;
