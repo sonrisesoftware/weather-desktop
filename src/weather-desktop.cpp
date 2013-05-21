@@ -128,7 +128,6 @@ void WeatherDesktop::saveSettings()
 	Settings::setLocations(list);
 	
 	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount());
-	qDebug() << "Service:" << App->service()->objectName();
 	Settings::setAccessCount(QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount()));
 	
 	Settings::self()->writeConfig();
@@ -137,7 +136,6 @@ void WeatherDesktop::saveSettings()
 Weather::Location *WeatherDesktop::addLocation(const QString& name, const QString& location)
 {
 	if (location.isEmpty()) return nullptr;
-	qDebug() << "Adding location: " + name + " - " + location;
 	Weather::Location *l = new Weather::Location(name, location, this);
 	locations().append(l);
 	locationNames().append(location);

@@ -38,7 +38,6 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 		Q_ASSERT(defaultService() != nullptr);
 		
 		service = defaultService();
-		qDebug() << "Using default service:" << service->objectName();
 	}
 	
 	// TODO: Normalize the location

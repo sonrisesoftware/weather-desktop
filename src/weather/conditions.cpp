@@ -30,7 +30,6 @@ Conditions::Conditions(Weather::Location *location): QObject(location)
 	setLocation(location);
 	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
 	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
-	qDebug() << "Recievers:";
 	refresh();
 }
 
@@ -41,7 +40,6 @@ Conditions::~Conditions()
 
 void Conditions::refresh()
 {	
-	qDebug() << "Refreshed and time to load weather!";
 	setIcon(KIcon("weather-clouds"));
 	setWeather("<Weather>");	
 	setTemp("<Temp>");

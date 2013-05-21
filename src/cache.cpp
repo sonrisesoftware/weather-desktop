@@ -155,7 +155,7 @@ QVariant Cache::load(QString name, QString *error)
 		} else { // Otherwise,	
 			// Return no data, with error "Outdated data"
 			*error = OUTDATED_DATA;
-			return QVariant();
+			return result["data"];
 		}
 	} else { // Otherwise,
 		qDebug() << "Data is not in cache:" << name;
