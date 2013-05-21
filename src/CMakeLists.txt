@@ -21,6 +21,9 @@ qclassgen(weather-desktop_SRCS
    
    wunderground/wunderground
    wunderground/conditions
+   
+   forecast.io/forecastio
+   forecast.io/conditions
  )
 
 # Run ui files through uic

@@ -24,6 +24,7 @@
 #include "weather/conditions.h"
 
 #include "wunderground/wunderground.h"
+#include "forecast.io/forecastio.h"
 
 // Qt headers
 #include <QtDeclarative>
@@ -39,10 +40,10 @@ KMainWindow *Application::m_window = nullptr;
 Application::Application(): KApplication(true)
 {
 	registerQMLTypes();
-	setService(new Wunderground::Wunderground(this));
-	service()->setObjectName("Test Service!");
+	setService(new ForecastIO::ForecastIO(this));
+	service()->setObjectName("Forecast.io");
 	service()->setMaxCalls(MAX_API_CALLS);
-	service()->setApiKey(WUNDER_API_KEY);
+	service()->setApiKey(FORECAST_API_KEY);
 	Weather::Location::setDefaultService(service());
 	Weather::Location::setAutoRefresh(AUTO_REFRESH);
 }
