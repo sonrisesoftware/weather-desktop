@@ -62,7 +62,7 @@ QString Wunderground::Wunderground::prefix()
 void Wunderground::Wunderground::download(Weather::Location *location)
 {
 	qDebug() << "Downloading:" << location->location();
-	json_query(location, "conditions/forecast", "", this, SLOT(onConditionsDownloaded(Weather::Location *,QString,QVariantMap)));
+	json_query(location, "conditions/forecast", "", this, SLOT(onConditionsDownloaded(Weather::Location*,QString,QVariantMap)));
 }
 
 Weather::Conditions* Wunderground::Wunderground::create_conditions(Weather::Location *location)

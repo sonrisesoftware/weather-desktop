@@ -33,7 +33,7 @@ using namespace Weather;
 Weather::DownloadJob::DownloadJob(Weather::Location *location, QObject *receiver, const char *slot) {
 	qDebug() << "New DownloadJob!";
 	m_location = location;
-	QObject::connect(this, SIGNAL(data(Weather::Location *,QString,QVariantMap)), receiver, slot);
+	QObject::connect(this, SIGNAL(data(Weather::Location*,QString,QVariantMap)), receiver, slot);
 }
 
 void Weather::DownloadJob::emit_signal(QString error, QVariantMap map) {

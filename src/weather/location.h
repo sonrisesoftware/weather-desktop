@@ -74,7 +74,7 @@ namespace Weather
 		}
 		
 		/**
-		 * Called from Service when new weather data is completly downloaded.
+		 * Called from Service when new weather data is completely downloaded.
 		 */
 		void finishRefresh(QVariantMap data, QString error);
 		

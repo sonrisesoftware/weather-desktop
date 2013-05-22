@@ -21,6 +21,7 @@
 #include "weather-desktop.h"
 
 #include "application.h"
+#include "forecast.io/datapoint.h"
 #include "cache.h"
 
 // KDE headers
@@ -57,6 +58,13 @@ int main(int argc, char **argv)
 	App = &app;
 
 	qDebug() << "Debugging is enabled.";
+	
+	Weather::Location *l = new Weather::Location("Home", "38.3505,-90.9835");
+	l->refresh();
+	Forecast::DataPoint *pnt = new Forecast::DataPoint(l, "daily.data.1");
+	pnt->load();
+	
+	return 0;
 	
 	//qDebug() << "Cache location:" << KStandardDirs::locateLocal("appdata", "cache");
 	//qDebug() << "Cache location:" << KStandardDirs::locateLocal("cache", "weather-desktop"); /// Use this instead????

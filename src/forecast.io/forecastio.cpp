@@ -32,7 +32,7 @@ ForecastIO::ForecastIO::~ForecastIO()
 
 QString ForecastIO::ForecastIO::internalLocation(Weather::Location *location)
 {
-	return "0,0";
+	return location->location();
 }
 
 void ForecastIO::ForecastIO::download(Weather::Location* location)
@@ -65,3 +65,4 @@ void ForecastIO::ForecastIO::onWeatherDownloaded(Weather::Location* location, QS
 
 
 #include "forecast.io/forecastio.moc"
+

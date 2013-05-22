@@ -24,6 +24,7 @@ qclassgen(weather-desktop_SRCS
    
    forecast.io/forecastio
    forecast.io/conditions
+   forecast.io/datapoint
  )
 
 # Run ui files through uic
@@ -57,3 +58,4 @@ install(FILES weather-desktopui.rc
 install(PROGRAMS weather-desktop.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 add_subdirectory(qml)
+
