@@ -66,11 +66,11 @@ void DataPoint::load()
 			// Time properties are represented by the seconds since the UNIX epoch
             setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
 		} else {
-			qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
+			//qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
 			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
-			qDebug() << setProperty(qPrintable(item), data[item]);
+			setProperty(qPrintable(item), data[item]);
 		}
-		qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
+		//qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
 	}
 }
 

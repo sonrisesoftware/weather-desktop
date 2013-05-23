@@ -60,6 +60,7 @@ private:																	\
 	static type s_ ## name;
 		
 QString download(const QUrl& url, QString *error);
+QVariant getJson(const QVariant& data, const QString& path);
 
 class Application;
 

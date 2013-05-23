@@ -11,6 +11,7 @@ qclassgen(weather-desktop_SRCS
    application
    weather-desktop
    cache
+   geocoding
    
    weather/location
    weather/service

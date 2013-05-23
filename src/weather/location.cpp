@@ -44,6 +44,12 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	// Set the name and location
 	setName(name);
 	setLocation(location);
+	setCoder(new Geocoding(location, this));
+	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(setLocation(QString)));
+	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(run()));
+	QObject::connect(coder(), SIGNAL(coordinatesChanged(QString)), this, SLOT(setCoordinates(QString)));
+	coder()->run();
+	
 	// Set the service
 	setService(service);
 	// Create the necessary weather types
@@ -64,6 +70,20 @@ Weather::Location::~Location()
 
 void Weather::Location::refresh()
 {
+	if (location().isEmpty())
+		setDisplay(i18nc("@label", "Auto IP"));
+	else
+		setDisplay(location());
+	
+	if (coordinates().isEmpty()) {
+		setError(true);
+		setErrorString("Unable to find location!");
+		return;
+	}
+	
+	setDisplay(coordinates());	
+	qDebug() << "DISPLAY FOR" << location() << display();
+	
 	setError(false);
 	// If the location is known (not IP-based),
 	if (!location().isEmpty()) {
@@ -104,11 +124,6 @@ void Weather::Location::refresh()
 	if (hasError() || needsRefresh()) {
 		setRefreshing(true);
 		qDebug() << "Refreshing...";
-		
-		if (location().isEmpty())
-			setDisplay(i18nc("@label", "Auto IP"));
-		else
-			setDisplay(location());
 
 		setRefreshing(true);
 		service()->download(this);

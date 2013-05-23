@@ -21,6 +21,7 @@
 #define LOCATION_H
 
 #include "main.h"
+#include <geocoding.h>
 #include "cache.h"
 
 #include <QObject>
@@ -41,6 +42,8 @@ namespace Weather
 		Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 		Q_PROPERTY(QString location READ location WRITE setLocation NOTIFY locationChanged)
 		Q_PROPERTY(QString display READ display WRITE setDisplay NOTIFY displayChanged)
+		Q_PROPERTY(Geocoding *coder READ coder NOTIFY coderChanged)
+		Q_PROPERTY(QString coordinates READ coordinates WRITE setCoordinates NOTIFY coordinatesChanged)
 		
 		Q_PROPERTY(Weather::Service *service READ service WRITE setService NOTIFY serviceChanged)
 		Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged)
@@ -84,7 +87,7 @@ namespace Weather
 			}
 			
 			return s_cache;
-		}
+		}		
 		
 		static void setCache(Cache *cache) {
 			Q_ASSERT(s_cache == nullptr);

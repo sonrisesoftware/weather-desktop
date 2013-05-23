@@ -32,7 +32,7 @@ Forecast::Forecast::~Forecast()
 
 QString Forecast::Forecast::internalLocation(Weather::Location *location)
 {
-	return "38.3505,-90.9835";
+	return location->coordinates();
 }
 
 void Forecast::Forecast::download(Weather::Location* location)
