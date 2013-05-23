@@ -17,35 +17,28 @@
  ***************************************************************************/
 
 
-#ifndef FORECASTIO_H
-#define FORECASTIO_H
+#ifndef FORECAST_CONDITIONS_H
+#define FORECAST_CONDITIONS_H
 
-#include "weather/service.h"
+#include "weather/conditions.h"
+#include "forecast/datapoint.h"
 
-namespace ForecastIO {
+namespace Forecast {
 
-	class ForecastIO : public Weather::Service
+	class ForecastConditions : public Weather::Conditions
 	{
 		Q_OBJECT
+		Q_PROPERTY(DataPoint *data READ data NOTIFY dataChanged)
 
 	public:
-		explicit ForecastIO(QObject* parent = 0);
-		virtual ~ForecastIO();
+		explicit ForecastConditions(Weather::Location* location);
+		virtual ~ForecastConditions();
 		
-		virtual void download(Weather::Location* location);
-		virtual Weather::Conditions* create_conditions(Weather::Location* location);
-		virtual void json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot);
-	
-	protected:
-		virtual QString prefix() { return "https://api.forecast.io"; }
-		QString internalLocation(Weather::Location *location);
+		virtual void refresh();
 		
-	private slots:
-		void onWeatherDownloaded(Weather::Location *location, QString error, const QVariantMap& data);
-		
-	#include "forecast.io/forecastio.gen"
+	#include "forecast/conditions.gen"
 	};
 
-};
+}
 
-#endif // FORECASTIO_H
+#endif // FORECAST_CONDITIONS_H

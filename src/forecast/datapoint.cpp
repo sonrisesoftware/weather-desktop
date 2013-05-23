@@ -17,7 +17,7 @@
  ***************************************************************************/
 
 
-#include "forecast.io/datapoint.h"
+#include "forecast/datapoint.h"
 #include <weather/location.h>
 
 using namespace Forecast;
@@ -32,7 +32,7 @@ QVariant get(const QVariantMap& data, const QString& path) {
 		} else if (result.type() == QVariant::Map) {
 			result = result.toMap()[item];
 		} else {
-			qFatal(qPrintable("Invalid type in path: " + result.type()));
+			qFatal("Invalid type in path: %s", qPrintable(result.type()));
 		}
 		
 		Q_ASSERT(!result.isNull());
@@ -57,6 +57,8 @@ void DataPoint::load()
 {
 	if (location()->hasError()) return;
 	
+	qDebug() << "Loading...";
+	
 	QVariantMap data = get(location()->data(), path()).toMap();
 	
 	foreach(const QString& item, data.keys()) {
@@ -64,11 +66,13 @@ void DataPoint::load()
 			// Time properties are represented by the seconds since the UNIX epoch
             setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
 		} else {
-			setProperty(qPrintable(item), data[item]);
+			qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
+			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
+			qDebug() << setProperty(qPrintable(item), data[item]);
 		}
 		qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
 	}
 }
 
 
-#include "forecast.io/datapoint.moc"
+#include "forecast/datapoint.moc"

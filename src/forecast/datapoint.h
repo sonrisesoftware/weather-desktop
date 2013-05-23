@@ -28,7 +28,7 @@
 
 namespace Forecast {
 
-	class DataPoint: QObject
+	class DataPoint: public QObject
 	{
 		Q_OBJECT
 		
@@ -42,28 +42,28 @@ namespace Forecast {
 		Q_PROPERTY(QDateTime sunrise READ sunrise WRITE setSunrise NOTIFY sunriseChanged);
 		Q_PROPERTY(QDateTime sunset READ sunset WRITE setSunset NOTIFY sunsetChanged);
 
-		Q_PROPERTY(int precipIntensity READ precipIntensity WRITE setPrecipIntensity NOTIFY precipIntensityChanged);
-		Q_PROPERTY(int precipIntensityMax READ precipIntensityMax WRITE setPrecipIntensityMax NOTIFY precipIntensityMaxChanged);
+		Q_PROPERTY(float precipIntensity READ precipIntensity WRITE setPrecipIntensity NOTIFY precipIntensityChanged);
+		Q_PROPERTY(float precipIntensityMax READ precipIntensityMax WRITE setPrecipIntensityMax NOTIFY precipIntensityMaxChanged);
 		Q_PROPERTY(QDateTime precipIntensityMaxTime READ precipIntensityMaxTime WRITE setPrecipIntensityMaxTime NOTIFY precipIntensityMaxTimeChanged);
-		Q_PROPERTY(int precipProbability READ precipProbability WRITE setPrecipProbability NOTIFY precipProbabilityChanged);
-		Q_PROPERTY(int precipType READ precipType WRITE setPrecipType NOTIFY precipTypeChanged);
-		Q_PROPERTY(int precipAccumulation READ precipAccumulation WRITE setTrecipAccumulation NOTIFY precipAccumulationChanged);
+		Q_PROPERTY(float precipProbability READ precipProbability WRITE setPrecipProbability NOTIFY precipProbabilityChanged);
+		Q_PROPERTY(float precipType READ precipType WRITE setPrecipType NOTIFY precipTypeChanged);
+		Q_PROPERTY(float precipAccumulation READ precipAccumulation WRITE setTrecipAccumulation NOTIFY precipAccumulationChanged);
 
-		Q_PROPERTY(int temperature READ temperature WRITE setTemperature NOTIFY temperatureChanged);
-		Q_PROPERTY(int temperatureMin READ temperatureMin WRITE setTemperatureMin NOTIFY temperatureMinChanged);
+		Q_PROPERTY(float temperature READ temperature WRITE setTemperature NOTIFY temperatureChanged);
+		Q_PROPERTY(float temperatureMin READ temperatureMin WRITE setTemperatureMin NOTIFY temperatureMinChanged);
 		Q_PROPERTY(QDateTime temperatureMinTime READ temperatureMinTime WRITE setTemperatureMinTime NOTIFY temperatureMinTimeChanged);
-		Q_PROPERTY(int temperatureMax READ temperatureMax WRITE setTemperatureMax NOTIFY temperatureMaxChanged);
+		Q_PROPERTY(float temperatureMax READ temperatureMax WRITE setTemperatureMax NOTIFY temperatureMaxChanged);
 		Q_PROPERTY(QDateTime temperatureMaxTime READ temperatureMaxTime WRITE setTemperatureMaxTime NOTIFY temperatureMaxTimeChanged);
 
-		Q_PROPERTY(int dewPoint READ dewPoint WRITE setDewPoint NOTIFY dewPointChanged);
-		Q_PROPERTY(int windSpeed READ windSpeed WRITE setWindSpeed NOTIFY windSpeedChanged);
-		Q_PROPERTY(int windBearing READ windBearing WRITE setSindBearing NOTIFY windBearingChanged);
-		Q_PROPERTY(int cloudCover READ cloudCover WRITE setCloudCover NOTIFY cloudCoverChanged);
+		Q_PROPERTY(float dewPoint READ dewPoint WRITE setDewPoint NOTIFY dewPointChanged);
+		Q_PROPERTY(float windSpeed READ windSpeed WRITE setWindSpeed NOTIFY windSpeedChanged);
+		Q_PROPERTY(float windBearing READ windBearing WRITE setSindBearing NOTIFY windBearingChanged);
+		Q_PROPERTY(float cloudCover READ cloudCover WRITE setCloudCover NOTIFY cloudCoverChanged);
 
-		Q_PROPERTY(int humidity READ humidity WRITE setHumidity NOTIFY humidityChanged);
-		Q_PROPERTY(int pressure READ pressure WRITE setPressure NOTIFY pressureChanged);
-		Q_PROPERTY(int visibility READ visibility WRITE setVisibility NOTIFY visibilityChanged);
-		Q_PROPERTY(int ozone READ ozone WRITE setOzone NOTIFY ozoneChanged);
+		Q_PROPERTY(float humidity READ humidity WRITE setHumidity NOTIFY humidityChanged);
+		Q_PROPERTY(float pressure READ pressure WRITE setPressure NOTIFY pressureChanged);
+		Q_PROPERTY(float visibility READ visibility WRITE setVisibility NOTIFY visibilityChanged);
+		Q_PROPERTY(float ozone READ ozone WRITE setOzone NOTIFY ozoneChanged);
 		
 	public:
 		explicit DataPoint(Weather::Location *location,const QString& path);
@@ -72,7 +72,7 @@ namespace Forecast {
 	public slots:
 		void load();
 			
-	#include "forecast.io/datapoint.gen"
+	#include "forecast/datapoint.gen"
 	};
 
 }

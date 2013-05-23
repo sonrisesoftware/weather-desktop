@@ -17,34 +17,34 @@
  ***************************************************************************/
 
 
-#include "conditions.h"
+#include "forecast/conditions.h"
+#include "forecast/forecast.h"
 
-using namespace ForecastIO;
+using namespace Forecast;
 
-ForecastIOConditions::ForecastIOConditions(Weather::Location* location): Weather::Conditions(location)
+ForecastConditions::ForecastConditions(Weather::Location* location): Weather::Conditions(location)
 {
-
+	setData(new DataPoint(location, "currently"));
 }
 
-ForecastIOConditions::~ForecastIOConditions()
+ForecastConditions::~ForecastConditions()
 {
 }
 
-void ForecastIOConditions::refresh()
+void ForecastConditions::refresh()
 {
 	if (location()->hasError()) return;
 	
-	QVariantMap data = location()->data()["currently"].toMap();
-	qDebug() << data;
+	data()->load();
 	
-	setWeather(data["summary"].toString());
-	setClouds(QVariant(data["cloudCover"].toFloat() * 100).toString() + "%");
-	setDewpoint(data["dewPoint"].toString() + TEMP_F);
-	setHumidity(QVariant(data["humidity"].toFloat() * 100).toString() + "%");
-	setWind(data["windSpeed"].toString() + " mph from " + data["windBearing"].toString() + i18n(DEG));
-	setTemp(data["temperature"].toString() + TEMP_F);
-	setPressure(data["pressure"].toString() + " millibars");
-	setHumidity(QVariant(data["humidity"].toFloat() * 100).toString() + "%");
+	setWeather(data()->summary());
+	setClouds(Forecast::Forecast::clouds(data()->cloudCover()));
+	setDewpoint(Forecast::Forecast::temp(data()->dewPoint()));
+	setHumidity(Forecast::Forecast::humidity(data()->humidity()));
+	//setWind(data["windSpeed"].toString() + " mph from " + data["windBearing"].toString() + i18n(DEG));
+	setTemp(Forecast::Forecast::temp(data()->temperature()));
+	//setPressure(data["pressure"].toString() + " millibars");
+	//setHumidity(QVariant(data["humidity"].toFloat() * 100).toString() + "%");
 }
 
-#include "forecast.io/conditions.moc"
+#include "forecast/conditions.moc"

@@ -17,40 +17,40 @@
  ***************************************************************************/
 
 
-#include "forecast.io/forecastio.h"
-#include "forecast.io/conditions.h"
+#include "forecast/forecast.h"
+#include "forecast/conditions.h"
 
-ForecastIO::ForecastIO::ForecastIO(QObject* parent): Service(parent)
+Forecast::Forecast::Forecast(QObject* parent): Service(parent)
 {
 	
 }
 
-ForecastIO::ForecastIO::~ForecastIO()
+Forecast::Forecast::~Forecast()
 {
 	
 }
 
-QString ForecastIO::ForecastIO::internalLocation(Weather::Location *location)
+QString Forecast::Forecast::internalLocation(Weather::Location *location)
 {
-	return location->location();
+	return "38.3505,-90.9835";
 }
 
-void ForecastIO::ForecastIO::download(Weather::Location* location)
+void Forecast::Forecast::download(Weather::Location* location)
 {
 	json_query(location, "forecast", "", this, SLOT(onWeatherDownloaded(Weather::Location*,QString,QVariantMap)));
 }
 
-Weather::Conditions* ForecastIO::ForecastIO::create_conditions(Weather::Location* location)
+Weather::Conditions* Forecast::Forecast::create_conditions(Weather::Location* location)
 {
-	return new ForecastIOConditions(location);
+	return new ForecastConditions(location);
 }
 
-void ForecastIO::ForecastIO::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
+void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
 {
 	json_call(location, query + '/' + Weather::Service::apiKey() + '/' + internalLocation(location) + '?' + params, receiver, slot);
 }
 
-void ForecastIO::ForecastIO::onWeatherDownloaded(Weather::Location* location, QString error, const QVariantMap& data)
+void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QString error, const QVariantMap& data)
 {
 	qDebug() << "Conditions downloaded!";
 	if (data["response"].toMap().contains("error")) {
@@ -64,5 +64,5 @@ void ForecastIO::ForecastIO::onWeatherDownloaded(Weather::Location* location, QS
 }
 
 
-#include "forecast.io/forecastio.moc"
+#include "forecast/forecast.moc"
 

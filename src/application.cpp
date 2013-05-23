@@ -24,7 +24,7 @@
 #include "weather/conditions.h"
 
 #include "wunderground/wunderground.h"
-#include "forecast.io/forecastio.h"
+#include "forecast/forecast.h"
 
 // Qt headers
 #include <QtDeclarative>
@@ -40,7 +40,7 @@ KMainWindow *Application::m_window = nullptr;
 Application::Application(): KApplication(true)
 {
 	registerQMLTypes();
-	setService(new ForecastIO::ForecastIO(this));
+	setService(new Forecast::Forecast(this));
 	service()->setObjectName("Forecast.io");
 	service()->setMaxCalls(MAX_API_CALLS);
 	service()->setApiKey(FORECAST_API_KEY);

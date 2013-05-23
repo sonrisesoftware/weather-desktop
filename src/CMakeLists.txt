@@ -22,9 +22,9 @@ qclassgen(weather-desktop_SRCS
    wunderground/wunderground
    wunderground/conditions
    
-   forecast.io/forecastio
-   forecast.io/conditions
-   forecast.io/datapoint
+   forecast/forecast
+   forecast/conditions
+   forecast/datapoint
  )
 
 # Run ui files through uic
