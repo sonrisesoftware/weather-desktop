@@ -33,7 +33,7 @@
 static const char description[] =
 		I18N_NOOP("An advanced, cross-platform weather application.");
 
-static const char version[] = "0.1";
+static const char version[] = "0.1.2";
 Application *App;
 
 int main(int argc, char **argv)
