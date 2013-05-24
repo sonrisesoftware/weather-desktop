@@ -3,9 +3,7 @@ Weather Desktop - An advanced weather app
 
 Check the weather in a simple and easy-to-use manner. With no ads and a beautiful interface, it's easier and faster than checking weather websites!
 
-Weather Desktop provides access to multiple named locations, with previews of all available at the same time. It displays detailed current conditions,  daily forecasts for the next seven days, and hourly forecasts for the next 24 hours. For people on the go, Weather Desktop can automatically determine your location using your IP address. In addition, users can easily add their own backgrounds, weather-related or not, to the application. 
-
-Don't want to open the application? Just enable the option to set your current wallpaper to depict the current weather conditions!
+Weather Desktop provides access to multiple named locations, with previews of all available at the same time. It displays detailed current conditions,  daily forecasts for the next seven days, and hourly forecasts for the next 24 hours. In addition, Weather Desktop also displays severe alerts for your locations, alerting you to any dangerous weather conditions. Also users can easily add their own backgrounds, weather-related or not, to the application. 
 
 ### Features ###
 
@@ -13,7 +11,6 @@ _**Note:** the features marked below in italics do not exist yet but are schedul
 
  * Runs on any system that supports the KDE libraries
  * Multiple named locations
- * _List of 10 recent locations_
  * Current weather conditions
  * _Weather forecasts for 10 days_
  * _Severe weather alerts_
@@ -33,9 +30,8 @@ _**Note:** the features marked below in italics do not exist yet but are schedul
  * Development by Michael Spencer (@iBeliever)
  * Design by Michael Spencer (@iBeliever) and Christopher Spencer
  * Powered by World Weather Online
- * Powered by [Weather Underground](http://www.wunderground.com/?apiref=f7b0e81e954c09e8)
-
-   ![Weather Underground](http://icons-ak.wxug.com/graphics/wu2/logo_130x80.png)
+ * Powered by [Forecast.io](http://forecast.io/)
+ * Nominatim Search Courtesy of [MapQuest](http://www.mapquest.com/) <img src="http://developer.mapquest.com/content/osm/mq_logo.png">
 
 ### Licensing ###
 

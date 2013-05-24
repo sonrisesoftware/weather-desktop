@@ -35,6 +35,9 @@
 
 static const char description[] =
 		I18N_NOOP("An advanced, cross-platform weather application.");
+		
+static const char credits[] =
+		I18N_NOOP("Powered by <a href=\"http://forecast.io/\">Forecast.io</a>\nNominatim Search Courtesy of <a href=\"http://www.mapquest.com/\" target=\"_blank\">MapQuest</a>");
 
 static const char version[] = "0.1";
 Application *App;
@@ -43,7 +46,7 @@ int main(int argc, char **argv)
 {
 	KAboutData about("weather-desktop", 0, ki18nc("@title", "Weather Desktop"),
 			version, ki18nc("@title", description), KAboutData::License_GPL_V3, 
-			ki18nc("@info", "(C) 2013 Michael Spencer"), ki18nc("@info", "Powered by World Weather Online"),
+			ki18nc("@info", "(C) 2013 Michael Spencer"), ki18nc("@info", credits),
 			"https://github.com/iBeliever/weather-desktop" /* Home page */,
 			"https://github.com/iBeliever/weather-desktop/issues" /* Reporting bugs */);
 	about.addAuthor(ki18nc("@info:credit", "Michael Spencer"),
