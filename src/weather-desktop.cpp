@@ -45,7 +45,6 @@ WeatherDesktop::WeatherDesktop()
 	loadSettings();
 	
 	if (locations().length() == 0) {
-		setLocation("St. Louis, MO");
 		initialSetup();
 	} else {
 		setCurrentLocation((Weather::Location *) locations()[0]);
@@ -98,12 +97,6 @@ void WeatherDesktop::onImplicitHeightChanged()
 
 void WeatherDesktop::loadSettings()
 {
-	foreach(const QString& str, Settings::locations()) {
-		QStringList list = str.split(':');
-		Q_ASSERT(list.length() == 2);
-		addLocation(list[0], list[1]);
-	}
-	
 	QStringList list = Settings::accessCount().split(':');
 	QDate current = QDate::currentDate();
 	QDate lastUsed = QDate::fromString(list[0]);
@@ -111,6 +104,21 @@ void WeatherDesktop::loadSettings()
 	if (current == lastUsed) {
 		App->service()->setAccessCount(list[1].toInt() + App->service()->accessCount());
 		qDebug() << "Loading access count:" << App->service()->accessCount();
+	}
+	
+	if (Settings::units() == Settings::EnumUnits::English) {
+		Weather::Location::setUnits(Weather::English);
+	} else if (Settings::units() == Settings::EnumUnits::Metric) {
+		Weather::Location::setUnits(Weather::Metric);
+	} else {
+		qFatal("Invalid units!");
+	}
+	
+	// MUST BE LAST IN FUNCTION!!!
+	foreach(const QString& str, Settings::locations()) {
+		QStringList list = str.split(':');
+		Q_ASSERT(list.length() == 2);
+		addLocation(list[0], list[1]);
 	}
 }
 
@@ -126,6 +134,14 @@ void WeatherDesktop::saveSettings()
 	
 	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount());
 	Settings::setAccessCount(QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount()));
+	
+	if (Weather::Location::units() == Weather::English) {
+		Settings::setUnits(Settings::EnumUnits::English);
+	} else if (Weather::Location::units() == Weather::Metric) {
+		Settings::setUnits(Settings::EnumUnits::Metric);
+	} else {
+		qFatal("Invalid units!");
+	}
 	
 	Settings::self()->writeConfig();
 }
@@ -238,6 +254,8 @@ void WeatherDesktop::initialSetup()
 	
 	if (ok) {
 		addLocation("Home", location);
+	} else {
+		setLocation("St. Louis, MO");
 	}
 }
 

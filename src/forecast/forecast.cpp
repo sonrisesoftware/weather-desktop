@@ -73,7 +73,7 @@ QString Forecast::Forecast::temp(float value) {
 	if (Weather::Location::units() == Weather::English) {
 		return validate(value, format(value) + TEMP_F);
 	} else {
-		return validate(value, format(5/9 * (value - 32)) + TEMP_C);
+		return validate(value, format(5.0/9.0 * (value - 32)) + TEMP_C);
 	}
 }
 
