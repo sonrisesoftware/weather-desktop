@@ -150,6 +150,28 @@ Rectangle {
 				}
 			}
 		}
+		
+		PlasmaComponents.ToolBar {
+			id: creditsToolBar
+			width: tools.implicitWidth + 15
+			anchors.bottom: parent.bottom;
+			anchors.right: parent.right;
+			
+			tools: Row {
+				anchors.leftMargin: 3
+				anchors.rightMargin: 3
+				spacing: 5
+				
+				Text {
+					id: creditsText
+					text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
+					textFormat: Text.RichText;
+					onLinkActivated: {
+						Qt.openUrlExternally(link)
+					}
+				}
+			}
+		}
 	}
 	
 	Component  {
