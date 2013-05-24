@@ -34,6 +34,11 @@ namespace Weather
 
 	class Conditions;
 	class Service;
+	
+	enum Units {
+		English,
+		Metric
+	};
 
 	class Location : public QObject
 	{
@@ -63,7 +68,8 @@ namespace Weather
 		STATIC_PROPERTY(bool, autoRefresh, autoRefresh, setAutoRefresh)
 		STATIC_PROPERTY(int, refreshTime, refreshTime, setRefreshTime)
 		STATIC_PROPERTY(Weather::Service *, defaultService, defaultService, setDefaultService)
-			
+		STATIC_PROPERTY(Weather::Units, units, units, setUnits)
+		
 	public:
 		explicit Location(const QString& name, const QString& location, Service *service, QObject *parent = 0);
 		explicit Location(const QString& name, const QString& location, QObject *parent = 0): Location(name, location, nullptr, parent) {}
@@ -91,6 +97,7 @@ namespace Weather
 		
 		static void setCache(Cache *cache) {
 			Q_ASSERT(s_cache == nullptr);
+			Q_ASSERT(cache != nullptr);
 			
 			s_cache = cache;
 		}

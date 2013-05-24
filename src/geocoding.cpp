@@ -47,7 +47,7 @@ void Geocoding::run()
 	QString error;
 	QVariantList list = geocache()->load(location(), &error).toList();
 	if (!error.isEmpty()) {
-		QString call = "http://open.mapquestapi.com/nominatim/v1/search.php?format=json&q=" + location().replace(' ', '+');
+		QString call = "http://open.mapquestapi.com/nominatim/v1/search.php?format=json&q=" + QString(location()).replace(' ', '+');
 		QString data = download(QUrl(call), &error);
 		bool ok;
 		QJson::Parser parser;
