@@ -44,8 +44,10 @@ WeatherDesktop::WeatherDesktop()
 	setupGUI();
 	loadSettings();
 	
-	if (locations().length() == 0) {
+if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
 		initialSetup();
+	} else if (Weather::Location::cache()->recent().length() > 0) {
+		setLocation(Weather::Location::cache()->recent()[0]);
 	} else {
 		setCurrentLocation((Weather::Location *) locations()[0]);
 	}
@@ -142,6 +144,8 @@ void WeatherDesktop::saveSettings()
 	} else {
 		qFatal("Invalid units!");
 	}
+
+	Settings::setFirstRun(false);
 	
 	Settings::self()->writeConfig();
 }
@@ -248,8 +252,8 @@ void WeatherDesktop::setLocation(const QString& location)
 void WeatherDesktop::initialSetup()
 {
 	bool ok;	
-	QString location = KInputDialog::getText(i18n("Setup Home Location"),
-			i18n("Please enter your home location:"), 
+	QString location = KInputDialog::getText(i18n("Setup Weather Desktop"),
+			i18n("Enter your home location:"), 
 			QString(), &ok, this);
 	
 	if (ok) {

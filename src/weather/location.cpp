@@ -90,13 +90,13 @@ void Weather::Location::refresh()
 	if (!location().isEmpty()) {
 		// Load  the data from the cache
 		QString error;
-		QVariant var = cache()->load(coordinates(), &error);
+		QVariant var = cache()->load(location(), &error);
 		
 		// If the data is valid,
 		if (error.isEmpty() || error.startsWith(OUTDATED_DATA)) {
 			qDebug() << "Using location from cache:" << location();
 			setData(var.toMap());
-			QDateTime lastUpdatedTime = cache()->lastUpdated(coordinates(), &error);
+			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
 			if (error.isEmpty())
 				setLastUpdated(lastUpdatedTime.time());
 		}
@@ -104,7 +104,7 @@ void Weather::Location::refresh()
 		if (error.isEmpty()) {
 			setNeedsRefresh(false);
 
-			QDateTime lastUpdatedTime = cache()->lastUpdated(coordinates(), &error);
+			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
 			// Request an update at the specified time
 			QDateTime then = lastUpdatedTime.addMSecs(refreshTime());
 			//qDebug() << "Refresh at:" << then;
@@ -150,7 +150,7 @@ void Weather::Location::finishRefresh(QVariantMap data, QString error)
 		
 		QString internalError;
 		if (!location().isEmpty()) {
-			cache()->save(coordinates(), &internalError, data);
+			cache()->save(location(), &internalError, data);
 			if (!internalError.isEmpty()) {
 				qWarning("Unable to save location to cache: %s", qPrintable(internalError));
 			}

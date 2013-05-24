@@ -14,6 +14,10 @@
 		<entry name="Access Count" type="String">
 			<label>The number of times the API has been called per day</label>
 		</entry>
+		<entry name="First Run" type="bool">
+			<label>True to run the first run wizard</label>
+			<default>true</default>
+		</entry>
 		<entry name="Units" type="Enum">
 			<label>The units used for displaying weather</label>
 			<default>English</default>
