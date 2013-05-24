@@ -1,8 +1,17 @@
-weather-desktop (0.1.1); urgency=low
+weather-desktop (0.2); urgency=medium
 
- * Added new UI to show saved locations.
- * Added new background and icon.
+ * Refactored weather code
+ * Better usage limits
+ * Added new backend for Forecast.io
+ * Added Metric & English Units
+ * New location UI
  * Fixed some minor bugs.
+
+-- Michael Spencer <spencers1993@gmail.com>  Fri, 24 May 2013 18:29:24 -0500
+
+weather-desktop (0.1); urgency=low
+
+ * Initial version
 
 -- Michael Spencer <spencers1993@gmail.com>  Tue, 14 May 2013 19:47:37 -0500
 
