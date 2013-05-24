@@ -70,10 +70,13 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 // ##### STATIC CONVERSION METHODS #####
 
 QString Forecast::Forecast::temp(float value) {
-	if (Weather::Location::units() == Weather::English) {
+	if (Weather::Location::units().temp() == Weather::Units::Fahrenheit) {
 		return validate(value, format(value) + TEMP_F);
-	} else {
+	} else if (Weather::Location::units().temp() == Weather::Units::Celsius) {
 		return validate(value, format(5.0/9.0 * (value - 32)) + TEMP_C);
+	} else {
+		qFatal("Unknown units!");
+		return "";
 	}
 }
 
@@ -105,26 +108,37 @@ QString Forecast::Forecast::wind(float speed, float dir) {
 		i++;
 	
 	QString from = compass[i];
-	if (Weather::Location::units() == Weather::English) {
+	if (Weather::Location::units().speed() == Weather::Units::MilesPerHour) {
 		return validate(speed, validate(dir, format(speed) + " mph from " + from));
-	} else {
+	} else if (Weather::Location::units().speed() == Weather::Units::KilometersPerHour) {
+		return validate(speed, validate(dir, format(1.60934 * speed) + " km/hr from " + from));
+	} else if (Weather::Location::units().speed() == Weather::Units::MetersPerSecond) {
 		return validate(speed, validate(dir, format(0.44704 * speed) + " m/s from " + from));
+	} else {
+		qFatal("Unknown units!");
+		return "";
 	}
 }
 
 QString Forecast::Forecast::pressure(float value) {
-	if (Weather::Location::units() == Weather::English) {
+	if (Weather::Location::units().pressure() == Weather::Units::InchesMercury) {
 		return validate(value, format(0.02953 * value, 4) + " inHg");
-	} else {
+	} else if (Weather::Location::units().pressure() == Weather::Units::Millibars) {
 		return validate(value, format(value, 4) + " millibars");
+	} else {
+		qFatal("Unknown units!");
+		return "";
 	}
 }
 
 QString Forecast::Forecast::visibility(float value) {
-	if (Weather::Location::units() == Weather::English) {
+	if (Weather::Location::units().longDistance() == Weather::Units::Miles) {
 		return validate(value, format(value) + " mi");
-	} else {
+	} else if (Weather::Location::units().longDistance() == Weather::Units::Kilometers) {
 		return validate(value, format(1.60934 * value) + " km");
+	} else {
+		qFatal("Unknown units!");
+		return "";
 	}
 }
 

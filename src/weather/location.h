@@ -21,8 +21,9 @@
 #define LOCATION_H
 
 #include "main.h"
-#include <geocoding.h>
+#include "geocoding.h"
 #include "cache.h"
+#include "weather/units.h"
 
 #include <QObject>
 #include <QString>
@@ -34,11 +35,6 @@ namespace Weather
 
 	class Conditions;
 	class Service;
-	
-	enum Units {
-		English,
-		Metric
-	};
 
 	class Location : public QObject
 	{
