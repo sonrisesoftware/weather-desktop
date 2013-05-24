@@ -37,6 +37,8 @@ void ForecastConditions::refresh()
 	
 	data()->load();
 	
+	location()->setDay(QDateTime::currentDateTime() > data()->sunrise() && QDateTime::currentDateTime() < data()->sunset());
+	
 	setIcon(Forecast::Forecast::icon(data()->icon()));
 	setWeather(data()->summary());
 	setClouds(Forecast::Forecast::clouds(data()->cloudCover()));
@@ -46,6 +48,7 @@ void ForecastConditions::refresh()
 	setTemp(Forecast::Forecast::temp(data()->temperature()));
 	setPressure(Forecast::Forecast::pressure(data()->pressure()));
 	setVisibility(Forecast::Forecast::visibility(data()->visibility()));
+	setPrecip(Forecast::Forecast::precip(data()));
 }
 
 #include "forecast/conditions.moc"

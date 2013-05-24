@@ -21,6 +21,7 @@
 #define FORECAST_H
 
 #include "weather/service.h"
+#include "forecast/datapoint.h"
 #include <KIcon>
 
 namespace Forecast {
@@ -44,6 +45,7 @@ namespace Forecast {
 		static QString pressure(float value);
 		static QString visibility(float value);
 		static KIcon icon(QString name);
+		static QString precip(DataPoint *data);
 		
 	protected:
 		virtual QString prefix() { return "https://api.forecast.io"; }
@@ -53,12 +55,17 @@ namespace Forecast {
 		void onWeatherDownloaded(Weather::Location *location, QString error, const QVariantMap& data);
 		
 	private:
-		static QString validate(float value, QString string) {
-			return validate(value, string, "");
+		
+		static QString validate(float value, QString string, QString def = "") {
+			if (value != -99) {
+				return string;
+			} else {
+				return def;
+			}
 		}
 		
-		static QString validate(float value, QString string, QString def) {
-			if (value != -99) {
+		static QString validate(QString value, QString string, QString def = "") {
+			if (value != "!!!!") {
 				return string;
 			} else {
 				return def;

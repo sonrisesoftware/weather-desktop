@@ -47,8 +47,7 @@ namespace Weather
 		Q_PROPERTY(QString windgust READ windgust NOTIFY windgustChanged)
 		
 		Q_PROPERTY(QString humidity READ humidity NOTIFY humidityChanged)
-		Q_PROPERTY(QString rainfall READ rainfall NOTIFY rainfallChanged)
-		Q_PROPERTY(QString snowdepth READ snowdepth NOTIFY snowdepthChanged)
+		Q_PROPERTY(QString precip READ precip NOTIFY precipChanged)
 		
 		Q_PROPERTY(QIcon icon READ icon NOTIFY iconChanged)
 		Q_PROPERTY(QColor color READ color NOTIFY colorChanged)

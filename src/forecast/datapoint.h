@@ -46,7 +46,7 @@ namespace Forecast {
 		Q_PROPERTY(float precipIntensityMax READ precipIntensityMax WRITE setPrecipIntensityMax NOTIFY precipIntensityMaxChanged);
 		Q_PROPERTY(QDateTime precipIntensityMaxTime READ precipIntensityMaxTime WRITE setPrecipIntensityMaxTime NOTIFY precipIntensityMaxTimeChanged);
 		Q_PROPERTY(float precipProbability READ precipProbability WRITE setPrecipProbability NOTIFY precipProbabilityChanged);
-		Q_PROPERTY(float precipType READ precipType WRITE setPrecipType NOTIFY precipTypeChanged);
+		Q_PROPERTY(QString precipType READ precipType WRITE setPrecipType NOTIFY precipTypeChanged);
 		Q_PROPERTY(float precipAccumulation READ precipAccumulation WRITE setTrecipAccumulation NOTIFY precipAccumulationChanged);
 
 		Q_PROPERTY(float temperature READ temperature WRITE setTemperature NOTIFY temperatureChanged);

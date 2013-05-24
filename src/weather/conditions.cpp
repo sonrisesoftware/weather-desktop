@@ -55,8 +55,7 @@ void Conditions::refresh()
 	setWindgust("<Wind gust>");
 	
 	setHumidity("<Humidity>");
-	setRainfall("<Rainfall>");
-	setSnowdepth("<Snowdepth>");
+	setPrecip("<Precipitation>");
 }
 
 void Weather::Conditions::updateColor(const QString& temp)

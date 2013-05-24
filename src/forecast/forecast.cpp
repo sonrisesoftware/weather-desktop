@@ -19,6 +19,9 @@
 
 #include "forecast/forecast.h"
 #include "forecast/conditions.h"
+#include "forecast/datapoint.h"
+
+#include <QString>
 
 Forecast::Forecast::Forecast(QObject* parent): Service(parent)
 {
@@ -68,7 +71,15 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 
 QString Forecast::Forecast::temp(float value) { return validate(value, format(value) + TEMP_F); }
 
-QString Forecast::Forecast::clouds(float value) { return validate(value, format(value * 100) + '%'); }
+QString Forecast::Forecast::clouds(float value) {
+	//0 corresponds to clear sky, 0.4 to scattered clouds, 0.75 to broken cloud cover, and 1 to completely overcast skies.
+	QString weather = "Clear";
+	if (value > 0.3) weather = "Scattered";
+	if (value > 0.6) weather = "Broken";
+	if (value > 0.9) weather = "Overcast";
+	
+	return validate(value, weather/*,format(value * 100) + '%'*/);
+}
 
 QString Forecast::Forecast::humidity(float value) { return validate(value, format(value * 100) + '%'); }
 
@@ -107,7 +118,7 @@ KIcon Forecast::Forecast::icon(QString name) {
 	} else if (name == "sleet") {
 		code = "weather-freezing-rain";
 	} else if (name == "wind") {
-		
+		//TODO: Add missing icon!
 	} else if (name == "fog") {
 		code = "weather-mist";
 	} else if (name == "cloudy") {
@@ -119,6 +130,19 @@ KIcon Forecast::Forecast::icon(QString name) {
 	}
 	
 	return KIcon(code);
+}
+
+QString Forecast::Forecast::precip(DataPoint* data)
+{
+	QString weather = "None";
+	if (data->precipIntensity() > 0.017) weather = "Light ";
+	if (data->precipIntensity() > 0.4) weather = "Moderate ";
+	if (data->precipIntensity() > 0.8) weather = "Heavy ";
+
+	if (!data->precipType().isEmpty())
+		weather += data->precipType()[0].toUpper() + data->precipType().right(data->precipType().length() - 1);
+	
+	return weather;
 }
 
 
