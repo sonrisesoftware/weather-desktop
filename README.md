@@ -49,12 +49,15 @@ If you are using Ubuntu, you can buy the application from the Ubuntu Software Ce
 
 **API Key**
 
-When building from source, you will need an API key from World Weather Online or [Weather Underground](http://www.wunderground.com/?apiref=f7b0e81e954c09e8).
+When building from source, you will need an API key from World Weather Online, [Weather Underground](http://www.wunderground.com/?apiref=f7b0e81e954c09e8), or [Forecast.io](http://developer.forecast.io).
+
+Currently, if you don't want to edit any actual source code files, you must use Forecast.io, as the selection of a weather backend is hardcoded into the app.
 
 Once you have an API key, create a file called `src/api_key.h` and add your API key to it:
 
     #define WWO_API_KEY "<your-key-here>" // For World Weather Online
     #define WUNDER_API_KEY "<your-key-here>" // For Wunderground
+    #define FORECAST_API_KEY "<your-key-here>" // For Forecast.io
 
 **Class Generator**
 
