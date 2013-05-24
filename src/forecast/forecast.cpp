@@ -69,7 +69,16 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 
 // ##### STATIC CONVERSION METHODS #####
 
-QString Forecast::Forecast::temp(float value) { return validate(value, format(value) + TEMP_F); }
+QString Forecast::Forecast::temp(float value) {
+	if (Weather::Location::units().temp() == Weather::Units::Fahrenheit) {
+		return validate(value, format(value) + TEMP_F);
+	} else if (Weather::Location::units().temp() == Weather::Units::Celsius) {
+		return validate(value, format(5.0/9.0 * (value - 32)) + TEMP_C);
+	} else {
+		qFatal("Unknown units!");
+		return "";
+	}
+}
 
 QString Forecast::Forecast::clouds(float value) {
 	//0 corresponds to clear sky, 0.4 to scattered clouds, 0.75 to broken cloud cover, and 1 to completely overcast skies.
@@ -81,7 +90,9 @@ QString Forecast::Forecast::clouds(float value) {
 	return validate(value, weather/*,format(value * 100) + '%'*/);
 }
 
-QString Forecast::Forecast::humidity(float value) { return validate(value, format(value * 100) + '%'); }
+QString Forecast::Forecast::humidity(float value) {
+	return validate(value, format(value * 100) + '%');
+}
 
 QString Forecast::Forecast::wind(float speed, float dir) {
 	static QString compass[] = {
@@ -97,12 +108,39 @@ QString Forecast::Forecast::wind(float speed, float dir) {
 		i++;
 	
 	QString from = compass[i];
-	return validate(speed, validate(dir, format(speed) + " mph from " + from));// + '(' + format(dir) + i18n(DEG) + ')')); 
+	if (Weather::Location::units().speed() == Weather::Units::MilesPerHour) {
+		return validate(speed, validate(dir, format(speed) + " mph from " + from));
+	} else if (Weather::Location::units().speed() == Weather::Units::KilometersPerHour) {
+		return validate(speed, validate(dir, format(1.60934 * speed) + " km/hr from " + from));
+	} else if (Weather::Location::units().speed() == Weather::Units::MetersPerSecond) {
+		return validate(speed, validate(dir, format(0.44704 * speed) + " m/s from " + from));
+	} else {
+		qFatal("Unknown units!");
+		return "";
+	}
 }
 
-QString Forecast::Forecast::pressure(float value) { return validate(value, format(value, 4) + " millibars"); }
+QString Forecast::Forecast::pressure(float value) {
+	if (Weather::Location::units().pressure() == Weather::Units::InchesMercury) {
+		return validate(value, format(0.02953 * value, 4) + " inHg");
+	} else if (Weather::Location::units().pressure() == Weather::Units::Millibars) {
+		return validate(value, format(value, 4) + " millibars");
+	} else {
+		qFatal("Unknown units!");
+		return "";
+	}
+}
 
-QString Forecast::Forecast::visibility(float value) { return validate(value, format(value) + " mph"); }
+QString Forecast::Forecast::visibility(float value) {
+	if (Weather::Location::units().longDistance() == Weather::Units::Miles) {
+		return validate(value, format(value) + " mi");
+	} else if (Weather::Location::units().longDistance() == Weather::Units::Kilometers) {
+		return validate(value, format(1.60934 * value) + " km");
+	} else {
+		qFatal("Unknown units!");
+		return "";
+	}
+}
 
 KIcon Forecast::Forecast::icon(QString name) {
 	QString code = "weather-desktop";
@@ -146,7 +184,6 @@ QString Forecast::Forecast::precip(DataPoint* data)
 	
 	return weather == "Very light " ? "None" : weather;
 }
-
 
 #include "forecast/forecast.moc"
 

@@ -44,7 +44,7 @@ WeatherDesktop::WeatherDesktop()
 	setupGUI();
 	loadSettings();
 	
-	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
+if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
 		initialSetup();
 	} else if (Weather::Location::cache()->recent().length() > 0) {
 		setLocation(Weather::Location::cache()->recent()[0]);
@@ -99,12 +99,6 @@ void WeatherDesktop::onImplicitHeightChanged()
 
 void WeatherDesktop::loadSettings()
 {
-	foreach(const QString& str, Settings::locations()) {
-		QStringList list = str.split(':');
-		Q_ASSERT(list.length() == 2);
-		addLocation(list[0], list[1]);
-	}
-	
 	QStringList list = Settings::accessCount().split(':');
 	QDate current = QDate::currentDate();
 	QDate lastUsed = QDate::fromString(list[0]);
@@ -112,6 +106,22 @@ void WeatherDesktop::loadSettings()
 	if (current == lastUsed) {
 		App->service()->setAccessCount(list[1].toInt() + App->service()->accessCount());
 		qDebug() << "Loading access count:" << App->service()->accessCount();
+	}
+	
+	// FIXME!!!! Load all the unit types
+	if (Settings::units() == Settings::EnumUnits::English) {
+		Weather::Location::setUnits(Weather::Units::English);
+	} else if (Settings::units() == Settings::EnumUnits::Metric) {
+		Weather::Location::setUnits(Weather::Units::Metric);
+	} else {
+		qFatal("Invalid units!");
+	}
+	
+	// MUST BE LAST IN FUNCTION!!!
+	foreach(const QString& str, Settings::locations()) {
+		QStringList list = str.split(':');
+		Q_ASSERT(list.length() == 2);
+		addLocation(list[0], list[1]);
 	}
 }
 
@@ -128,6 +138,15 @@ void WeatherDesktop::saveSettings()
 	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount());
 	Settings::setAccessCount(QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount()));
 	
+	// FIXME!!!! Save all the unit types
+	if (Weather::Location::units().system() == Weather::Units::English) {
+		Settings::setUnits(Settings::EnumUnits::English);
+	} else if (Weather::Location::units().system() == Weather::Units::Metric) {
+		Settings::setUnits(Settings::EnumUnits::Metric);
+	} else {
+		qFatal("Invalid units!");
+	}
+
 	Settings::setFirstRun(false);
 	
 	Settings::self()->writeConfig();
@@ -243,6 +262,23 @@ void WeatherDesktop::initialSetup()
 		addLocation("Home", location);
 	} else {
 		setLocation("St. Louis, MO");
+	}
+	
+	QStringList units = {"English", "Metric"};
+	QString ans = KInputDialog::getItem(i18n("Setup Weather Desktop"),
+			i18n("Select your preferred units:"),
+			units, 0, false, &ok, this);
+	
+	if (ok) {
+		if (ans == "English") {
+			Weather::Location::setUnits(Weather::Units(Weather::Units::English));
+		} else if (ans == "Metric") {
+			Weather::Location::setUnits(Weather::Units(Weather::Units::Metric));
+		} else {
+			qFatal("Invalid units!");
+		}
+	} else {
+		Weather::Location::setUnits(Weather::Units(Weather::Units::English));
 	}
 }
 

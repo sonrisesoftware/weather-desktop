@@ -27,6 +27,7 @@ bool Weather::Location::s_autoRefresh = false;
 int Weather::Location::s_refreshTime = 60 * 60 * 1000; // 1 hour
 Cache *Weather::Location::s_cache = nullptr;
 Weather::Service *Weather::Location::s_defaultService = nullptr;
+Weather::Units Weather::Location::s_units(Weather::Units::English);
 
 Weather::Location::Location(const QString& name, const QString& location, Weather::Service *service, QObject* parent)
 	: QObject(parent)
@@ -60,6 +61,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	refresh();
 	// Connect slots
 	QObject::connect(this, SIGNAL(locationChanged(QString)), SLOT(onLocationChanged()));
+	QObject::connect(&s_units, SIGNAL(unitsChanged()), this, SIGNAL(refreshed()));
 	// TODO: Add to global list (if there is one)
 }
 

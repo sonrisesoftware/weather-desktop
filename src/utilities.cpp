@@ -70,7 +70,7 @@ QVariant getJson(const QVariant& data, const QString& path) {
 	QVariant result = data;
 	
 	foreach (const QString& item, list) {
-		qDebug() << item << result.typeName();
+		//qDebug() << item << result.typeName();
 		if (result.type() == QVariant::List) {
 			result = result.toList()[item.toInt()];
 		} else if (result.type() == QVariant::Map) {

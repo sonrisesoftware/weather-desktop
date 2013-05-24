@@ -16,6 +16,7 @@ qclassgen(weather-desktop_SRCS
    weather/location
    weather/service
    weather/conditions
+   weather/units
    
    #worldweather/worldweatheronline
    #worldweather/conditions
