@@ -26,6 +26,7 @@ qclassgen(weather-desktop_SRCS
    forecast/forecast
    forecast/conditions
    forecast/datapoint
+   forecast/datablock
  )
 
 # Run ui files through uic

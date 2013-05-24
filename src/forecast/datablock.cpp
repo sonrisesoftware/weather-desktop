@@ -16,36 +16,47 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-
-#include "forecast/datapoint.h"
-#include <weather/location.h>
+#include "main.h"
+#include "forecast/datablock.h"
 
 using namespace Forecast;
 
-DataPoint::DataPoint(Weather::Location *location, const QString& path): QObject(location)
+DataBlock::DataBlock(Weather::Location *location, const QString& path): QObject(location)
 {
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
 	setPath(path);
 }
 
-DataPoint::~DataPoint()
+DataBlock::~DataBlock()
 {
 
 }
 
-void DataPoint::load()
+void DataBlock::load()
 {
 	if (location()->hasError()) return;
 	
-	qDebug() << "Loading:" << path();
+	qDebug() << "Loading...";
 	
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	
 	foreach(const QString& item, data.keys()) {
-		if (property(qPrintable(item)).type() == QVariant::DateTime) {
+		if (item == "data") {
+			QVariantList list = data[item].toList();
+			
+			while (!this->data().isEmpty()) {
+				delete this->data().takeFirst();
+			}
+			
+			for (int i = 0; i < list.length(); i++) {
+				DataPoint *point = new DataPoint(location(), path() + ".data." + QString::number(i));
+				point->load();
+				this->data().append(point);
+			}
+		} else if (property(qPrintable(item)).type() == QVariant::DateTime) {
 			// Time properties are represented by the seconds since the UNIX epoch
-            setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
+			setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
 		} else {
 			//qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
 			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
@@ -53,7 +64,11 @@ void DataPoint::load()
 		}
 		//qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
 	}
+	
+	qDebug() << "Summary:" << summary();
+	qDebug() << "Icon:" << icon();
+	qDebug() << "Data:" << this->data();
 }
 
 
-#include "forecast/datapoint.moc"
+#include "forecast/datablock.moc"

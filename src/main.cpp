@@ -22,6 +22,7 @@
 
 #include "application.h"
 #include "forecast/datapoint.h"
+#include "forecast/datablock.h"
 #include "cache.h"
 #include "geocoding.h"
 
@@ -59,7 +60,7 @@ int main(int argc, char **argv)
 	App = &app;
 
 	qDebug() << "Debugging is enabled.";
-
+	
 	// See if we are starting with session management
 	if (app.isSessionRestored())
 	{

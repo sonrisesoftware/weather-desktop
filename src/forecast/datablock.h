@@ -17,43 +17,38 @@
  ***************************************************************************/
 
 
+#ifndef FORECAST_DATABLOCK_H
+#define FORECAST_DATABLOCK_H
+
+#include <QObject>
 #include "forecast/datapoint.h"
-#include <weather/location.h>
+#include "weather/location.h"
 
-using namespace Forecast;
+#include <QList>
 
-DataPoint::DataPoint(Weather::Location *location, const QString& path): QObject(location)
-{
-	Q_ASSERT(location != nullptr);
-	setLocation(location);
-	setPath(path);
+namespace Forecast {
+
+	class DataBlock : public QObject
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
+		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+		
+		Q_PROPERTY(QList<Forecast::DataPoint*> data READ data WRITE setData NOTIFY dataChanged)
+		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
+		Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
+
+	public:
+		explicit DataBlock(Weather::Location *location, const QString& path);
+		virtual ~DataBlock();
+		
+	public slots:
+		void load();
+	
+	#include "forecast/datablock.gen"
+	};
+
 }
 
-DataPoint::~DataPoint()
-{
-
-}
-
-void DataPoint::load()
-{
-	if (location()->hasError()) return;
-	
-	qDebug() << "Loading:" << path();
-	
-	QVariantMap data = getJson(location()->data(), path()).toMap();
-	
-	foreach(const QString& item, data.keys()) {
-		if (property(qPrintable(item)).type() == QVariant::DateTime) {
-			// Time properties are represented by the seconds since the UNIX epoch
-            setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
-		} else {
-			//qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
-			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
-			setProperty(qPrintable(item), data[item]);
-		}
-		//qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
-	}
-}
-
-
-#include "forecast/datapoint.moc"
+#endif // FORECAST_DATABLOCK_H
