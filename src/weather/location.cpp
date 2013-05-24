@@ -44,6 +44,12 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	// Set the name and location
 	setName(name);
 	setLocation(location);
+	setCoder(new Geocoding(location, this));
+	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(setLocation(QString)));
+	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(run()));
+	QObject::connect(coder(), SIGNAL(coordinatesChanged(QString)), this, SLOT(setCoordinates(QString)));
+	coder()->run();
+	
 	// Set the service
 	setService(service);
 	// Create the necessary weather types
@@ -64,18 +70,31 @@ Weather::Location::~Location()
 
 void Weather::Location::refresh()
 {
+	if (location().isEmpty())
+		setDisplay(i18nc("@label", "Auto IP"));
+	else
+		setDisplay(location());
+	
+	if (coordinates().isEmpty()) {
+		setError(true);
+		setErrorString("Unable to find location!");
+		return;
+	}
+	
+	//setDisplay(coordinates());
+	
 	setError(false);
 	// If the location is known (not IP-based),
 	if (!location().isEmpty()) {
 		// Load  the data from the cache
 		QString error;
-		QVariant var = cache()->load(location(), &error);
+		QVariant var = cache()->load(coordinates(), &error);
 		
 		// If the data is valid,
 		if (error.isEmpty() || error.startsWith(OUTDATED_DATA)) {
 			qDebug() << "Using location from cache:" << location();
 			setData(var.toMap());
-			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
+			QDateTime lastUpdatedTime = cache()->lastUpdated(coordinates(), &error);
 			if (error.isEmpty())
 				setLastUpdated(lastUpdatedTime.time());
 		}
@@ -83,7 +102,7 @@ void Weather::Location::refresh()
 		if (error.isEmpty()) {
 			setNeedsRefresh(false);
 
-			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
+			QDateTime lastUpdatedTime = cache()->lastUpdated(coordinates(), &error);
 			// Request an update at the specified time
 			QDateTime then = lastUpdatedTime.addMSecs(refreshTime());
 			//qDebug() << "Refresh at:" << then;
@@ -104,11 +123,6 @@ void Weather::Location::refresh()
 	if (hasError() || needsRefresh()) {
 		setRefreshing(true);
 		qDebug() << "Refreshing...";
-		
-		if (location().isEmpty())
-			setDisplay(i18nc("@label", "Auto IP"));
-		else
-			setDisplay(location());
 
 		setRefreshing(true);
 		service()->download(this);
@@ -134,7 +148,7 @@ void Weather::Location::finishRefresh(QVariantMap data, QString error)
 		
 		QString internalError;
 		if (!location().isEmpty()) {
-			cache()->save(location(), &internalError, data);
+			cache()->save(coordinates(), &internalError, data);
 			if (!internalError.isEmpty()) {
 				qWarning("Unable to save location to cache: %s", qPrintable(internalError));
 			}

@@ -149,7 +149,7 @@ QVariant Cache::load(QString name, QString *error)
 		qDebug() << "Data exists in cache:" << name;
  		
 		// If the data is current,
-		if (result["time"].toDateTime().msecsTo(QDateTime::currentDateTime()) < maxTime()) {
+		if (maxTime() == 0 || result["time"].toDateTime().msecsTo(QDateTime::currentDateTime()) < maxTime()) {
 			// Return the data
 			return result["data"];
 		} else { // Otherwise,	

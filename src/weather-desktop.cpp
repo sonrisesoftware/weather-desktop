@@ -132,7 +132,7 @@ void WeatherDesktop::saveSettings()
 
 Weather::Location *WeatherDesktop::addLocation(const QString& name, const QString& location)
 {
-	if (location.isEmpty()) return nullptr;
+	Q_ASSERT(!location.isEmpty());
 	Weather::Location *l = new Weather::Location(name, location, this);
 	locations().append(l);
 	emit locationsChanged(locations());

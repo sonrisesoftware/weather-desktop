@@ -26,6 +26,8 @@
 #include <KIO/JobUiDelegate>
 #include <KIO/NetAccess>
 
+#include <QString>
+
 QString readFile(const QString& fileName, QString *error) {
 	QFile file(fileName);
 	file.open(QIODevice::ReadOnly);
@@ -61,4 +63,24 @@ QString download(const QUrl& url, QString *error) {
 	}		
 	
 	return text;
+}
+
+QVariant getJson(const QVariant& data, const QString& path) {
+	QStringList list = path.split('.');
+	QVariant result = data;
+	
+	foreach (const QString& item, list) {
+		qDebug() << item << result.typeName();
+		if (result.type() == QVariant::List) {
+			result = result.toList()[item.toInt()];
+		} else if (result.type() == QVariant::Map) {
+			result = result.toMap()[item];
+		} else {
+			qFatal("Invalid type in path: %s", qPrintable(result.type()));
+		}
+		
+		Q_ASSERT(!result.isNull());
+	}
+	
+	return result;
 }

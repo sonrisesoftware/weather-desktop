@@ -40,7 +40,7 @@ Item {
 		}
 	}
 	
-	Rectangle {
+	/*Rectangle {
 		id: top
 		anchors {
 			left: parent.left;
@@ -78,5 +78,6 @@ Item {
 			GradientStop { position: 0.0; color: "transparent" }
 			GradientStop { position: 1.0; color: listPanel.color }
 		}
-	}
+	}*/
 }
+

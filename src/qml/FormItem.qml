@@ -30,6 +30,7 @@ Item {
 	property int indent: root.parent.indent;
 	implicitHeight: childrenRect.height;
 	implicitWidth: childrenRect.width;
+	opacity: value.text == "" && label.text != "" ? 0 : 1
 	
 	Text {
 		id: label

@@ -25,10 +25,11 @@ Rectangle {
 	//width: 400
 	//height: 64
 	color: appStyle.panelColor;
+	border.color: appStyle.borderColor;
 	radius: appStyle.panelRadius;
 	
-	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_updating
-	property bool is_updating: (WeatherApp.currentLocation.updating == true)
+	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_refreshing
+	property bool is_updating: (WeatherApp.currentLocation.refreshing == true)
 	property bool is_regular: !(is_error || is_updating)
 	
 	implicitWidth: is_regular ? Math.max(400, icon.width + 80 + 2 * Math.max(

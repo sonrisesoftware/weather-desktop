@@ -54,7 +54,7 @@ void WundergroundConditions::refresh()
 	setPressure(data["pressure_mb"].toString() + " millibars"); //TODO: Unit conversion
 	//setClouds(data["cloudcover"].toString() + "%");
 	setHumidity(data["relative_humidity"].toString());
-	setRainfall(data["precip_today_metric"].toString() + " mm"); //TODO: Unit conversion
+	setPrecip(data["precip_today_metric"].toString() + " mm"); //TODO: Unit conversion
 	setWind(data["wind_mph"].toString() + " mph from the " + data["wind_dir"].toString()); //TODO: Unit conversion
 	setWindgust(data["wind_gust_mph"].toString() + " mph");
 	setWindchill(data["feelslike_f"].toString() + TEMP_F);

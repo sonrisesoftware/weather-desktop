@@ -33,7 +33,7 @@ using namespace Weather;
 Weather::DownloadJob::DownloadJob(Weather::Location *location, QObject *receiver, const char *slot) {
 	qDebug() << "New DownloadJob!";
 	m_location = location;
-	QObject::connect(this, SIGNAL(data(Weather::Location *,QString,QVariantMap)), receiver, slot);
+	QObject::connect(this, SIGNAL(data(Weather::Location*,QString,QVariantMap)), receiver, slot);
 }
 
 void Weather::DownloadJob::emit_signal(QString error, QVariantMap map) {
@@ -118,8 +118,9 @@ void Service::process_query(KJob *job) {
 	QJson::Parser parser;
 	QVariantMap result = parser.parse(data, &ok).toMap();
 	if (!ok) {
-		error = "Unable to parse JSON response!";
+		error = "Unable to parse JSON response: " + parser.errorString();
 		qDebug() << "ERROR:" << error;
+		qDebug() << data;
 	}
 	
 	obj->emit_signal(error, result);

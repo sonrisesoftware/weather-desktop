@@ -16,52 +16,44 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "weather/conditions.h"
 
-#include "main.h"
-#include "weather/location.h"
-#include <KIcon>
+#include "forecast/datapoint.h"
+#include <weather/location.h>
 
-using namespace Weather;
+using namespace Forecast;
 
-Conditions::Conditions(Weather::Location *location): QObject(location)
+DataPoint::DataPoint(Weather::Location *location, const QString& path): QObject(location)
 {
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
-	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
-	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
-	//refresh();
+	setPath(path);
 }
 
-Conditions::~Conditions()
+DataPoint::~DataPoint()
 {
 
 }
 
-void Conditions::refresh()
-{	
-	setIcon(KIcon("weather-clouds"));
-	setWeather("<Weather>");	
-	setTemp("<Temp>");
-	
-	setWindchill("<Windchill>");
-	setDewpoint("<Dewpoint>");
-	
-	setPressure("<Pressure>");
-	setVisibility("<Visibility>");
-	setClouds("<Cloud cover>");
-	
-	setWind("<Wind>");
-	setWindgust("<Wind gust>");
-	
-	setHumidity("<Humidity>");
-	setPrecip("<Precipitation>");
-}
-
-void Weather::Conditions::updateColor(const QString& temp)
+void DataPoint::load()
 {
-	//qDebug() << "Updating color...";
+	if (location()->hasError()) return;
+	
+	qDebug() << "Loading:" << path();
+	
+	QVariantMap data = getJson(location()->data(), path()).toMap();
+	
+	foreach(const QString& item, data.keys()) {
+		if (property(qPrintable(item)).type() == QVariant::DateTime) {
+			// Time properties are represented by the seconds since the UNIX epoch
+            setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
+		} else {
+			//qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
+			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
+			setProperty(qPrintable(item), data[item]);
+		}
+		//qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
+	}
 }
 
 
-#include "weather/conditions.moc"
+#include "forecast/datapoint.moc"

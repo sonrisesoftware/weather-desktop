@@ -59,8 +59,7 @@ Rectangle {
 		windgust: WeatherApp.currentLocation.conditions.windgust;
 		
 		humidity: WeatherApp.currentLocation.conditions.humidity;
-		rainfall: WeatherApp.currentLocation.conditions.rainfall;
-		snowdepth: WeatherApp.currentLocation.conditions.snowdepth;
+		precip: WeatherApp.currentLocation.conditions.precip;
 		
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }

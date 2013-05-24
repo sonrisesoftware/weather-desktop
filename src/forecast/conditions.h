@@ -16,52 +16,29 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
+
+#ifndef FORECAST_CONDITIONS_H
+#define FORECAST_CONDITIONS_H
+
 #include "weather/conditions.h"
+#include "forecast/datapoint.h"
 
-#include "main.h"
-#include "weather/location.h"
-#include <KIcon>
+namespace Forecast {
 
-using namespace Weather;
+	class ForecastConditions : public Weather::Conditions
+	{
+		Q_OBJECT
+		Q_PROPERTY(DataPoint *data READ data NOTIFY dataChanged)
 
-Conditions::Conditions(Weather::Location *location): QObject(location)
-{
-	Q_ASSERT(location != nullptr);
-	setLocation(location);
-	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
-	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
-	//refresh();
+	public:
+		explicit ForecastConditions(Weather::Location* location);
+		virtual ~ForecastConditions();
+		
+		virtual void refresh();
+		
+	#include "forecast/conditions.gen"
+	};
+
 }
 
-Conditions::~Conditions()
-{
-
-}
-
-void Conditions::refresh()
-{	
-	setIcon(KIcon("weather-clouds"));
-	setWeather("<Weather>");	
-	setTemp("<Temp>");
-	
-	setWindchill("<Windchill>");
-	setDewpoint("<Dewpoint>");
-	
-	setPressure("<Pressure>");
-	setVisibility("<Visibility>");
-	setClouds("<Cloud cover>");
-	
-	setWind("<Wind>");
-	setWindgust("<Wind gust>");
-	
-	setHumidity("<Humidity>");
-	setPrecip("<Precipitation>");
-}
-
-void Weather::Conditions::updateColor(const QString& temp)
-{
-	//qDebug() << "Updating color...";
-}
-
-
-#include "weather/conditions.moc"
+#endif // FORECAST_CONDITIONS_H

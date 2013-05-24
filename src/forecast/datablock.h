@@ -16,52 +16,39 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "weather/conditions.h"
 
-#include "main.h"
+#ifndef FORECAST_DATABLOCK_H
+#define FORECAST_DATABLOCK_H
+
+#include <QObject>
+#include "forecast/datapoint.h"
 #include "weather/location.h"
-#include <KIcon>
 
-using namespace Weather;
+#include <QList>
 
-Conditions::Conditions(Weather::Location *location): QObject(location)
-{
-	Q_ASSERT(location != nullptr);
-	setLocation(location);
-	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
-	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
-	//refresh();
+namespace Forecast {
+
+	class DataBlock : public QObject
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
+		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+		
+		Q_PROPERTY(QList<Forecast::DataPoint*> data READ data WRITE setData NOTIFY dataChanged)
+		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
+		Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
+
+	public:
+		explicit DataBlock(Weather::Location *location, const QString& path);
+		virtual ~DataBlock();
+		
+	public slots:
+		void load();
+	
+	#include "forecast/datablock.gen"
+	};
+
 }
 
-Conditions::~Conditions()
-{
-
-}
-
-void Conditions::refresh()
-{	
-	setIcon(KIcon("weather-clouds"));
-	setWeather("<Weather>");	
-	setTemp("<Temp>");
-	
-	setWindchill("<Windchill>");
-	setDewpoint("<Dewpoint>");
-	
-	setPressure("<Pressure>");
-	setVisibility("<Visibility>");
-	setClouds("<Cloud cover>");
-	
-	setWind("<Wind>");
-	setWindgust("<Wind gust>");
-	
-	setHumidity("<Humidity>");
-	setPrecip("<Precipitation>");
-}
-
-void Weather::Conditions::updateColor(const QString& temp)
-{
-	//qDebug() << "Updating color...";
-}
-
-
-#include "weather/conditions.moc"
+#endif // FORECAST_DATABLOCK_H

@@ -28,8 +28,9 @@ Rectangle {
 // 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : "#ef7645") :
 // 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
 			
-	color: selected || state == "mouse-over" ? "#ef7645" : //"white"
-			Qt.rgba(33/256,126/256,205/256,1)
+	//color: selected || state == "mouse-over" ? "#ef7645" : //"white"
+	//		Qt.rgba(33/256,126/256,205/256,1)
+	color: selected || state == "mouse-over" ? appStyle.panelColor : "transparent"
 	
 	property color textColor: appStyle.textColor;
 	//property color textColor: "black";
@@ -38,7 +39,7 @@ Rectangle {
 	width: 200
 	height: 100
 	//border.color: "gray"
-	radius: 3
+	//radius: 3
 	
 	signal clicked
 	
@@ -49,6 +50,30 @@ Rectangle {
 	
 	property bool alert: false;
 	property bool selected: false;
+	
+	Rectangle {
+		height: 1
+		
+		color: appStyle.internalBorderColor;
+		
+		anchors {
+			left: parent.left
+			top: parent.top
+			right: parent.right
+		}
+	}
+	
+	Rectangle {
+		height: 1
+		
+		color: appStyle.internalBorderColor;
+		
+		anchors {
+			left: parent.left
+			bottom: parent.bottom
+			right: parent.right
+		}
+	}
 	
 	Text {
 		id: title

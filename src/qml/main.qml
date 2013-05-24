@@ -31,6 +31,23 @@ Rectangle {
 		id: style
 	}
 	
+	Image {
+		id: background
+		source: "images/weather-clear.jpg"
+		anchors.fill: parent
+	}
+	
+	Rectangle {
+		width: 1
+		anchors {
+			top: parent.top
+			left: listPanel.right
+			bottom: parent.bottom
+		}
+		
+		color: appStyle.borderColor
+	}
+	
 	Item {
 		id: content
 		anchors {
@@ -38,12 +55,6 @@ Rectangle {
 			top: parent.top;
 			bottom: parent.bottom;
 			right: parent.right;
-		}
-		
-		Image {
-			id: background
-			source: "images/weather-clear.jpg"
-			anchors.fill: parent
 		}
 		
 		WeatherHeader {
@@ -147,7 +158,7 @@ Rectangle {
 		Item {
 			id: wrapper
 			
-			width: 210
+			width: 200
 			height: 100
 			
 			WeatherTile {
@@ -176,14 +187,15 @@ Rectangle {
 	
 	Rectangle {
 		id: listPanel
-		color: "#3e3d39"
+		//color: "#3e3d39"
+		color: appStyle.panelColor
 		anchors {
 			left: root.left;
 			top: root.top;
 			bottom: root.bottom;
 		}
 		
-		width: 210
+		width: 200
 	
 		PlasmaWidgets.LineEdit {
 			id: searchBox;
@@ -212,7 +224,7 @@ Rectangle {
 				bottomMargin: 5;
 			}
 			
-			spacing: 5
+			spacing: -1
 			model: WeatherApp.locations;
 			delegate: tileitem;
 			

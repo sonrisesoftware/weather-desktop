@@ -38,8 +38,7 @@ Panel {
 	property string windgust;
 	
 	property string humidity;
-	property string rainfall;
-	property string snowdepth;
+	property string precip;
 	
 	title: i18n("Current Conditions")
 		
@@ -132,13 +131,8 @@ Panel {
 		}
 		
 		FormItem {
-			label: i18n("Rainfall:")
-			value: root.rainfall
-		}
-		
-		FormItem {
-			label: i18n("Snow depth:")
-			value: root.snowdepth
+			label: i18n("Precipitation:")
+			value: root.precip
 		}
 	}
 }

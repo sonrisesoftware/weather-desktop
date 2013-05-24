@@ -11,6 +11,7 @@ qclassgen(weather-desktop_SRCS
    application
    weather-desktop
    cache
+   geocoding
    
    weather/location
    weather/service
@@ -21,6 +22,11 @@ qclassgen(weather-desktop_SRCS
    
    wunderground/wunderground
    wunderground/conditions
+   
+   forecast/forecast
+   forecast/conditions
+   forecast/datapoint
+   forecast/datablock
  )
 
 # Run ui files through uic
@@ -54,3 +60,4 @@ install(FILES weather-desktopui.rc
 install(PROGRAMS weather-desktop.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 add_subdirectory(qml)
+

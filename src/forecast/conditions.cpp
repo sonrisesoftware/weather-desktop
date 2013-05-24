@@ -16,52 +16,39 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "weather/conditions.h"
 
-#include "main.h"
-#include "weather/location.h"
-#include <KIcon>
+#include "forecast/conditions.h"
+#include "forecast/forecast.h"
 
-using namespace Weather;
+using namespace Forecast;
 
-Conditions::Conditions(Weather::Location *location): QObject(location)
+ForecastConditions::ForecastConditions(Weather::Location* location): Weather::Conditions(location)
 {
-	Q_ASSERT(location != nullptr);
-	setLocation(location);
-	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
-	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
-	//refresh();
+	setData(new DataPoint(location, "currently"));
 }
 
-Conditions::~Conditions()
+ForecastConditions::~ForecastConditions()
 {
-
 }
 
-void Conditions::refresh()
-{	
-	setIcon(KIcon("weather-clouds"));
-	setWeather("<Weather>");	
-	setTemp("<Temp>");
-	
-	setWindchill("<Windchill>");
-	setDewpoint("<Dewpoint>");
-	
-	setPressure("<Pressure>");
-	setVisibility("<Visibility>");
-	setClouds("<Cloud cover>");
-	
-	setWind("<Wind>");
-	setWindgust("<Wind gust>");
-	
-	setHumidity("<Humidity>");
-	setPrecip("<Precipitation>");
-}
-
-void Weather::Conditions::updateColor(const QString& temp)
+void ForecastConditions::refresh()
 {
-	//qDebug() << "Updating color...";
+	if (location()->hasError()) return;
+	
+	data()->load();
+	
+	location()->setDay(QDateTime::currentDateTime() > data()->sunrise() && QDateTime::currentDateTime() < data()->sunset());
+	
+	setIcon(Forecast::Forecast::icon(data()->icon()));
+	setWeather(data()->summary());
+	setClouds(Forecast::Forecast::clouds(data()->cloudCover()));
+	setDewpoint(Forecast::Forecast::temp(data()->dewPoint()));
+	setHumidity(Forecast::Forecast::humidity(data()->humidity()));
+	setWind(Forecast::Forecast::wind(data()->windSpeed(), data()->windBearing()));
+	setTemp(Forecast::Forecast::temp(data()->temperature()));
+	setPressure(Forecast::Forecast::pressure(data()->pressure()));
+	setVisibility(Forecast::Forecast::visibility(data()->visibility()));
+	setPrecip(Forecast::Forecast::precip(data()));
 }
 
-
-#include "weather/conditions.moc"
+#include "forecast/conditions.moc"

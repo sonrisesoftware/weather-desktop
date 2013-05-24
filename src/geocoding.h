@@ -16,52 +16,44 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "weather/conditions.h"
+#ifndef GEOCODING_H
+#define GEOCODING_H
 
-#include "main.h"
-#include "weather/location.h"
-#include <KIcon>
+#include "cache.h"
 
-using namespace Weather;
+#include <QObject>
+#include <QString>
+#include <KStandardDirs>
 
-Conditions::Conditions(Weather::Location *location): QObject(location)
+class Geocoding : public QObject
 {
-	Q_ASSERT(location != nullptr);
-	setLocation(location);
-	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
-	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
-	//refresh();
-}
-
-Conditions::~Conditions()
-{
-
-}
-
-void Conditions::refresh()
-{	
-	setIcon(KIcon("weather-clouds"));
-	setWeather("<Weather>");	
-	setTemp("<Temp>");
+	Q_OBJECT
 	
-	setWindchill("<Windchill>");
-	setDewpoint("<Dewpoint>");
-	
-	setPressure("<Pressure>");
-	setVisibility("<Visibility>");
-	setClouds("<Cloud cover>");
-	
-	setWind("<Wind>");
-	setWindgust("<Wind gust>");
-	
-	setHumidity("<Humidity>");
-	setPrecip("<Precipitation>");
-}
+	Q_PROPERTY(QString location READ location WRITE setLocation NOTIFY locationChanged)
+	Q_PROPERTY(QString name READ name NOTIFY nameChanged)
+	Q_PROPERTY(QString coordinates READ coordinates NOTIFY coordinatesChanged)
 
-void Weather::Conditions::updateColor(const QString& temp)
-{
-	//qDebug() << "Updating color...";
-}
+public:
+	explicit Geocoding(const QString& location, QObject* parent = 0);
+	virtual ~Geocoding();
+	
+	static Cache *geocache() {
+		if (s_geocache == nullptr) {
+			s_geocache = new Cache(KStandardDirs::locateLocal("appdata", "geocache"));
+			s_geocache->setMaxTime(0);
+		}
+		
+		return s_geocache;
+	}	
 
+public slots:	
+	void run();
+	
+private:
+	static Cache *s_geocache;
+	static int s_count;
+	
+#include "geocoding.gen"
+};
 
-#include "weather/conditions.moc"
+#endif // GEOCODING_H
