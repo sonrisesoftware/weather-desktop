@@ -37,14 +37,15 @@ void ForecastConditions::refresh()
 	
 	data()->load();
 	
+	setIcon(Forecast::Forecast::icon(data()->icon()));
 	setWeather(data()->summary());
 	setClouds(Forecast::Forecast::clouds(data()->cloudCover()));
 	setDewpoint(Forecast::Forecast::temp(data()->dewPoint()));
 	setHumidity(Forecast::Forecast::humidity(data()->humidity()));
-	//setWind(data["windSpeed"].toString() + " mph from " + data["windBearing"].toString() + i18n(DEG));
+	setWind(Forecast::Forecast::wind(data()->windSpeed(), data()->windBearing()));
 	setTemp(Forecast::Forecast::temp(data()->temperature()));
-	//setPressure(data["pressure"].toString() + " millibars");
-	//setHumidity(QVariant(data["humidity"].toFloat() * 100).toString() + "%");
+	setPressure(Forecast::Forecast::pressure(data()->pressure()));
+	setVisibility(Forecast::Forecast::visibility(data()->visibility()));
 }
 
 #include "forecast/conditions.moc"

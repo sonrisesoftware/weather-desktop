@@ -36,7 +36,7 @@ Geocoding::Geocoding(const QString& location, QObject* parent): QObject(parent)
 
 Geocoding::~Geocoding()
 {
-	if (s_count == 0) {
+	if (--s_count == 0) {
 		delete s_geocache;
 		s_geocache = nullptr;
 	}
@@ -65,8 +65,8 @@ void Geocoding::run()
 	
 	for (int i = 0; i < list.length(); i++) {
 		QVariant item = list[i];
-		qDebug() << "CHECKING:" << getJson(item, "class").toString() << getJson(item, "type").toString();
-		qDebug() << item;
+		//qDebug() << "CHECKING:" << getJson(item, "class").toString() << getJson(item, "type").toString();
+		//qDebug() << item;
 		
 		if (getJson(item, "class").toString() == "place" && getJson(item, "type").toString() == "city") {
 			setName(getJson(item, "display_name").toString());
@@ -78,8 +78,6 @@ void Geocoding::run()
 	
 	if (list.length() > 0 && coordinates().isEmpty()) {
 		QVariant item = list[0];
-		qDebug() << "CHECKING:" << getJson(item, "class").toString() << getJson(item, "type").toString();
-		qDebug() << item;
 		
 		setName(getJson(item, "display_name").toString());
 		setCoordinates(getJson(item, "lat").toString() + ',' + getJson(item, "lon").toString());

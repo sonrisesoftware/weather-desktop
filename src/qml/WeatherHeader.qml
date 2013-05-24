@@ -25,6 +25,7 @@ Rectangle {
 	//width: 400
 	//height: 64
 	color: appStyle.panelColor;
+	border.color: appStyle.borderColor;
 	radius: appStyle.panelRadius;
 	
 	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_updating

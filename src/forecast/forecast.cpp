@@ -64,5 +64,63 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 }
 
 
+// ##### STATIC CONVERSION METHODS #####
+
+QString Forecast::Forecast::temp(float value) { return validate(value, format(value) + TEMP_F); }
+
+QString Forecast::Forecast::clouds(float value) { return validate(value, format(value * 100) + '%'); }
+
+QString Forecast::Forecast::humidity(float value) { return validate(value, format(value * 100) + '%'); }
+
+QString Forecast::Forecast::wind(float speed, float dir) {
+	static QString compass[] = {
+		"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"
+	};
+	
+	/*static QString compass[] = {
+	 *	"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N"
+};*/
+	float index = dir * ((float) ((sizeof(compass)/sizeof(compass[0])) - 1))/360;
+	int i = (int) index;
+	if (index - i >= 0.5)
+		i++;
+	
+	QString from = compass[i];
+	return validate(speed, validate(dir, format(speed) + " mph from " + from));// + '(' + format(dir) + i18n(DEG) + ')')); 
+}
+
+QString Forecast::Forecast::pressure(float value) { return validate(value, format(value, 4) + " millibars"); }
+
+QString Forecast::Forecast::visibility(float value) { return validate(value, format(value) + " mph"); }
+
+KIcon Forecast::Forecast::icon(QString name) {
+	QString code = "weather-desktop";
+	
+	if (name == "clear-day") {
+		code = "weather-clear";
+	} else if (name == "clear-night") {
+		code = "weather-clear-night";
+	} else if (name == "rain") {
+		code = "weather-showers";
+	} else if (name == "snow") {
+		code = "weather-snow";
+	} else if (name == "sleet") {
+		code = "weather-freezing-rain";
+	} else if (name == "wind") {
+		
+	} else if (name == "fog") {
+		code = "weather-mist";
+	} else if (name == "cloudy") {
+		code = "weather-many-clouds";
+	} else if (name == "partly-cloudy-day") {
+		code = "weather-clouds";
+	} else if (name == "partly-cloudy-night") {
+		code = "weather-clouds-night";
+	}
+	
+	return KIcon(code);
+}
+
+
 #include "forecast/forecast.moc"
 

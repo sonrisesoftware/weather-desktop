@@ -30,7 +30,7 @@ Conditions::Conditions(Weather::Location *location): QObject(location)
 	setLocation(location);
 	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
 	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
-	refresh();
+	//refresh();
 }
 
 Conditions::~Conditions()

@@ -21,6 +21,7 @@
 #define FORECAST_H
 
 #include "weather/service.h"
+#include <KIcon>
 
 namespace Forecast {
 
@@ -36,9 +37,13 @@ namespace Forecast {
 		virtual Weather::Conditions* create_conditions(Weather::Location* location);
 		virtual void json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot);
 		
-		static QString temp(float value) { return validate(value, format(value) + TEMP_F); }
-		static QString clouds(float value) { return validate(value, format(value * 100) + '%'); }
-		static QString humidity(float value) { return validate(value, format(value * 100) + '%'); }
+		static QString temp(float value);
+		static QString clouds(float value);
+		static QString humidity(float value);
+		static QString wind(float speed, float dir);
+		static QString pressure(float value);
+		static QString visibility(float value);
+		static KIcon icon(QString name);
 		
 	protected:
 		virtual QString prefix() { return "https://api.forecast.io"; }
@@ -49,15 +54,19 @@ namespace Forecast {
 		
 	private:
 		static QString validate(float value, QString string) {
+			return validate(value, string, "");
+		}
+		
+		static QString validate(float value, QString string, QString def) {
 			if (value != -99) {
 				return string;
 			} else {
-				return "";
+				return def;
 			}
 		}
 		
-		static QString format(float value) {
-			return QLocale::system().toString(round(value), 'g', 3);
+		static QString format(float value, int rounding = 3) {
+			return QLocale::system().toString(round(value), 'g', rounding);
 		}
 		
 		static float round(float value) {

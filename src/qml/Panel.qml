@@ -30,6 +30,8 @@ Rectangle {
 	color: appStyle.panelColor;
 	radius: appStyle.panelRadius;
 	
+	border.color: appStyle.borderColor;
+	
 	property alias title: header.text
 	property alias header: header
 	//property Style style;

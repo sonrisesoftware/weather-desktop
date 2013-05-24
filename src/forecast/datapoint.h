@@ -37,7 +37,7 @@ namespace Forecast {
 		
 		Q_PROPERTY(QDateTime time READ time WRITE setTime NOTIFY timeChanged);
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
-		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged);
+		Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
 
 		Q_PROPERTY(QDateTime sunrise READ sunrise WRITE setSunrise NOTIFY sunriseChanged);
 		Q_PROPERTY(QDateTime sunset READ sunset WRITE setSunset NOTIFY sunsetChanged);
