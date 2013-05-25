@@ -38,7 +38,7 @@
 namespace Weather
 {
 	class Location;
-	class Conditions;
+	class DataPoint;
 	
 	class DownloadJob: public QObject {
 		Q_OBJECT
@@ -74,7 +74,7 @@ namespace Weather
 			json_query(location, query, "", receiver, slot);
 		}
 		
-		virtual Weather::Conditions *create_conditions(Weather::Location *location) = 0;
+		virtual Weather::DataPoint *create_conditions(Weather::Location *location) = 0;
 		
 	public slots:
 		virtual void download(Weather::Location *location) = 0;

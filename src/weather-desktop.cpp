@@ -44,7 +44,7 @@ WeatherDesktop::WeatherDesktop()
 	setupGUI();
 	loadSettings();
 	
-if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
+	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
 		initialSetup();
 	} else if (Weather::Location::cache()->recent().length() > 0) {
 		setLocation(Weather::Location::cache()->recent()[0]);

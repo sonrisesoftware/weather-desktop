@@ -33,8 +33,8 @@
 namespace Weather
 {
 
-	class Conditions;
 	class Service;
+	class DataPoint;
 
 	class Location : public QObject
 	{
@@ -49,7 +49,7 @@ namespace Weather
 		Q_PROPERTY(Weather::Service *service READ service WRITE setService NOTIFY serviceChanged)
 		Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged)
 		
-		Q_PROPERTY(Weather::Conditions *conditions READ conditions NOTIFY conditionsChanged)
+		Q_PROPERTY(Weather::DataPoint *conditions READ conditions NOTIFY conditionsChanged)
 		// TODO: Add more weather types here
 		
 		Q_PROPERTY(bool needsRefresh READ needsRefresh NOTIFY needsRefreshChanged)
