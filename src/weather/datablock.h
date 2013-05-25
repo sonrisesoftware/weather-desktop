@@ -17,32 +17,50 @@
  ***************************************************************************/
 
 
-#ifndef FORECAST_WEATHERPOINT_H
-#define FORECAST_WEATHERPOINT_H
+
+#ifndef WEATHER_DATABLOCK_H
+#define WEATHER_DATABLOCK_H
 
 #include "weather/datapoint.h"
-//#include "forecast/datapoint.h"
 
-namespace Forecast {
+#include <QObject>
+#include <QIcon>
+#include <QList>
 
-	class Point;
+namespace Weather {
 	
-	class WeatherPoint : public Weather::DataPoint
+	class Location;
+
+	class DataBlock : public QObject
 	{
 		Q_OBJECT
 		
-		Q_PROPERTY(Point *data READ data NOTIFY dataChanged)
-
+		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
+		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+		
+		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
+		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged);
+		Q_PROPERTY(QList<DataPoint*> items READ items NOTIFY itemsChanged);
+		
 	public:
-		explicit WeatherPoint(Weather::Location* location, const QString& path);
-		explicit WeatherPoint(Weather::Location* location, Point *data);
-		virtual ~WeatherPoint();
+		explicit DataBlock(Weather::Location *location, const QString& path);
+		virtual ~DataBlock();
 		
-		virtual void refresh();
+		const DataPoint *operator[](int index) const {
+			return m_items[index];
+		}
 		
-	#include "forecast/weatherpoint.gen"
+		int length() const { return m_items.length(); }
+		
+	public slots:
+		virtual void refresh() = 0;
+		
+	signals:
+		void refreshed();
+		
+	#include "weather/datablock.gen"
 	};
 
 }
 
-#endif // FORECAST_WEATHERPOINT_H
+#endif // WEATHER_DATABLOCK_H

@@ -44,29 +44,20 @@ void Block::load()
 	
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	
-	foreach(const QString& item, data.keys()) {
-		if (item == "data") {
-			QVariantList list = data[item].toList();
+	QVariantList list = data["data"].toList();
 			
-			while (!this->data().isEmpty()) {
-				delete this->data().takeFirst();
-			}
-			
-			for (int i = 0; i < list.length(); i++) {
-				Point *point = new Point(location(), path() + ".data." + QString::number(i));
-				point->load();
-				this->data().append(point);
-			}
-		} else if (property(qPrintable(item)).type() == QVariant::DateTime) {
-			// Time properties are represented by the seconds since the UNIX epoch
-			setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
-		} else {
-			//qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
-			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
-			setProperty(qPrintable(item), data[item]);
-		}
-		//qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
+	while (!this->data().isEmpty()) {
+		this->data().takeFirst()->deleteLater();
 	}
+	
+	for (int i = 0; i < list.length(); i++) {
+		Point *point = new Point(location(), path() + ".data." + QString::number(i));
+		point->load();
+		this->data().append(point);
+	}
+	
+	setSummary(data["summary"].toString());
+	setIcon(data["icon"].toString());
 	
 	qDebug() << "Summary:" << summary();
 	qDebug() << "Icon:" << icon();

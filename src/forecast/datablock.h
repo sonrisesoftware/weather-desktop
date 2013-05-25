@@ -24,7 +24,7 @@
 #include <QList>
 
 namespace Weather {
-	class Weather;
+	class Location;
 }
 
 namespace Forecast {
@@ -38,7 +38,7 @@ namespace Forecast {
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
 		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 		
-		Q_PROPERTY(QList<Forecast::Point*> data READ data WRITE set NOTIFY dataChanged)
+		Q_PROPERTY(QList<Point*> data READ data WRITE set NOTIFY dataChanged)
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
 		Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
 

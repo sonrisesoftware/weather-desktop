@@ -17,32 +17,42 @@
  ***************************************************************************/
 
 
-#ifndef FORECAST_WEATHERPOINT_H
-#define FORECAST_WEATHERPOINT_H
+#include "forecast/weatherblock.h"
 
+#include "forecast/forecast.h"
+#include "forecast/weatherpoint.h"
+#include "forecast/datapoint.h"
+#include "forecast/datablock.h"
 #include "weather/datapoint.h"
-//#include "forecast/datapoint.h"
+#include "weather/location.h"
 
-namespace Forecast {
+Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location, path)
+{
+	setData(new Block(location, path));
+}
 
-	class Point;
-	
-	class WeatherPoint : public Weather::DataPoint
-	{
-		Q_OBJECT
-		
-		Q_PROPERTY(Point *data READ data NOTIFY dataChanged)
-
-	public:
-		explicit WeatherPoint(Weather::Location* location, const QString& path);
-		explicit WeatherPoint(Weather::Location* location, Point *data);
-		virtual ~WeatherPoint();
-		
-		virtual void refresh();
-		
-	#include "forecast/weatherpoint.gen"
-	};
+Forecast::WeatherBlock::~WeatherBlock()
+{
 
 }
 
-#endif // FORECAST_WEATHERPOINT_H
+void Forecast::WeatherBlock::refresh()
+{
+	if (location()->hasError()) return;
+	
+	data()->load();
+	
+	setSummary(data()->summary());
+	setIcon(Forecast::Forecast::icon(data()->icon()));
+	
+	while (data()->data().length() > items().length()) {
+		items().removeLast();
+	}
+	
+	while (data()->data().length() > items().length()) {
+		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
+		items().append(dataPoint);
+	}
+}
+
+#include "forecast/weatherblock.h"

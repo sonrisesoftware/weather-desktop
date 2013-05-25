@@ -16,6 +16,7 @@ qclassgen(weather-desktop_SRCS
    weather/location
    weather/service
    weather/datapoint
+   weather/datablock
    weather/units
    
    #worldweather/worldweatheronline
@@ -26,6 +27,7 @@ qclassgen(weather-desktop_SRCS
    
    forecast/forecast
    forecast/weatherpoint
+   forecast/weatherblock
    forecast/datapoint
    forecast/datablock
  )

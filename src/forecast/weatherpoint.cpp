@@ -21,6 +21,7 @@
 
 #include "forecast/forecast.h"
 #include "forecast/datapoint.h"
+#include "forecast/datablock.h"
 
 #include "weather/datapoint.h"
 #include "weather/location.h"
@@ -31,6 +32,12 @@ Forecast::WeatherPoint::WeatherPoint(Weather::Location* location, const QString&
 {
 	qDebug() << "Weather point!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 	setData(new Point(location, path));
+}
+
+Forecast::WeatherPoint::WeatherPoint(Weather::Location* location, Point *data): Weather::DataPoint(location, data->path())
+{
+	qDebug() << "Weather point!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+	setData(data);
 }
 
 Forecast::WeatherPoint::~WeatherPoint()

@@ -17,32 +17,26 @@
  ***************************************************************************/
 
 
-#ifndef FORECAST_WEATHERPOINT_H
-#define FORECAST_WEATHERPOINT_H
 
-#include "weather/datapoint.h"
-//#include "forecast/datapoint.h"
+#include "weather/datablock.h"
+#include "weather/location.h"
 
-namespace Forecast {
+using namespace Weather;
 
-	class Point;
+
+DataBlock::DataBlock(Location* location, const QString& path): QObject()
+{
+	Q_ASSERT(location != nullptr);
+	setLocation(location);
+	setPath(path);
 	
-	class WeatherPoint : public Weather::DataPoint
-	{
-		Q_OBJECT
-		
-		Q_PROPERTY(Point *data READ data NOTIFY dataChanged)
+	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
+}
 
-	public:
-		explicit WeatherPoint(Weather::Location* location, const QString& path);
-		explicit WeatherPoint(Weather::Location* location, Point *data);
-		virtual ~WeatherPoint();
-		
-		virtual void refresh();
-		
-	#include "forecast/weatherpoint.gen"
-	};
+DataBlock::~DataBlock()
+{
 
 }
 
-#endif // FORECAST_WEATHERPOINT_H
+
+#include "weather/datablock.moc"
