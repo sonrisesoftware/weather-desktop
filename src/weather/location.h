@@ -47,11 +47,11 @@ namespace Weather
 		Q_PROPERTY(Geocoding *coder READ coder NOTIFY coderChanged)
 		Q_PROPERTY(QString coordinates READ coordinates WRITE setCoordinates NOTIFY coordinatesChanged)
 		
-		Q_PROPERTY(Service *service READ service WRITE setService NOTIFY serviceChanged)
+		Q_PROPERTY(Weather::Service *service READ service WRITE setService NOTIFY serviceChanged)
 		Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged)
 		
-		Q_PROPERTY(DataPoint *conditions READ conditions NOTIFY conditionsChanged)
-		Q_PROPERTY(DataBlock *dailyForecast READ dailyForecast NOTIFY dailyForecastChanged)
+		Q_PROPERTY(Weather::DataPoint *conditions READ conditions NOTIFY conditionsChanged)
+		Q_PROPERTY(Weather::DataBlock *dailyForecast READ dailyForecast NOTIFY dailyForecastChanged)
 		// TODO: Add more weather types here
 		
 		Q_PROPERTY(bool needsRefresh READ needsRefresh NOTIFY needsRefreshChanged)

@@ -19,6 +19,7 @@
 
 #include "forecast/forecast.h"
 #include "forecast/weatherpoint.h"
+#include "forecast/weatherblock.h"
 #include "forecast/datapoint.h"
 
 #include "weather/location.h"
@@ -48,6 +49,11 @@ void Forecast::Forecast::download(Weather::Location* location)
 Weather::DataPoint* Forecast::Forecast::create_conditions(Weather::Location* location)
 {
 	return new WeatherPoint(location, "currently");
+}
+
+Weather::DataBlock* Forecast::Forecast::create_dailyForecast(Weather::Location* location)
+{
+	return new WeatherBlock(location, "daily");
 }
 
 void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)

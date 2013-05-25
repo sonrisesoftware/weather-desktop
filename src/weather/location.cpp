@@ -55,6 +55,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	setService(service);
 	// Create the necessary weather types
 	setConditions(this->service()->create_conditions(this));
+	setDailyForecast(this->service()->create_dailyForecast(this));
 	// Needs an refresh
 	setNeedsRefresh(true);
 	// Refresh

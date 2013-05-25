@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QIcon>
 #include <QList>
+#include <QDebug>
 
 namespace Weather {
 	
@@ -48,6 +49,11 @@ namespace Weather {
 		
 		const DataPoint *operator[](int index) const {
 			return m_items[index];
+		}
+		
+		Q_INVOKABLE Weather::DataPoint *at(int index) {
+			qDebug() << "AT:" << index << m_items.length() << m_items.at(index);
+			return m_items.at(index);
 		}
 		
 		int length() const { return m_items.length(); }

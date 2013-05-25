@@ -28,13 +28,13 @@ namespace Weather {
 	class Units: public QObject {
 		Q_OBJECT
 		
-		Q_PROPERTY(System system READ system WRITE setSystem NOTIFY systemChanged)
+		Q_PROPERTY(Weather::Units::System system READ system WRITE setSystem NOTIFY systemChanged)
 		
-		Q_PROPERTY(Temperature temp READ temp WRITE setTemp NOTIFY tempChanged)
-		Q_PROPERTY(Pressure pressure READ pressure WRITE setPressure NOTIFY pressureChanged)
-		Q_PROPERTY(Speed speed READ speed WRITE setSpeed NOTIFY speedChanged)
-		Q_PROPERTY(Distance shortDistance READ shortDistance WRITE setShortDistance NOTIFY shortDistanceChanged)
-		Q_PROPERTY(Distance longDistance READ longDistance WRITE setLongDistance NOTIFY longDistanceChanged)
+		Q_PROPERTY(Weather::Units::Temperature temp READ temp WRITE setTemp NOTIFY tempChanged)
+		Q_PROPERTY(Weather::Units::Pressure pressure READ pressure WRITE setPressure NOTIFY pressureChanged)
+		Q_PROPERTY(Weather::Units::Speed speed READ speed WRITE setSpeed NOTIFY speedChanged)
+		Q_PROPERTY(Weather::Units::Distance shortDistance READ shortDistance WRITE setShortDistance NOTIFY shortDistanceChanged)
+		Q_PROPERTY(Weather::Units::Distance longDistance READ longDistance WRITE setLongDistance NOTIFY longDistanceChanged)
 		
 	public:
 		enum Temperature {
@@ -65,7 +65,7 @@ namespace Weather {
 			Metric
 		};
 		
-		Units(System system, QObject* parent = 0);
+		Units(Weather::Units::System system, QObject* parent = 0);
 		Units(const Units& other);
 		Units& operator=(const Units& units);
 		virtual ~Units();

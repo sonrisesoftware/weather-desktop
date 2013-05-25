@@ -22,6 +22,7 @@
 
 #include "weather/location.h"
 #include "weather/datapoint.h"
+#include "weather/datablock.h"
 
 #include "forecast/forecast.h"
 
@@ -57,6 +58,7 @@ void Application::registerQMLTypes()
 	qmlRegisterType<WeatherDesktop>();
 	qmlRegisterType<Weather::Location>();
 	qmlRegisterType<Weather::Service>();
+	qmlRegisterType<Weather::DataBlock>();
 	qmlRegisterType<Weather::DataPoint>();
 }
 

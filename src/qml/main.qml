@@ -203,6 +203,10 @@ Rectangle {
 				temp: modelData.conditions.temperature;
 				icon: modelData.conditions.icon;
 				weather: modelData.conditions.summary;
+				
+				tempForecast: modelData.dailyForecast.at(0).temperatureMax;
+				iconForecast: modelData.dailyForecast.at(0).icon;
+				weatherForecast: modelData.dailyForecast.at(0).summary;
 			}
 		}
 	}

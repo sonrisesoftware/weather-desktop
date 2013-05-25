@@ -45,14 +45,15 @@ void Forecast::WeatherBlock::refresh()
 	setSummary(data()->summary());
 	setIcon(Forecast::Forecast::icon(data()->icon()));
 	
-	while (data()->data().length() > items().length()) {
+	while (data()->data().length() < items().length()) {
 		items().removeLast();
 	}
 	
 	while (data()->data().length() > items().length()) {
 		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
+		dataPoint->refresh();
 		items().append(dataPoint);
 	}
 }
 
-#include "forecast/weatherblock.h"
+#include "forecast/weatherblock.moc"
