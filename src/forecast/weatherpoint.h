@@ -17,44 +17,31 @@
  ***************************************************************************/
 
 
-#include "forecast/datapoint.h"
+#ifndef FORECAST_WEATHERPOINT_H
+#define FORECAST_WEATHERPOINT_H
 
-#include "weather/location.h"
+#include "weather/datapoint.h"
+//#include "forecast/datapoint.h"
 
-using namespace Forecast;
+namespace Forecast {
 
-Point::Point(Weather::Location *location, const QString& path): QObject(location)
-{
-	Q_ASSERT(location != nullptr);
-	setLocation(location);
-	setPath(path);
+	class Point;
+	
+	class WeatherPoint : public Weather::DataPoint
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(Point *data READ data NOTIFY dataChanged)
+
+	public:
+		explicit WeatherPoint(Weather::Location* location, const QString& path);
+		virtual ~WeatherPoint();
+		
+		virtual void refresh();
+		
+	#include "forecast/weatherpoint.gen"
+	};
+
 }
 
-Point::~Point()
-{
-
-}
-
-void Point::load()
-{
-	if (location()->hasError()) return;
-	
-	qDebug() << "Loading:" << path();
-	
-	QVariantMap data = getJson(location()->data(), path()).toMap();
-	
-	foreach(const QString& item, data.keys()) {
-		if (property(qPrintable(item)).type() == QVariant::DateTime) {
-			// Time properties are represented by the seconds since the UNIX epoch
-            setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
-		} else {
-			//qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
-			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
-			setProperty(qPrintable(item), data[item]);
-		}
-		//qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
-	}
-}
-
-
-#include "forecast/datapoint.moc"
+#endif // FORECAST_WEATHERPOINT_H

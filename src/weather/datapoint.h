@@ -17,8 +17,8 @@
  ***************************************************************************/
 
 
-#ifndef FORECAST_DATAPOINT_H
-#define FORECAST_DATAPOINT_H
+#ifndef WEATHER_DATAPOINT_H
+#define WEATHER_DATAPOINT_H
 
 #include <QObject>
 #include <QDateTime>
@@ -74,14 +74,14 @@ namespace Weather {
 		void updateColor(float temp);
 		
 	public slots:
-		void refresh() = 0;
+		virtual void refresh() = 0;
 		
 	signals:
 		void refreshed();
 			
-	#include "forecast/datapoint.gen"
+	#include "weather/datapoint.gen"
 	};
 
 }
 
-#endif // FORECAST_DATAPOINT_H
+#endif // WEATHER_DATAPOINT_H

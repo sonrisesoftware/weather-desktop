@@ -27,11 +27,20 @@ DataPoint::DataPoint(Weather::Location *location, const QString& path): QObject(
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
 	setPath(path);
+	
+	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
+	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
 }
 
 DataPoint::~DataPoint()
 {
 
 }
+
+void DataPoint::updateColor(float temp)
+{
+
+}
+
 
 #include "weather/datapoint.moc"

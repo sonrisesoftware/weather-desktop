@@ -48,15 +48,15 @@ Rectangle {
 		anchors.centerIn: root
 		opacity: 0
 		
-		windchill: WeatherApp.currentLocation.conditions.windchill;
-		dewpoint: WeatherApp.currentLocation.conditions.dewpoint;
+		windchill: WeatherApp.currentLocation.conditions.feelsLike;
+		dewpoint: WeatherApp.currentLocation.conditions.dewPoint;
 		
 		pressure: WeatherApp.currentLocation.conditions.pressure;
 		visibility: WeatherApp.currentLocation.conditions.visibility;
-		clouds: WeatherApp.currentLocation.conditions.clouds;
+		clouds: WeatherApp.currentLocation.conditions.cloudCover;
 		
 		wind: WeatherApp.currentLocation.conditions.wind;
-		windgust: WeatherApp.currentLocation.conditions.windgust;
+		windgust: WeatherApp.currentLocation.conditions.windGust;
 		
 		humidity: WeatherApp.currentLocation.conditions.humidity;
 		precip: WeatherApp.currentLocation.conditions.precip;

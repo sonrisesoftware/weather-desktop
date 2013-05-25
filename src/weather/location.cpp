@@ -18,7 +18,7 @@
 
 
 #include "weather/location.h"
-#include "wunderground/wunderground.h"
+#include "weather/service.h"
 
 #include <QDateTime>
 #include <QTimer>

@@ -16,24 +16,27 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "main.h"
 #include "forecast/datablock.h"
+
+#include "main.h"
+#include "weather/location.h"
+#include "forecast/datapoint.h"
 
 using namespace Forecast;
 
-DataBlock::DataBlock(Weather::Location *location, const QString& path): QObject(location)
+Block::Block(Weather::Location *location, const QString& path): QObject(location)
 {
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
 	setPath(path);
 }
 
-DataBlock::~DataBlock()
+Block::~Block()
 {
 
 }
 
-void DataBlock::load()
+void Block::load()
 {
 	if (location()->hasError()) return;
 	
@@ -50,7 +53,7 @@ void DataBlock::load()
 			}
 			
 			for (int i = 0; i < list.length(); i++) {
-				DataPoint *point = new DataPoint(location(), path() + ".data." + QString::number(i));
+				Point *point = new Point(location(), path() + ".data." + QString::number(i));
 				point->load();
 				this->data().append(point);
 			}
@@ -67,7 +70,7 @@ void DataBlock::load()
 	
 	qDebug() << "Summary:" << summary();
 	qDebug() << "Icon:" << icon();
-	qDebug() << "Data:" << this->data();
+	qDebug() << ":" << this->data();
 }
 
 

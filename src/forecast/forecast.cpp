@@ -18,8 +18,10 @@
 
 
 #include "forecast/forecast.h"
-#include "forecast/conditions.h"
+#include "forecast/weatherpoint.h"
 #include "forecast/datapoint.h"
+
+#include "weather/location.h"
 
 #include <QString>
 
@@ -43,9 +45,9 @@ void Forecast::Forecast::download(Weather::Location* location)
 	json_query(location, "forecast", "", this, SLOT(onWeatherDownloaded(Weather::Location*,QString,QVariantMap)));
 }
 
-Weather::Conditions* Forecast::Forecast::create_conditions(Weather::Location* location)
+Weather::DataPoint* Forecast::Forecast::create_conditions(Weather::Location* location)
 {
-	return new ForecastConditions(location);
+	return new WeatherPoint(location, "currently");
 }
 
 void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
@@ -170,7 +172,7 @@ KIcon Forecast::Forecast::icon(QString name) {
 	return KIcon(code);
 }
 
-QString Forecast::Forecast::precip(DataPoint* data)
+QString Forecast::Forecast::precip(Point* data)
 {
 	QString weather = "Very light ";
 	if (data->precipIntensity() > 0.017) weather = "Light ";

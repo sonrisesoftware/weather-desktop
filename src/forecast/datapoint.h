@@ -20,15 +20,17 @@
 #ifndef FORECAST_DATAPOINT_H
 #define FORECAST_DATAPOINT_H
 
-#include "weather/location.h"
-
 #include <QObject>
 #include <QDateTime>
 #include <QIcon>
 
+namespace Weather {
+	class Location;
+}
+
 namespace Forecast {
 
-	class DataPoint: public QObject
+	class Point: public QObject
 	{
 		Q_OBJECT
 		
@@ -66,8 +68,8 @@ namespace Forecast {
 		Q_PROPERTY(float ozone READ ozone WRITE setOzone NOTIFY ozoneChanged);
 		
 	public:
-		explicit DataPoint(Weather::Location *location,const QString& path);
-		virtual ~DataPoint();
+		explicit Point(Weather::Location *location,const QString& path);
+		virtual ~Point();
 		
 	public slots:
 		void load();

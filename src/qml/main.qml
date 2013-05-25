@@ -65,8 +65,8 @@ Rectangle {
 			anchors.topMargin: 20
 			name: WeatherApp.currentLocation.name;
 			location: WeatherApp.currentLocation.display;
-			temp: WeatherApp.currentLocation.conditions.temp;
-			weather: WeatherApp.currentLocation.conditions.weather;
+			temp: WeatherApp.currentLocation.conditions.temperature;
+			weather: WeatherApp.currentLocation.conditions.summary;
 			icon: WeatherApp.currentLocation.conditions.icon;
 		}
 			
@@ -200,9 +200,9 @@ Rectangle {
 				}
 				
 				title: modelData.name;
-				temp: modelData.conditions.temp;
+				temp: modelData.conditions.temperature;
 				icon: modelData.conditions.icon;
-				weather: modelData.conditions.weather;
+				weather: modelData.conditions.summary;
 			}
 		}
 	}
