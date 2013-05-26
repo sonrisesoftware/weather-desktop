@@ -42,6 +42,7 @@ namespace Weather {
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
 		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged);
 		Q_PROPERTY(QList<DataPoint*> items READ items NOTIFY itemsChanged);
+		Q_PROPERTY(int length READ length NOTIFY lengthChanged);
 		
 	public:
 		explicit DataBlock(Weather::Location *location, const QString& path);
@@ -52,11 +53,12 @@ namespace Weather {
 		}
 		
 		Q_INVOKABLE Weather::DataPoint *at(int index) {
-			qDebug() << "AT:" << index << m_items.length() << m_items.at(index);
+			qDebug() << "AT:" << index << m_items.length();
+			if (index >= m_items.length()) {
+				return nullptr;
+			}
 			return m_items.at(index);
 		}
-		
-		int length() const { return m_items.length(); }
 		
 	public slots:
 		virtual void refresh() = 0;

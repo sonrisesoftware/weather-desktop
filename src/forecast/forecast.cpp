@@ -102,6 +102,11 @@ QString Forecast::Forecast::humidity(float value) {
 	return validate(value, format(value * 100) + '%');
 }
 
+QString Forecast::Forecast::probability(float value) {
+	qDebug() << "PROBABILITY:" << value;
+	return validate(value, format(value * 100, 1) + '%');
+}
+
 QString Forecast::Forecast::wind(float speed, float dir) {
 	static QString compass[] = {
 		"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"

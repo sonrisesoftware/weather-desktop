@@ -81,7 +81,7 @@ Rectangle {
 			}
 		}
 		
-		/*PlasmaComponents.ToolBar {
+		PlasmaComponents.ToolBar {
 			id: topToolBar
 			//width: parent.width
 			
@@ -120,7 +120,7 @@ Rectangle {
 					checked: weatherView.view == "daily"
 				}
 			}
-		}*/
+		}
 		
 		PlasmaComponents.ToolBar {
 			id: bottomToolBar

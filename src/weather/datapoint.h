@@ -48,6 +48,7 @@ namespace Weather {
 		Q_PROPERTY(QDateTime sunset READ sunset WRITE setSunset NOTIFY sunsetChanged);
 
 		Q_PROPERTY(QString precip READ precip NOTIFY precipChanged)
+		Q_PROPERTY(QString precipProbability READ precipProbability WRITE setPrecipProbability NOTIFY precipProbabilityChanged);
 		Q_PROPERTY(QString precipAccumulation READ precipAccumulation WRITE setPrecipAccumulation NOTIFY precipAccumulationChanged);
 
 		Q_PROPERTY(QString temperature READ temperature WRITE setTemperature NOTIFY temperatureChanged);

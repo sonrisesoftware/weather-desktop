@@ -1,5 +1,6 @@
 set(weather-desktop_QML
    main.qml
+   DailyForecast.qml
    ErrorDialog.qml
    Form.qml
    FormItem.qml
@@ -10,7 +11,6 @@ set(weather-desktop_QML
    Style.qml
    WeatherConditions.qml
    WeatherHeader.qml
-   WeatherForecast.qml
    WeatherTile.qml
    WeatherView.qml   
  )

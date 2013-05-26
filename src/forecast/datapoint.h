@@ -41,8 +41,8 @@ namespace Forecast {
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
 		Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
 
-		Q_PROPERTY(QDateTime sunrise READ sunrise WRITE setSunrise NOTIFY sunriseChanged);
-		Q_PROPERTY(QDateTime sunset READ sunset WRITE setSunset NOTIFY sunsetChanged);
+		Q_PROPERTY(QDateTime sunriseTime READ sunriseTime WRITE setSunriseTime NOTIFY sunriseTimeChanged);
+		Q_PROPERTY(QDateTime sunsetTime READ sunsetTime WRITE setSunsetTime NOTIFY sunsetTimeChanged);
 
 		Q_PROPERTY(float precipIntensity READ precipIntensity WRITE setPrecipIntensity NOTIFY precipIntensityChanged);
 		Q_PROPERTY(float precipIntensityMax READ precipIntensityMax WRITE setPrecipIntensityMax NOTIFY precipIntensityMaxChanged);

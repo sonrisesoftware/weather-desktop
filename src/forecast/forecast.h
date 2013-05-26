@@ -49,6 +49,7 @@ namespace Forecast {
 		static QString humidity(float value);
 		static QString wind(float speed, float dir);
 		static QString pressure(float value);
+		static QString probability(float value);
 		static QString visibility(float value);
 		static KIcon icon(QString name);
 		static QString precip(Point *data);

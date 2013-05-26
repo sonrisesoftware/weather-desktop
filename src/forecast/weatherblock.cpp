@@ -54,6 +54,9 @@ void Forecast::WeatherBlock::refresh()
 		dataPoint->refresh();
 		items().append(dataPoint);
 	}
+	
+	setLength(items().length());
+	emit itemsChanged(items());
 }
 
 #include "forecast/weatherblock.moc"

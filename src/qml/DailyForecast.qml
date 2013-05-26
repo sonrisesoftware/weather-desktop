@@ -23,5 +23,66 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 Panel {
 	id: root
 	
-	title: i18n("Daily Forecast")
+	// FIXME: Why doesn't the WeatherPanel version work???
+	implicitWidth: Math.max(header.width + 10, days.width + 10)
+	implicitHeight: header.height + 200 + 30
+
+	title: "Daily Forecast"
+	
+	Component {
+		id: dayForecast
+		
+		Rectangle {
+			id: dayItem
+			
+			property variant modelData: WeatherApp.currentLocation.dailyForecast.at(index)
+			color: Qt.rgba(33/256,126/256,205/256,0.5)
+			width: 64 + 40
+			height: 160
+			
+			PlasmaCore.IconItem {
+				id: icon
+				width: 64; height: 64;
+				source: modelData.icon
+				
+				anchors {
+					topMargin: 20
+					top: parent.top
+					horizontalCenter: parent.horizontalCenter
+				}
+			}
+			
+			Text {
+				id: probability
+				//width: parent.width - 10
+				
+				text: modelData.precipProbability
+				font.pixelSize: appStyle.dataFontSize
+				color: appStyle.textColor
+				
+				anchors {
+					topMargin: 20
+					top: icon.bottom
+					horizontalCenter: parent.horizontalCenter
+				}
+			}
+		}
+	}
+	
+	Row {
+		id: days
+		anchors {
+			top: header.bottom
+			topMargin: 15
+			horizontalCenter: parent.horizontalCenter
+		}
+		
+		spacing: 5
+	
+		Repeater {
+			model: WeatherApp.currentLocation.dailyForecast.length
+			delegate: dayForecast
+		}
+	
+	}
 }

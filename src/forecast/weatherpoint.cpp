@@ -65,6 +65,7 @@ void Forecast::WeatherPoint::refresh()
 	setPressure(Forecast::Forecast::pressure(data()->pressure()));
 	setVisibility(Forecast::Forecast::visibility(data()->visibility()));
 	setPrecip(Forecast::Forecast::precip(data()));
+	setPrecipProbability(Forecast::Forecast::probability(data()->precipProbability()));
 	
 	updateColor(data()->temperature());
 	
