@@ -100,7 +100,7 @@ Rectangle {
 					checked: weatherView.view == "conditions"
 				}
 				
-				PlasmaComponents.ToolButton {
+				/*PlasmaComponents.ToolButton {
 					iconSource: "clock"
 					text: i18n("Hourly")
 					width: minimumWidth + 5
@@ -108,7 +108,7 @@ Rectangle {
 						weatherView.view = "hourly"
 					}
 					checked: weatherView.view == "hourly"
-				}
+				}*/
 				
 				PlasmaComponents.ToolButton {
 					iconSource: "view-calendar-day"
@@ -206,7 +206,7 @@ Rectangle {
 				
 				tempForecast: modelData.dailyForecast.at(0).temperatureMax;
 				iconForecast: modelData.dailyForecast.at(0).icon;
-				weatherForecast: modelData.dailyForecast.at(0).summary;
+				weatherForecast: modelData.dailyForecast.at(0).temperatureMin;
 			}
 		}
 	}
