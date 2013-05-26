@@ -39,7 +39,7 @@ void Point::load()
 {
 	if (location()->hasError()) return;
 	
-	qDebug() << "Loading:" << path();
+	//qDebug() << "Loading:" << path();
 	
 	setTime(QDateTime());
 	setSummary("");
@@ -82,7 +82,7 @@ void Point::load()
 			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
 			setProperty(qPrintable(item), data[item]);
 		}
-		qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
+		//qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
 	}
 }
 

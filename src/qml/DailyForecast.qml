@@ -19,26 +19,45 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Panel {
 	id: root
 	
 	// FIXME: Why doesn't the WeatherPanel version work???
 	implicitWidth: Math.max(header.width + 10, days.width + 10)
-	implicitHeight: header.height + 200 + 30
+	implicitHeight: header.height + tileHeight + 30
+	
+	property int tileWidth: 120
+	property int tileHeight: 190
 
 	title: "Daily Forecast"
 	
 	Component {
 		id: dayForecast
 		
-		Rectangle {
+		//Rectangle {
+		Item {
 			id: dayItem
 			
 			property variant modelData: WeatherApp.currentLocation.dailyForecast.at(index)
-			color: Qt.rgba(33/256,126/256,205/256,0.5)
-			width: 64 + 60
-			height: 160
+			property bool last: index == (repeat.model - 1)
+			//color: Qt.rgba(33/256,126/256,205/256,0.5)
+			width: tileWidth
+			height: tileHeight
+			
+			//PlasmaWidgets.Separator {
+			Rectangle {
+				visible: !last
+				opacity: 0.5
+				height: parent.height	
+				width: 1
+				//orientation: Qt.Vertical
+				anchors {
+					right: dayItem.right
+					rightMargin: days.spacing/2
+				}
+			}
 			
 			Text {
 				id: title
@@ -63,8 +82,9 @@ Panel {
 			
 			PlasmaCore.IconItem {
 				id: icon
-				width: 64; height: 64;
 				source: modelData.icon
+				width: 64;
+				height: 64;
 				
 				anchors {
 					topMargin: 10
@@ -82,9 +102,53 @@ Panel {
 				color: appStyle.textColor
 				
 				anchors {
-					topMargin: 20
+					topMargin: 42
 					top: icon.bottom
 					horizontalCenter: parent.horizontalCenter
+				}
+			}
+			
+			Item {
+				anchors {
+					topMargin: 10
+					top: probability.bottom
+					bottomMargin: 5
+					bottom: summary.top
+					left: parent.left
+					leftMargin: 10
+					right: parent.horizontalCenter
+					rightMargin: 0
+				}
+				
+				Text {
+					id: low
+					anchors.centerIn: parent
+					
+					text: modelData.temperatureMin
+					font.pixelSize: appStyle.dataFontSize
+					color: appStyle.textColor
+				}
+			}
+			
+			Item {
+				anchors {
+					topMargin: 10
+					top: probability.bottom
+					bottom: summary.top
+					bottomMargin: 5
+					left: parent.horizontalCenter
+					rightMargin: 10
+					leftMargin: 0
+					right: parent.right
+				}
+				
+				Text {
+					id: high
+					anchors.centerIn: parent
+					
+					text: modelData.temperatureMax
+					font.pixelSize: appStyle.dataFontSize + 10
+					color: appStyle.textColor
 				}
 			}
 			
@@ -118,7 +182,8 @@ Panel {
 		spacing: 5
 	
 		Repeater {
-			model: Math.min(WeatherApp.currentLocation.dailyForecast.length, 4)
+			id: repeat
+			model: Math.min(WeatherApp.currentLocation.dailyForecast.length, 5)
 			delegate: dayForecast
 		}
 	

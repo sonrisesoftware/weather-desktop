@@ -53,7 +53,7 @@ namespace Weather {
 		}
 		
 		Q_INVOKABLE Weather::DataPoint *at(int index) {
-			qDebug() << "AT:" << index << m_items.length();
+			//qDebug() << "AT:" << index << m_items.length();
 			if (index >= m_items.length()) {
 				return nullptr;
 			}

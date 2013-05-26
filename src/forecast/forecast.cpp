@@ -26,6 +26,14 @@
 
 #include <QString>
 
+QString units(const QString& units) {
+	if (Weather::Location::html()) {
+		return "<sup>" + units + "</sup>";
+	} else {
+		return units;
+	}
+}
+
 Forecast::Forecast::Forecast(QObject* parent): Service(parent)
 {
 	
@@ -79,9 +87,9 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 
 QString Forecast::Forecast::temp(float value) {
 	if (Weather::Location::units().temp() == Weather::Units::Fahrenheit) {
-		return validate(value, format(value) + TEMP_F);
+		return validate(value, format(value, 2) + units(TEMP_F));
 	} else if (Weather::Location::units().temp() == Weather::Units::Celsius) {
-		return validate(value, format(5.0/9.0 * (value - 32)) + TEMP_C);
+		return validate(value, format(5.0/9.0 * (value - 32), 2) + units(TEMP_C));
 	} else {
 		qFatal("Unknown units!");
 		return "";
