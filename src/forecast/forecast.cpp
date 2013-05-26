@@ -185,14 +185,19 @@ KIcon Forecast::Forecast::icon(QString name) {
 
 QString Forecast::Forecast::precip(Point* data)
 {
+	QString color = "";
 	QString weather = "Very light ";
-	if (data->precipIntensity() > 0.017) weather = "Light ";
-	if (data->precipIntensity() > 0.4) weather = "Moderate ";
-	if (data->precipIntensity() > 0.8) weather = "Heavy ";
+	if (data->precipIntensity() > 0.017) { weather = "Light "; }
+	if (data->precipIntensity() > 0.4)  { weather = "Moderate "; }
+	if (data->precipIntensity() > 0.8) { weather = "Heavy "; color = "#c31f1f"; }
 
 	if (!data->precipType().isEmpty()) {
 		weather += data->precipType();
 		//weather += data->precipType()[0].toUpper() + data->precipType().right(data->precipType().length() - 1);
+	}
+	
+	if (Weather::Location::html() && !color.isEmpty()) {
+		weather = "<font color=\"" + color + "\">" + weather + "</font>";
 	}
 	
 	return weather == "Very light " ? "None" : weather;

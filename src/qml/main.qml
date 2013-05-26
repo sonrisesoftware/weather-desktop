@@ -25,7 +25,7 @@ Rectangle {
 	id: root
 	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40) + listPanel.width;
 	//implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
-	implicitHeight: header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
+	implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property variant appStyle: Style {
 		id: style
@@ -59,8 +59,8 @@ Rectangle {
 		
 		WeatherHeader {
 			id: header
-			//anchors.top: topToolBar.bottom
-			anchors.top: parent.top
+			anchors.top: topToolBar.bottom
+			//anchors.top: parent.top
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.topMargin: 20
 			name: WeatherApp.currentLocation.name;

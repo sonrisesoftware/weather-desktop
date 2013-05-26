@@ -49,7 +49,7 @@ namespace Forecast {
 		Q_PROPERTY(QDateTime precipIntensityMaxTime READ precipIntensityMaxTime WRITE setPrecipIntensityMaxTime NOTIFY precipIntensityMaxTimeChanged);
 		Q_PROPERTY(float precipProbability READ precipProbability WRITE setPrecipProbability NOTIFY precipProbabilityChanged);
 		Q_PROPERTY(QString precipType READ precipType WRITE setPrecipType NOTIFY precipTypeChanged);
-		Q_PROPERTY(float precipAccumulation READ precipAccumulation WRITE setTrecipAccumulation NOTIFY precipAccumulationChanged);
+		Q_PROPERTY(float precipAccumulation READ precipAccumulation WRITE setPrecipAccumulation NOTIFY precipAccumulationChanged);
 
 		Q_PROPERTY(float temperature READ temperature WRITE setTemperature NOTIFY temperatureChanged);
 		Q_PROPERTY(float temperatureMin READ temperatureMin WRITE setTemperatureMin NOTIFY temperatureMinChanged);
@@ -59,7 +59,7 @@ namespace Forecast {
 
 		Q_PROPERTY(float dewPoint READ dewPoint WRITE setDewPoint NOTIFY dewPointChanged);
 		Q_PROPERTY(float windSpeed READ windSpeed WRITE setWindSpeed NOTIFY windSpeedChanged);
-		Q_PROPERTY(float windBearing READ windBearing WRITE setSindBearing NOTIFY windBearingChanged);
+		Q_PROPERTY(float windBearing READ windBearing WRITE setWindBearing NOTIFY windBearingChanged);
 		Q_PROPERTY(float cloudCover READ cloudCover WRITE setCloudCover NOTIFY cloudCoverChanged);
 
 		Q_PROPERTY(float humidity READ humidity WRITE setHumidity NOTIFY humidityChanged);

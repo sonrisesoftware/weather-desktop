@@ -28,6 +28,7 @@ int Weather::Location::s_refreshTime = 60 * 60 * 1000; // 1 hour
 Cache *Weather::Location::s_cache = nullptr;
 Weather::Service *Weather::Location::s_defaultService = nullptr;
 Weather::Units Weather::Location::s_units(Weather::Units::English);
+bool Weather::Location::s_html = false;
 
 Weather::Location::Location(const QString& name, const QString& location, Weather::Service *service, QObject* parent)
 	: QObject(parent)

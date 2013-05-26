@@ -45,32 +45,31 @@ void Point::load()
 	setSummary("");
 	setIcon("");
 	
-	setSunrise(QDateTime());
-	setSunset(QDateTime());
+	setSunriseTime(QDateTime());
+	setSunsetTime(QDateTime());
 	
-	setPrecipIntensity(0);
-	setPrecipIntensityMax(0);
+	setPrecipIntensity(-99);
+	setPrecipIntensityMax(-99);
 	setPrecipIntensityMaxTime(QDateTime());
-	setPrecipProbability(0);
-// 	Q_PROPERTY(QString precipType READ precipType WRITE setPrecipType NOTIFY precipTypeChanged);
-// 	Q_PROPERTY(float precipAccumulation READ precipAccumulation WRITE setTrecipAccumulation NOTIFY precipAccumulationChanged);
-// 	
-// 	Q_PROPERTY(float temperature READ temperature WRITE setTemperature NOTIFY temperatureChanged);
-// 	Q_PROPERTY(float temperatureMin READ temperatureMin WRITE setTemperatureMin NOTIFY temperatureMinChanged);
-// 	Q_PROPERTY(QDateTime temperatureMinTime READ temperatureMinTime WRITE setTemperatureMinTime NOTIFY temperatureMinTimeChanged);
-// 	Q_PROPERTY(float temperatureMax READ temperatureMax WRITE setTemperatureMax NOTIFY temperatureMaxChanged);
-// 	Q_PROPERTY(QDateTime temperatureMaxTime READ temperatureMaxTime WRITE setTemperatureMaxTime NOTIFY temperatureMaxTimeChanged);
-// 	
-// 	Q_PROPERTY(float dewPoint READ dewPoint WRITE setDewPoint NOTIFY dewPointChanged);
-// 	Q_PROPERTY(float windSpeed READ windSpeed WRITE setWindSpeed NOTIFY windSpeedChanged);
-// 	Q_PROPERTY(float windBearing READ windBearing WRITE setSindBearing NOTIFY windBearingChanged);
-// 	Q_PROPERTY(float cloudCover READ cloudCover WRITE setCloudCover NOTIFY cloudCoverChanged);
-// 	
-// 	Q_PROPERTY(float humidity READ humidity WRITE setHumidity NOTIFY humidityChanged);
-// 	Q_PROPERTY(float pressure READ pressure WRITE setPressure NOTIFY pressureChanged);
-// 	Q_PROPERTY(float visibility READ visibility WRITE setVisibility NOTIFY visibilityChanged);
-// 	Q_PROPERTY(float ozone READ ozone WRITE setOzone NOTIFY ozoneChanged);
+	setPrecipProbability(-99);
+	setPrecipType("");
+	setPrecipAccumulation(-99);
 	
+	setTemperature(-99);
+	setTemperatureMin(-99);
+	setTemperatureMinTime(QDateTime());
+	setTemperatureMax(-99);
+	setTemperatureMaxTime(QDateTime());
+
+	setDewPoint(-99);
+	setWindSpeed(-99);
+	setWindBearing(-99);
+	setCloudCover(-99);
+
+	setHumidity(-99);
+	setPressure(-99);
+	setVisibility(-99);
+	setOzone(-99);	
 	
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	

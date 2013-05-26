@@ -37,8 +37,29 @@ Panel {
 			
 			property variant modelData: WeatherApp.currentLocation.dailyForecast.at(index)
 			color: Qt.rgba(33/256,126/256,205/256,0.5)
-			width: 64 + 40
+			width: 64 + 60
 			height: 160
+			
+			Text {
+				id: title
+				//width: parent.width - 10
+				
+				text: today ? "Today" : Qt.formatDate(modelData.time, "dddd")
+				property bool today: Qt.formatDate(modelData.time) == Qt.formatDate(new Date())
+				onTextChanged: {
+					console.log(Qt.formatDate(modelData.time) + " == " + Qt.formatDate(new Date()))
+				}
+				font.pixelSize: appStyle.dataFontSize
+				color: appStyle.textColor
+				
+				//wrapMode: Text.Wrap
+				
+				anchors {
+					topMargin: 10
+					top: parent.top
+					horizontalCenter: parent.horizontalCenter
+				}
+			}
 			
 			PlasmaCore.IconItem {
 				id: icon
@@ -46,8 +67,8 @@ Panel {
 				source: modelData.icon
 				
 				anchors {
-					topMargin: 20
-					top: parent.top
+					topMargin: 10
+					top: title.bottom
 					horizontalCenter: parent.horizontalCenter
 				}
 			}
@@ -66,6 +87,23 @@ Panel {
 					horizontalCenter: parent.horizontalCenter
 				}
 			}
+			
+			Text {
+				id: summary
+				//width: parent.width - 10
+				
+				text: modelData.precip
+				font.pixelSize: appStyle.dataFontSize
+				color: appStyle.textColor
+				
+				//wrapMode: Text.Wrap
+				
+				anchors {
+					bottomMargin: 10
+					bottom: parent.bottom
+					horizontalCenter: parent.horizontalCenter
+				}
+			}
 		}
 	}
 	
@@ -80,7 +118,7 @@ Panel {
 		spacing: 5
 	
 		Repeater {
-			model: WeatherApp.currentLocation.dailyForecast.length
+			model: Math.min(WeatherApp.currentLocation.dailyForecast.length, 4)
 			delegate: dayForecast
 		}
 	

@@ -46,6 +46,7 @@ Application::Application(): KApplication(true)
 	service()->setApiKey(FORECAST_API_KEY);
 	Weather::Location::setDefaultService(service());
 	Weather::Location::setAutoRefresh(AUTO_REFRESH);
+	Weather::Location::setHtml(true);
 }
 
 Application::~Application()

@@ -67,6 +67,7 @@ namespace Weather
 		STATIC_PROPERTY(int, refreshTime, refreshTime, setRefreshTime)
 		STATIC_PROPERTY(Service *, defaultService, defaultService, setDefaultService)
 		STATIC_PROPERTY(Units, units, units, setUnits)
+		STATIC_PROPERTY(bool, html, html, setHtml)
 		
 	public:
 		explicit Location(const QString& name, const QString& location, Service *service, QObject *parent = 0);
