@@ -16,58 +16,46 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "main.h"
 #include "forecast/datablock.h"
+
+#include "main.h"
+#include "weather/location.h"
+#include "forecast/datapoint.h"
 
 using namespace Forecast;
 
-DataBlock::DataBlock(Weather::Location *location, const QString& path): QObject(location)
+Block::Block(Weather::Location *location, const QString& path): QObject(location)
 {
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
 	setPath(path);
 }
 
-DataBlock::~DataBlock()
+Block::~Block()
 {
 
 }
 
-void DataBlock::load()
+void Block::load()
 {
 	if (location()->hasError()) return;
 	
-	qDebug() << "Loading...";
-	
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	
-	foreach(const QString& item, data.keys()) {
-		if (item == "data") {
-			QVariantList list = data[item].toList();
+	QVariantList list = data["data"].toList();
 			
-			while (!this->data().isEmpty()) {
-				delete this->data().takeFirst();
-			}
-			
-			for (int i = 0; i < list.length(); i++) {
-				DataPoint *point = new DataPoint(location(), path() + ".data." + QString::number(i));
-				point->load();
-				this->data().append(point);
-			}
-		} else if (property(qPrintable(item)).type() == QVariant::DateTime) {
-			// Time properties are represented by the seconds since the UNIX epoch
-			setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());
-		} else {
-			//qDebug() << item << "\t" << property(qPrintable(item)).typeName() << "==" << data[item].typeName();
-			//Q_ASSERT(property(qPrintable(item)).typeName() == data[item].typeName());
-			setProperty(qPrintable(item), data[item]);
-		}
-		//qDebug() << qPrintable(item) << "\t=" << property(qPrintable(item));
+	while (!this->data().isEmpty()) {
+		this->data().takeFirst()->deleteLater();
 	}
 	
-	qDebug() << "Summary:" << summary();
-	qDebug() << "Icon:" << icon();
-	qDebug() << "Data:" << this->data();
+	for (int i = 0; i < list.length(); i++) {
+		Point *point = new Point(location(), path() + ".data." + QString::number(i));
+		point->load();
+		this->data().append(point);
+	}
+	
+	setSummary(data["summary"].toString());
+	setIcon(data["icon"].toString());
 }
 
 

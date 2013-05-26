@@ -15,17 +15,19 @@ qclassgen(weather-desktop_SRCS
    
    weather/location
    weather/service
-   weather/conditions
+   weather/datapoint
+   weather/datablock
    weather/units
    
    #worldweather/worldweatheronline
    #worldweather/conditions
    
-   wunderground/wunderground
-   wunderground/conditions
+   #wunderground/wunderground
+   #wunderground/conditions
    
    forecast/forecast
-   forecast/conditions
+   forecast/weatherpoint
+   forecast/weatherblock
    forecast/datapoint
    forecast/datablock
  )

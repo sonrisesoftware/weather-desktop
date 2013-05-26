@@ -21,11 +21,16 @@
 #define FORECAST_H
 
 #include "weather/service.h"
-#include "forecast/datapoint.h"
 #include <KIcon>
+
+namespace Weather {
+	class DataPoint;
+}
 
 namespace Forecast {
 
+	class Point;
+	
 	class Forecast : public Weather::Service
 	{
 		Q_OBJECT
@@ -35,7 +40,8 @@ namespace Forecast {
 		virtual ~Forecast();
 		
 		virtual void download(Weather::Location* location);
-		virtual Weather::Conditions* create_conditions(Weather::Location* location);
+		virtual Weather::DataPoint* create_conditions(Weather::Location* location);
+		virtual Weather::DataBlock* create_dailyForecast(Weather::Location* location);
 		virtual void json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot);
 		
 		static QString temp(float value);
@@ -43,9 +49,10 @@ namespace Forecast {
 		static QString humidity(float value);
 		static QString wind(float speed, float dir);
 		static QString pressure(float value);
+		static QString probability(float value);
 		static QString visibility(float value);
 		static KIcon icon(QString name);
-		static QString precip(DataPoint *data);
+		static QString precip(Point *data);
 		
 	protected:
 		virtual QString prefix() { return "https://api.forecast.io"; }

@@ -16,12 +16,47 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-import QtQuick 1.1
-import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Panel {
-	id: root
-	
-	title: i18n("Daily Forecast")
+#include "forecast/weatherblock.h"
+
+#include "forecast/forecast.h"
+#include "forecast/weatherpoint.h"
+#include "forecast/datapoint.h"
+#include "forecast/datablock.h"
+#include "weather/datapoint.h"
+#include "weather/location.h"
+
+Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location, path)
+{
+	setData(new Block(location, path));
 }
+
+Forecast::WeatherBlock::~WeatherBlock()
+{
+
+}
+
+void Forecast::WeatherBlock::refresh()
+{
+	if (location()->hasError()) return;
+	
+	data()->load();
+	
+	setSummary(data()->summary());
+	setIcon(Forecast::Forecast::icon(data()->icon()));
+	
+	while (data()->data().length() < items().length()) {
+		items().removeLast();
+	}
+	
+	while (data()->data().length() > items().length()) {
+		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
+		dataPoint->refresh();
+		items().append(dataPoint);
+	}
+	
+	setLength(items().length());
+	emit itemsChanged(items());
+}
+
+#include "forecast/weatherblock.moc"

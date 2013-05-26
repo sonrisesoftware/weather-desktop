@@ -17,41 +17,26 @@
  ***************************************************************************/
 
 
-#ifndef FORECAST_DATABLOCK_H
-#define FORECAST_DATABLOCK_H
 
-#include <QObject>
-#include <QList>
+#include "weather/datablock.h"
+#include "weather/location.h"
 
-namespace Weather {
-	class Location;
+using namespace Weather;
+
+
+DataBlock::DataBlock(Location* location, const QString& path): QObject()
+{
+	Q_ASSERT(location != nullptr);
+	setLocation(location);
+	setPath(path);
+	
+	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
 }
 
-namespace Forecast {
-
-	class Point;
-	
-	class Block : public QObject
-	{
-		Q_OBJECT
-		
-		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
-		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
-		
-		Q_PROPERTY(QList<Point*> data READ data WRITE set NOTIFY dataChanged)
-		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
-		Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
-
-	public:
-		explicit Block(Weather::Location *location, const QString& path);
-		virtual ~Block();
-		
-	public slots:
-		void load();
-	
-	#include "forecast/datablock.gen"
-	};
+DataBlock::~DataBlock()
+{
 
 }
 
-#endif // FORECAST_DATABLOCK_H
+
+#include "weather/datablock.moc"

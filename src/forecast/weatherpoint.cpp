@@ -17,38 +17,65 @@
  ***************************************************************************/
 
 
-#include "forecast/conditions.h"
+#include "forecast/weatherpoint.h"
+
 #include "forecast/forecast.h"
+#include "forecast/datapoint.h"
+#include "forecast/datablock.h"
 
-using namespace Forecast;
+#include "weather/datapoint.h"
+#include "weather/location.h"
 
-ForecastConditions::ForecastConditions(Weather::Location* location): Weather::Conditions(location)
+//using namespace Forecast;
+
+Forecast::WeatherPoint::WeatherPoint(Weather::Location* location, const QString& path): Weather::DataPoint(location, path)
 {
-	setData(new DataPoint(location, "currently"));
+	setData(new Point(location, path));
 }
 
-ForecastConditions::~ForecastConditions()
+Forecast::WeatherPoint::WeatherPoint(Weather::Location* location, Point *data): Weather::DataPoint(location, data->path())
 {
+	setData(data);
 }
 
-void ForecastConditions::refresh()
+Forecast::WeatherPoint::~WeatherPoint()
+{
+
+}
+
+void Forecast::WeatherPoint::refresh()
 {
 	if (location()->hasError()) return;
 	
 	data()->load();
 	
-	location()->setDay(QDateTime::currentDateTime() > data()->sunrise() && QDateTime::currentDateTime() < data()->sunset());
-	
+	setTime(data()->time());
 	setIcon(Forecast::Forecast::icon(data()->icon()));
-	setWeather(data()->summary());
-	setClouds(Forecast::Forecast::clouds(data()->cloudCover()));
-	setDewpoint(Forecast::Forecast::temp(data()->dewPoint()));
+	setSummary(data()->summary());
+	setCloudCover(Forecast::Forecast::clouds(data()->cloudCover()));
+	setDewPoint(Forecast::Forecast::temp(data()->dewPoint()));
 	setHumidity(Forecast::Forecast::humidity(data()->humidity()));
 	setWind(Forecast::Forecast::wind(data()->windSpeed(), data()->windBearing()));
-	setTemp(Forecast::Forecast::temp(data()->temperature()));
+	setTemperature(Forecast::Forecast::temp(data()->temperature()));
+	setTemperatureMin(Forecast::Forecast::temp(data()->temperatureMin()));
+	setTemperatureMax(Forecast::Forecast::temp(data()->temperatureMax()));
 	setPressure(Forecast::Forecast::pressure(data()->pressure()));
 	setVisibility(Forecast::Forecast::visibility(data()->visibility()));
 	setPrecip(Forecast::Forecast::precip(data()));
+	setPrecipProbability(Forecast::Forecast::probability(data()->precipProbability()));
+	
+	updateColor(data()->temperature());
+	
+// 	Q_PROPERTY(QDateTime sunrise READ sunrise WRITE setSunrise NOTIFY sunriseChanged);
+// 	Q_PROPERTY(QDateTime sunset READ sunset WRITE setSunset NOTIFY sunsetChanged);
+// 	
+// 	Q_PROPERTY(QString precipAccumulation READ precipAccumulation WRITE setPrecipAccumulation NOTIFY precipAccumulationChanged);
+// 	
+// 	Q_PROPERTY(QString feelsLike READ feelsLike NOTIFY feelsLikeChanged)
+// 	Q_PROPERTY(QString windGust READ windGust NOTIFY windGustChanged)
+// 	
+// 	Q_PROPERTY(QString ozone READ ozone WRITE setOzone NOTIFY ozoneChanged);
 }
 
-#include "forecast/conditions.moc"
+
+#include "forecast/weatherpoint.moc"

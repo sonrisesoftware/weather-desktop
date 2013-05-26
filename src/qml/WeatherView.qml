@@ -48,15 +48,15 @@ Rectangle {
 		anchors.centerIn: root
 		opacity: 0
 		
-		windchill: WeatherApp.currentLocation.conditions.windchill;
-		dewpoint: WeatherApp.currentLocation.conditions.dewpoint;
+		windchill: WeatherApp.currentLocation.conditions.feelsLike;
+		dewpoint: WeatherApp.currentLocation.conditions.dewPoint;
 		
 		pressure: WeatherApp.currentLocation.conditions.pressure;
 		visibility: WeatherApp.currentLocation.conditions.visibility;
-		clouds: WeatherApp.currentLocation.conditions.clouds;
+		clouds: WeatherApp.currentLocation.conditions.cloudCover;
 		
 		wind: WeatherApp.currentLocation.conditions.wind;
-		windgust: WeatherApp.currentLocation.conditions.windgust;
+		windgust: WeatherApp.currentLocation.conditions.windGust;
 		
 		humidity: WeatherApp.currentLocation.conditions.humidity;
 		precip: WeatherApp.currentLocation.conditions.precip;
@@ -78,15 +78,15 @@ Rectangle {
 		}
 	}
 	
-	/*WeatherForecast {
-		id: forecast
+	DailyForecast {
+		id: dailyForecast
 		anchors.centerIn: root
 		opacity: 0
 				
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }
 		}
-	}*/
+	}
 	
 	states: [
 		State {
@@ -99,9 +99,9 @@ Rectangle {
 		State {
 			name: "daily"
 			when: is_regular && view == "daily"
-			PropertyChanges { target: forecast; opacity: 1; restoreEntryValues: true; }
-			PropertyChanges { target: root; implicitWidth: forecast.implicitWidth; }
-			PropertyChanges { target: root; implicitHeight: forecast.implicitHeight; }
+			PropertyChanges { target: dailyForecast; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: dailyForecast.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: dailyForecast.implicitHeight; }
 		},
 		State {
 			name: "error"

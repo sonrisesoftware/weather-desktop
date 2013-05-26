@@ -18,27 +18,56 @@
 
 
 #include "forecast/datapoint.h"
-#include <weather/location.h>
+
+#include "weather/location.h"
 
 using namespace Forecast;
 
-DataPoint::DataPoint(Weather::Location *location, const QString& path): QObject(location)
+Point::Point(Weather::Location *location, const QString& path): QObject(location)
 {
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
 	setPath(path);
 }
 
-DataPoint::~DataPoint()
+Point::~Point()
 {
 
 }
 
-void DataPoint::load()
+void Point::load()
 {
 	if (location()->hasError()) return;
 	
-	qDebug() << "Loading:" << path();
+	setTime(QDateTime());
+	setSummary("");
+	setIcon("");
+	
+	setSunriseTime(QDateTime());
+	setSunsetTime(QDateTime());
+	
+	setPrecipIntensity(-99);
+	setPrecipIntensityMax(-99);
+	setPrecipIntensityMaxTime(QDateTime());
+	setPrecipProbability(-99);
+	setPrecipType("");
+	setPrecipAccumulation(-99);
+	
+	setTemperature(-99);
+	setTemperatureMin(-99);
+	setTemperatureMinTime(QDateTime());
+	setTemperatureMax(-99);
+	setTemperatureMaxTime(QDateTime());
+
+	setDewPoint(-99);
+	setWindSpeed(-99);
+	setWindBearing(-99);
+	setCloudCover(-99);
+
+	setHumidity(-99);
+	setPressure(-99);
+	setVisibility(-99);
+	setOzone(-99);	
 	
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	

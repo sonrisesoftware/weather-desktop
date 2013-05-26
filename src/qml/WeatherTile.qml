@@ -47,6 +47,9 @@ Rectangle {
 	property alias title: title.text;
 	property alias temp: temp.text;
 	property alias weather: weather.text;
+	property alias iconForecast: iconForecast.source;
+	property alias tempForecast: tempForecast.text;
+	property alias weatherForecast: weatherForecast.text;
 	
 	property bool alert: false;
 	property bool selected: false;
@@ -104,7 +107,7 @@ Rectangle {
 	
 	Item {
 		id: conditions
-		opacity: 1
+		opacity: 0
 		
 		anchors {
 			top: title.bottom;
@@ -162,10 +165,40 @@ Rectangle {
 			right: root.right;
 		}
 		
+		PlasmaCore.IconItem {
+			id: iconForecast
+			width: 64; height: 64;
+			
+			anchors {
+				left: parent.left;
+				leftMargin: 10;
+				verticalCenter: parent.verticalCenter;
+			}
+		}
+		
 		Text {
-			anchors.centerIn: parent;
-			text: "Weather Forecast!"
-			font.pixelSize: appStyle.headerFontSize;
+			id: tempForecast
+			
+			anchors {
+				left: iconForecast.right;
+				leftMargin: 10;
+				bottom: parent.verticalCenter;
+			}
+			
+			font.pixelSize: appStyle.titleFontSize;
+			color: textColor;
+		}
+		
+		Text {
+			id: weatherForecast
+			
+			anchors {
+				left: iconForecast.right;
+				leftMargin: 10;
+				top: parent.verticalCenter;
+			}
+			
+			font.pixelSize: appStyle.headerFontSize - 2;
 			color: textColor;
 		}
 	}
@@ -185,12 +218,12 @@ Rectangle {
 		State {
 			name: "default"
 			when: !mouseArea.containsMouse
-			//PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
 		},	
 		State {
 			name: "mouse-over"
 			when: mouseArea.containsMouse
-			//PropertyChanges { target: forecast; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: forecast; opacity: 1; restoreEntryValues: true; }
 		}
 	]
 	

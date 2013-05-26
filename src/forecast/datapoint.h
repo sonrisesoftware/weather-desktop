@@ -20,15 +20,17 @@
 #ifndef FORECAST_DATAPOINT_H
 #define FORECAST_DATAPOINT_H
 
-#include "weather/location.h"
-
 #include <QObject>
 #include <QDateTime>
 #include <QIcon>
 
+namespace Weather {
+	class Location;
+}
+
 namespace Forecast {
 
-	class DataPoint: public QObject
+	class Point: public QObject
 	{
 		Q_OBJECT
 		
@@ -39,15 +41,15 @@ namespace Forecast {
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
 		Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
 
-		Q_PROPERTY(QDateTime sunrise READ sunrise WRITE setSunrise NOTIFY sunriseChanged);
-		Q_PROPERTY(QDateTime sunset READ sunset WRITE setSunset NOTIFY sunsetChanged);
+		Q_PROPERTY(QDateTime sunriseTime READ sunriseTime WRITE setSunriseTime NOTIFY sunriseTimeChanged);
+		Q_PROPERTY(QDateTime sunsetTime READ sunsetTime WRITE setSunsetTime NOTIFY sunsetTimeChanged);
 
 		Q_PROPERTY(float precipIntensity READ precipIntensity WRITE setPrecipIntensity NOTIFY precipIntensityChanged);
 		Q_PROPERTY(float precipIntensityMax READ precipIntensityMax WRITE setPrecipIntensityMax NOTIFY precipIntensityMaxChanged);
 		Q_PROPERTY(QDateTime precipIntensityMaxTime READ precipIntensityMaxTime WRITE setPrecipIntensityMaxTime NOTIFY precipIntensityMaxTimeChanged);
 		Q_PROPERTY(float precipProbability READ precipProbability WRITE setPrecipProbability NOTIFY precipProbabilityChanged);
 		Q_PROPERTY(QString precipType READ precipType WRITE setPrecipType NOTIFY precipTypeChanged);
-		Q_PROPERTY(float precipAccumulation READ precipAccumulation WRITE setTrecipAccumulation NOTIFY precipAccumulationChanged);
+		Q_PROPERTY(float precipAccumulation READ precipAccumulation WRITE setPrecipAccumulation NOTIFY precipAccumulationChanged);
 
 		Q_PROPERTY(float temperature READ temperature WRITE setTemperature NOTIFY temperatureChanged);
 		Q_PROPERTY(float temperatureMin READ temperatureMin WRITE setTemperatureMin NOTIFY temperatureMinChanged);
@@ -57,7 +59,7 @@ namespace Forecast {
 
 		Q_PROPERTY(float dewPoint READ dewPoint WRITE setDewPoint NOTIFY dewPointChanged);
 		Q_PROPERTY(float windSpeed READ windSpeed WRITE setWindSpeed NOTIFY windSpeedChanged);
-		Q_PROPERTY(float windBearing READ windBearing WRITE setSindBearing NOTIFY windBearingChanged);
+		Q_PROPERTY(float windBearing READ windBearing WRITE setWindBearing NOTIFY windBearingChanged);
 		Q_PROPERTY(float cloudCover READ cloudCover WRITE setCloudCover NOTIFY cloudCoverChanged);
 
 		Q_PROPERTY(float humidity READ humidity WRITE setHumidity NOTIFY humidityChanged);
@@ -66,8 +68,8 @@ namespace Forecast {
 		Q_PROPERTY(float ozone READ ozone WRITE setOzone NOTIFY ozoneChanged);
 		
 	public:
-		explicit DataPoint(Weather::Location *location,const QString& path);
-		virtual ~DataPoint();
+		explicit Point(Weather::Location *location,const QString& path);
+		virtual ~Point();
 		
 	public slots:
 		void load();

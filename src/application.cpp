@@ -21,9 +21,9 @@
 #include "config.h"
 
 #include "weather/location.h"
-#include "weather/conditions.h"
+#include "weather/datapoint.h"
+#include "weather/datablock.h"
 
-#include "wunderground/wunderground.h"
 #include "forecast/forecast.h"
 
 // Qt headers
@@ -46,6 +46,7 @@ Application::Application(): KApplication(true)
 	service()->setApiKey(FORECAST_API_KEY);
 	Weather::Location::setDefaultService(service());
 	Weather::Location::setAutoRefresh(AUTO_REFRESH);
+	Weather::Location::setHtml(true);
 }
 
 Application::~Application()
@@ -58,7 +59,8 @@ void Application::registerQMLTypes()
 	qmlRegisterType<WeatherDesktop>();
 	qmlRegisterType<Weather::Location>();
 	qmlRegisterType<Weather::Service>();
-	qmlRegisterType<Weather::Conditions>();
+	qmlRegisterType<Weather::DataBlock>();
+	qmlRegisterType<Weather::DataPoint>();
 }
 
 void Application::setupDeclarativeBindings(QDeclarativeEngine* declarativeEngine)

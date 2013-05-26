@@ -17,28 +17,32 @@
  ***************************************************************************/
 
 
-#ifndef FORECAST_CONDITIONS_H
-#define FORECAST_CONDITIONS_H
+#ifndef FORECAST_WEATHERPOINT_H
+#define FORECAST_WEATHERPOINT_H
 
-#include "weather/conditions.h"
-#include "forecast/datapoint.h"
+#include "weather/datapoint.h"
+//#include "forecast/datapoint.h"
 
 namespace Forecast {
 
-	class ForecastConditions : public Weather::Conditions
+	class Point;
+	
+	class WeatherPoint : public Weather::DataPoint
 	{
 		Q_OBJECT
-		Q_PROPERTY(DataPoint *data READ data NOTIFY dataChanged)
+		
+		Q_PROPERTY(Point *data READ data NOTIFY dataChanged)
 
 	public:
-		explicit ForecastConditions(Weather::Location* location);
-		virtual ~ForecastConditions();
+		explicit WeatherPoint(Weather::Location* location, const QString& path);
+		explicit WeatherPoint(Weather::Location* location, Point *data);
+		virtual ~WeatherPoint();
 		
 		virtual void refresh();
 		
-	#include "forecast/conditions.gen"
+	#include "forecast/weatherpoint.gen"
 	};
 
 }
 
-#endif // FORECAST_CONDITIONS_H
+#endif // FORECAST_WEATHERPOINT_H

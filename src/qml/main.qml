@@ -25,7 +25,7 @@ Rectangle {
 	id: root
 	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40) + listPanel.width;
 	//implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
-	implicitHeight: header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
+	implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property variant appStyle: Style {
 		id: style
@@ -59,14 +59,14 @@ Rectangle {
 		
 		WeatherHeader {
 			id: header
-			//anchors.top: topToolBar.bottom
-			anchors.top: parent.top
+			anchors.top: topToolBar.bottom
+			//anchors.top: parent.top
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.topMargin: 20
 			name: WeatherApp.currentLocation.name;
 			location: WeatherApp.currentLocation.display;
-			temp: WeatherApp.currentLocation.conditions.temp;
-			weather: WeatherApp.currentLocation.conditions.weather;
+			temp: WeatherApp.currentLocation.conditions.temperature;
+			weather: WeatherApp.currentLocation.conditions.summary;
 			icon: WeatherApp.currentLocation.conditions.icon;
 		}
 			
@@ -81,7 +81,7 @@ Rectangle {
 			}
 		}
 		
-		/*PlasmaComponents.ToolBar {
+		PlasmaComponents.ToolBar {
 			id: topToolBar
 			//width: parent.width
 			
@@ -100,7 +100,7 @@ Rectangle {
 					checked: weatherView.view == "conditions"
 				}
 				
-				PlasmaComponents.ToolButton {
+				/*PlasmaComponents.ToolButton {
 					iconSource: "clock"
 					text: i18n("Hourly")
 					width: minimumWidth + 5
@@ -108,7 +108,7 @@ Rectangle {
 						weatherView.view = "hourly"
 					}
 					checked: weatherView.view == "hourly"
-				}
+				}*/
 				
 				PlasmaComponents.ToolButton {
 					iconSource: "view-calendar-day"
@@ -120,7 +120,7 @@ Rectangle {
 					checked: weatherView.view == "daily"
 				}
 			}
-		}*/
+		}
 		
 		PlasmaComponents.ToolBar {
 			id: bottomToolBar
@@ -200,9 +200,13 @@ Rectangle {
 				}
 				
 				title: modelData.name;
-				temp: modelData.conditions.temp;
+				temp: modelData.conditions.temperature;
 				icon: modelData.conditions.icon;
-				weather: modelData.conditions.weather;
+				weather: modelData.conditions.summary;
+				
+				tempForecast: modelData.dailyForecast.at(0).temperatureMax;
+				iconForecast: modelData.dailyForecast.at(0).icon;
+				weatherForecast: modelData.dailyForecast.at(0).temperatureMin;
 			}
 		}
 	}

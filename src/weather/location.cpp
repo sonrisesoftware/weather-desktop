@@ -18,7 +18,7 @@
 
 
 #include "weather/location.h"
-#include "wunderground/wunderground.h"
+#include "weather/service.h"
 
 #include <QDateTime>
 #include <QTimer>
@@ -28,6 +28,7 @@ int Weather::Location::s_refreshTime = 60 * 60 * 1000; // 1 hour
 Cache *Weather::Location::s_cache = nullptr;
 Weather::Service *Weather::Location::s_defaultService = nullptr;
 Weather::Units Weather::Location::s_units(Weather::Units::English);
+bool Weather::Location::s_html = false;
 
 Weather::Location::Location(const QString& name, const QString& location, Weather::Service *service, QObject* parent)
 	: QObject(parent)
@@ -55,6 +56,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	setService(service);
 	// Create the necessary weather types
 	setConditions(this->service()->create_conditions(this));
+	setDailyForecast(this->service()->create_dailyForecast(this));
 	// Needs an refresh
 	setNeedsRefresh(true);
 	// Refresh
@@ -94,7 +96,7 @@ void Weather::Location::refresh()
 		
 		// If the data is valid,
 		if (error.isEmpty() || error.startsWith(OUTDATED_DATA)) {
-			qDebug() << "Using location from cache:" << location();
+			//qDebug() << "Using location from cache:" << location();
 			setData(var.toMap());
 			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
 			if (error.isEmpty())

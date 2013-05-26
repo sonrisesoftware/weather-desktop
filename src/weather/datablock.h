@@ -17,41 +17,58 @@
  ***************************************************************************/
 
 
-#ifndef FORECAST_DATABLOCK_H
-#define FORECAST_DATABLOCK_H
+
+#ifndef WEATHER_DATABLOCK_H
+#define WEATHER_DATABLOCK_H
+
+#include "weather/datapoint.h"
 
 #include <QObject>
+#include <QIcon>
 #include <QList>
+#include <QDebug>
 
 namespace Weather {
-	class Location;
-}
-
-namespace Forecast {
-
-	class Point;
 	
-	class Block : public QObject
+	class Location;
+
+	class DataBlock : public QObject
 	{
 		Q_OBJECT
 		
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
 		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 		
-		Q_PROPERTY(QList<Point*> data READ data WRITE set NOTIFY dataChanged)
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
-		Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
-
+		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged);
+		Q_PROPERTY(QList<DataPoint*> items READ items NOTIFY itemsChanged);
+		Q_PROPERTY(int length READ length NOTIFY lengthChanged);
+		
 	public:
-		explicit Block(Weather::Location *location, const QString& path);
-		virtual ~Block();
+		explicit DataBlock(Weather::Location *location, const QString& path);
+		virtual ~DataBlock();
+		
+		const DataPoint *operator[](int index) const {
+			return m_items[index];
+		}
+		
+		Q_INVOKABLE Weather::DataPoint *at(int index) {
+			//qDebug() << "AT:" << index << m_items.length();
+			if (index >= m_items.length()) {
+				return nullptr;
+			}
+			return m_items.at(index);
+		}
 		
 	public slots:
-		void load();
-	
-	#include "forecast/datablock.gen"
+		virtual void refresh() = 0;
+		
+	signals:
+		void refreshed();
+		
+	#include "weather/datablock.gen"
 	};
 
 }
 
-#endif // FORECAST_DATABLOCK_H
+#endif // WEATHER_DATABLOCK_H

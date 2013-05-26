@@ -16,52 +16,30 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.  *
  ***************************************************************************/
 
-#include "weather/conditions.h"
 
-#include "main.h"
+#include "weather/datapoint.h"
 #include "weather/location.h"
-#include <KIcon>
 
 using namespace Weather;
 
-Conditions::Conditions(Weather::Location *location): QObject(location)
+DataPoint::DataPoint(Weather::Location *location, const QString& path): QObject(location)
 {
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
+	setPath(path);
+	
 	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
-	QObject::connect(this, SIGNAL(tempChanged(QString)), this, SLOT(updateColor(QString)));
-	//refresh();
 }
 
-Conditions::~Conditions()
+DataPoint::~DataPoint()
 {
 
 }
 
-void Conditions::refresh()
-{	
-	setIcon(KIcon("weather-clouds"));
-	setWeather("<Weather>");	
-	setTemp("<Temp>");
-	
-	setWindchill("<Windchill>");
-	setDewpoint("<Dewpoint>");
-	
-	setPressure("<Pressure>");
-	setVisibility("<Visibility>");
-	setClouds("<Cloud cover>");
-	
-	setWind("<Wind>");
-	setWindgust("<Wind gust>");
-	
-	setHumidity("<Humidity>");
-	setPrecip("<Precipitation>");
-}
-
-void Weather::Conditions::updateColor(const QString& temp)
+void DataPoint::updateColor(float temp)
 {
-	//qDebug() << "Updating color...";
+
 }
 
 
-#include "weather/conditions.moc"
+#include "weather/datapoint.moc"

@@ -18,10 +18,21 @@
 
 
 #include "forecast/forecast.h"
-#include "forecast/conditions.h"
+#include "forecast/weatherpoint.h"
+#include "forecast/weatherblock.h"
 #include "forecast/datapoint.h"
 
+#include "weather/location.h"
+
 #include <QString>
+
+QString units(const QString& units) {
+	if (Weather::Location::html()) {
+		return "<sup>" + units + "</sup>";
+	} else {
+		return units;
+	}
+}
 
 Forecast::Forecast::Forecast(QObject* parent): Service(parent)
 {
@@ -43,9 +54,14 @@ void Forecast::Forecast::download(Weather::Location* location)
 	json_query(location, "forecast", "", this, SLOT(onWeatherDownloaded(Weather::Location*,QString,QVariantMap)));
 }
 
-Weather::Conditions* Forecast::Forecast::create_conditions(Weather::Location* location)
+Weather::DataPoint* Forecast::Forecast::create_conditions(Weather::Location* location)
 {
-	return new ForecastConditions(location);
+	return new WeatherPoint(location, "currently");
+}
+
+Weather::DataBlock* Forecast::Forecast::create_dailyForecast(Weather::Location* location)
+{
+	return new WeatherBlock(location, "daily");
 }
 
 void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
@@ -55,7 +71,6 @@ void Forecast::Forecast::json_query(Weather::Location* location, const QString& 
 
 void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QString error, const QVariantMap& data)
 {
-	qDebug() << "Conditions downloaded!";
 	if (data["response"].toMap().contains("error")) {
 		//error = "[" + data["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
 		//		data["response"].toMap()["error"].toMap()["description"].toString();
@@ -71,9 +86,9 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 
 QString Forecast::Forecast::temp(float value) {
 	if (Weather::Location::units().temp() == Weather::Units::Fahrenheit) {
-		return validate(value, format(value) + TEMP_F);
+		return validate(value, format(value, 2) + units(TEMP_F));
 	} else if (Weather::Location::units().temp() == Weather::Units::Celsius) {
-		return validate(value, format(5.0/9.0 * (value - 32)) + TEMP_C);
+		return validate(value, format(5.0/9.0 * (value - 32), 2) + units(TEMP_C));
 	} else {
 		qFatal("Unknown units!");
 		return "";
@@ -92,6 +107,10 @@ QString Forecast::Forecast::clouds(float value) {
 
 QString Forecast::Forecast::humidity(float value) {
 	return validate(value, format(value * 100) + '%');
+}
+
+QString Forecast::Forecast::probability(float value) {
+	return validate(value, format(value * 100, 1) + '%');
 }
 
 QString Forecast::Forecast::wind(float speed, float dir) {
@@ -170,16 +189,21 @@ KIcon Forecast::Forecast::icon(QString name) {
 	return KIcon(code);
 }
 
-QString Forecast::Forecast::precip(DataPoint* data)
+QString Forecast::Forecast::precip(Point* data)
 {
+	QString color = "";
 	QString weather = "Very light ";
-	if (data->precipIntensity() > 0.017) weather = "Light ";
-	if (data->precipIntensity() > 0.4) weather = "Moderate ";
-	if (data->precipIntensity() > 0.8) weather = "Heavy ";
+	if (data->precipIntensity() > 0.017) { weather = "Light "; }
+	if (data->precipIntensity() > 0.4)  { weather = "Moderate "; }
+	if (data->precipIntensity() > 0.8) { weather = "Heavy "; color = "#c31f1f"; }
 
 	if (!data->precipType().isEmpty()) {
 		weather += data->precipType();
 		//weather += data->precipType()[0].toUpper() + data->precipType().right(data->precipType().length() - 1);
+	}
+	
+	if (Weather::Location::html() && !color.isEmpty()) {
+		weather = "<font color=\"" + color + "\">" + weather + "</font>";
 	}
 	
 	return weather == "Very light " ? "None" : weather;

@@ -17,58 +17,36 @@
  ***************************************************************************/
 
 
-#ifndef CONDITIONS_H
-#define CONDITIONS_H
+#ifndef FORECAST_WEATHERBLOCK_H
+#define FORECAST_WEATHERBLOCK_H
 
-#include "weather/service.h"
+#include "weather/datablock.h"
 #include "weather/location.h"
 
-#include <QObject>
-#include <QColor>
-#include <QIcon>
-
-namespace Weather
-{
+/*namespace Weather {
 	class Location;
-	
-	class Conditions: public QObject
+}*/
+
+namespace Forecast {
+	class Block;
+	class Point;
+
+	class WeatherBlock : public Weather::DataBlock
 	{
 		Q_OBJECT
 		
-		Q_PROPERTY(QString temp READ temp NOTIFY tempChanged)
-		Q_PROPERTY(QString windchill READ windchill NOTIFY windchillChanged)
-		Q_PROPERTY(QString dewpoint READ dewpoint NOTIFY dewpointChanged)
-		Q_PROPERTY(QString weather READ weather NOTIFY weatherChanged)
-		Q_PROPERTY(QString pressure READ pressure NOTIFY pressureChanged)
-		Q_PROPERTY(QString visibility READ visibility NOTIFY visibilityChanged);
-		Q_PROPERTY(QString clouds READ clouds NOTIFY cloudsChanged)
-		
-		Q_PROPERTY(QString wind READ wind NOTIFY windChanged)
-		Q_PROPERTY(QString windgust READ windgust NOTIFY windgustChanged)
-		
-		Q_PROPERTY(QString humidity READ humidity NOTIFY humidityChanged)
-		Q_PROPERTY(QString precip READ precip NOTIFY precipChanged)
-		
-		Q_PROPERTY(QIcon icon READ icon NOTIFY iconChanged)
-		Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
-		
-		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
+		Q_PROPERTY(Block *data READ data NOTIFY dataChanged)		
 
 	public:
-		explicit Conditions(Weather::Location *location);
-		virtual ~Conditions();
+		explicit WeatherBlock(Weather::Location* location, const QString& path);
+		virtual ~WeatherBlock();
 		
 	public slots:
-		virtual void refresh() = 0;
+		virtual void refresh();
 		
-	signals:
-		void refreshed();
-		
-	private slots:
-		void updateColor(const QString& temp);
-		
-	#include "weather/conditions.gen"
+	#include "forecast/weatherblock.gen"
 	};
+
 }
 
-#endif // CONDITIONS_H
+#endif // FORECAST_WEATHERBLOCK_H

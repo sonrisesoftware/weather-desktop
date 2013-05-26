@@ -33,8 +33,9 @@
 namespace Weather
 {
 
-	class Conditions;
 	class Service;
+	class DataPoint;
+	class DataBlock;
 
 	class Location : public QObject
 	{
@@ -49,7 +50,8 @@ namespace Weather
 		Q_PROPERTY(Weather::Service *service READ service WRITE setService NOTIFY serviceChanged)
 		Q_PROPERTY(QVariantMap data READ data WRITE setData NOTIFY dataChanged)
 		
-		Q_PROPERTY(Weather::Conditions *conditions READ conditions NOTIFY conditionsChanged)
+		Q_PROPERTY(Weather::DataPoint *conditions READ conditions NOTIFY conditionsChanged)
+		Q_PROPERTY(Weather::DataBlock *dailyForecast READ dailyForecast NOTIFY dailyForecastChanged)
 		// TODO: Add more weather types here
 		
 		Q_PROPERTY(bool needsRefresh READ needsRefresh NOTIFY needsRefreshChanged)
@@ -63,8 +65,9 @@ namespace Weather
 		
 		STATIC_PROPERTY(bool, autoRefresh, autoRefresh, setAutoRefresh)
 		STATIC_PROPERTY(int, refreshTime, refreshTime, setRefreshTime)
-		STATIC_PROPERTY(Weather::Service *, defaultService, defaultService, setDefaultService)
-		STATIC_PROPERTY(Weather::Units, units, units, setUnits)
+		STATIC_PROPERTY(Service *, defaultService, defaultService, setDefaultService)
+		STATIC_PROPERTY(Units, units, units, setUnits)
+		STATIC_PROPERTY(bool, html, html, setHtml)
 		
 	public:
 		explicit Location(const QString& name, const QString& location, Service *service, QObject *parent = 0);
