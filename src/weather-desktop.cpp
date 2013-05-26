@@ -100,7 +100,7 @@ void WeatherDesktop::onImplicitHeightChanged()
 void WeatherDesktop::loadSettings()
 {
 	QStringList list = Settings::accessCount().split(':');
-	QDate current = QDate::currentDate();
+	QDate current = QDateTime::currentDateTimeUtc().date();
 	QDate lastUsed = QDate::fromString(list[0]);
 	
 	if (current == lastUsed) {
@@ -135,8 +135,8 @@ void WeatherDesktop::saveSettings()
 	}
 	Settings::setLocations(list);
 	
-	qDebug() << "Saving access count:" << QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount());
-	Settings::setAccessCount(QDate::currentDate().toString() + ':' + QString::number(App->service()->accessCount()));
+	qDebug() << "Saving access count:" << QDateTime::currentDateTimeUtc().date().toString() + ':' + QString::number(App->service()->accessCount());
+	Settings::setAccessCount(QDateTime::currentDateTimeUtc().date().toString() + ':' + QString::number(App->service()->accessCount()));
 	
 	// FIXME!!!! Save all the unit types
 	if (Weather::Location::units().system() == Weather::Units::English) {
