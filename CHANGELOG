@@ -1,3 +1,10 @@
+weather-desktop (0.2.2); urgency=low
+
+ * Fixed #30 - Access times are now stored in UTC
+
+-- Michael Spencer <spencers1993@gmail.com>  Sat, 25 May 2013 21:02:08 -0500
+
+
 weather-desktop (0.2.1); urgency=low
 
  * Added support for forecasts
