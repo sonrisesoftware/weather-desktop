@@ -65,9 +65,7 @@ Panel {
 				
 				text: today ? "Today" : Qt.formatDate(modelData.time, "dddd")
 				property bool today: Qt.formatDate(modelData.time) == Qt.formatDate(new Date())
-				onTextChanged: {
-					console.log(Qt.formatDate(modelData.time) + " == " + Qt.formatDate(new Date()))
-				}
+				
 				font.pixelSize: appStyle.dataFontSize
 				color: appStyle.textColor
 				

@@ -40,8 +40,6 @@ void Block::load()
 {
 	if (location()->hasError()) return;
 	
-	qDebug() << "Loading...";
-	
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	
 	QVariantList list = data["data"].toList();
@@ -58,10 +56,6 @@ void Block::load()
 	
 	setSummary(data["summary"].toString());
 	setIcon(data["icon"].toString());
-	
-	qDebug() << "Summary:" << summary();
-	qDebug() << "Icon:" << icon();
-	qDebug() << ":" << this->data();
 }
 
 

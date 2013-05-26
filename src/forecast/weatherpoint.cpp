@@ -30,13 +30,11 @@
 
 Forecast::WeatherPoint::WeatherPoint(Weather::Location* location, const QString& path): Weather::DataPoint(location, path)
 {
-	qDebug() << "Weather point!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 	setData(new Point(location, path));
 }
 
 Forecast::WeatherPoint::WeatherPoint(Weather::Location* location, Point *data): Weather::DataPoint(location, data->path())
 {
-	qDebug() << "Weather point!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 	setData(data);
 }
 
@@ -47,7 +45,6 @@ Forecast::WeatherPoint::~WeatherPoint()
 
 void Forecast::WeatherPoint::refresh()
 {
-	qDebug() << "In weather point!!!!!!!!!!!!!!!";
 	if (location()->hasError()) return;
 	
 	data()->load();

@@ -39,8 +39,6 @@ void Point::load()
 {
 	if (location()->hasError()) return;
 	
-	//qDebug() << "Loading:" << path();
-	
 	setTime(QDateTime());
 	setSummary("");
 	setIcon("");

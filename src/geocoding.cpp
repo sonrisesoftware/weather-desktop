@@ -71,7 +71,7 @@ void Geocoding::run()
 		if (getJson(item, "class").toString() == "place" && getJson(item, "type").toString() == "city") {
 			setName(getJson(item, "display_name").toString());
 			setCoordinates(getJson(item, "lat").toString() + ',' + getJson(item, "lon").toString());
-			qDebug() << "FOUND LOCATION:" << name() << coordinates();
+			//qDebug() << "FOUND LOCATION:" << name() << coordinates();
 			break;
 		}
 	}
@@ -81,7 +81,7 @@ void Geocoding::run()
 		
 		setName(getJson(item, "display_name").toString());
 		setCoordinates(getJson(item, "lat").toString() + ',' + getJson(item, "lon").toString());
-		qDebug() << "FOUND LOCATION:" << name() << coordinates();
+		//qDebug() << "FOUND LOCATION:" << name() << coordinates();
 	}
 }
 

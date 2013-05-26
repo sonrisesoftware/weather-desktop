@@ -71,7 +71,6 @@ void Forecast::Forecast::json_query(Weather::Location* location, const QString& 
 
 void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QString error, const QVariantMap& data)
 {
-	qDebug() << "Conditions downloaded!";
 	if (data["response"].toMap().contains("error")) {
 		//error = "[" + data["response"].toMap()["error"].toMap()["type"].toString() + "] " + 
 		//		data["response"].toMap()["error"].toMap()["description"].toString();
@@ -111,7 +110,6 @@ QString Forecast::Forecast::humidity(float value) {
 }
 
 QString Forecast::Forecast::probability(float value) {
-	qDebug() << "PROBABILITY:" << value;
 	return validate(value, format(value * 100, 1) + '%');
 }
 

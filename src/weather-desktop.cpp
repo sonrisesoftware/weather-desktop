@@ -181,6 +181,7 @@ void WeatherDesktop::addCurrentLocation()
 void WeatherDesktop::removeCurrentLocation()
 {
 	Weather::Location *l = location(currentLocation()->location());
+	int index = locations().indexOf(l);
 	
 	if (l == nullptr) return;
 	
@@ -188,7 +189,7 @@ void WeatherDesktop::removeCurrentLocation()
 	emit locationsChanged(locations());
 	
 	if (locations().length() > 0) {
-		setCurrentLocation((Weather::Location *) locations()[0]);
+		setCurrentLocation((Weather::Location *) locations()[index - 1]);
 	} else {
 		setLocation(l->location());
 	}
@@ -232,7 +233,6 @@ Weather::Location* WeatherDesktop::location(int index)
 
 void WeatherDesktop::setLocation(const QString& location)
 {
-	qDebug() << "Set location to:" << location;
 	if (location.isEmpty()) {
 		//setCurrentLocation(autoLocation());
 		return;

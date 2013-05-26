@@ -74,7 +74,7 @@ Cache::Cache(const QString& directory, QObject *parent): QObject(parent)
 		QByteArray data = read_file(directory + "/cache-info", &error);
 		if (error.isEmpty()) {
 			setRecent(QString(data).split('\n'));
-			qDebug() << recent();
+			//qDebug() << recent();
 		} else {
 			qFatal("Unable to create cache: %s", qPrintable(error));
 		}
@@ -146,7 +146,7 @@ QVariant Cache::load(QString name, QString *error)
  		//qDebug() << "Saved:" << result["time"].toDateTime();
 		//qDebug() << "Now:" << QDateTime::currentDateTime();
 		
-		qDebug() << "Data exists in cache:" << name;
+		//qDebug() << "Data exists in cache:" << name;
  		
 		// If the data is current,
 		if (maxTime() == 0 || result["time"].toDateTime().msecsTo(QDateTime::currentDateTime()) < maxTime()) {
@@ -158,7 +158,7 @@ QVariant Cache::load(QString name, QString *error)
 			return result["data"];
 		}
 	} else { // Otherwise,
-		qDebug() << "Data is not in cache:" << name;
+		//qDebug() << "Data not in cache:" << name;
 		// Return no data, with error "No data in cache"
 		*error = NO_DATA;
 		return QVariant();

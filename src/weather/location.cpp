@@ -96,7 +96,7 @@ void Weather::Location::refresh()
 		
 		// If the data is valid,
 		if (error.isEmpty() || error.startsWith(OUTDATED_DATA)) {
-			qDebug() << "Using location from cache:" << location();
+			//qDebug() << "Using location from cache:" << location();
 			setData(var.toMap());
 			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
 			if (error.isEmpty())
