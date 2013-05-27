@@ -221,8 +221,8 @@ Rectangle {
 				weather: modelData.conditions.summary;
 				
 				//tempForecast: modelData.dailyForecast.at(0).temperatureMax;
-				iconForecast: modelData.dailyForecast.at(0).icon;
-				weatherForecast: modelData.dailyForecast.at(0).summary;
+				iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
+				weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
 			}
 		}
 	}
