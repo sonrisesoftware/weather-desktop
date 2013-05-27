@@ -33,6 +33,7 @@
 #define TEMP_C i18n(" °C")
 
 #define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("appdata", file))
+#define RESOURCE_FILE(file) KStandardDirs::locate("appdata", file)
 		
 #define STATIC_PROPERTY(type, name, read, write)							\
 public:																		\

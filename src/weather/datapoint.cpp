@@ -18,7 +18,10 @@
 
 
 #include "weather/datapoint.h"
+
 #include "weather/location.h"
+#include "main.h"
+#include <QFile>
 
 using namespace Weather;
 
@@ -29,6 +32,7 @@ DataPoint::DataPoint(Weather::Location *location, const QString& path): QObject(
 	setPath(path);
 	
 	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
+	QObject::connect(this, SIGNAL(iconChanged(QIcon)), this, SLOT(onIconChanged(QIcon)));
 }
 
 DataPoint::~DataPoint()
@@ -39,6 +43,17 @@ DataPoint::~DataPoint()
 void DataPoint::updateColor(float temp)
 {
 
+}
+
+void Weather::DataPoint::onIconChanged(const QIcon& icon)
+{
+	QString fileName = RESOURCE_FILE("images/" + icon.name());
+	
+	if (!QFile(fileName).exists()) {
+		fileName = RESOURCE_FILE("images/weather-clear.jpg");
+	}
+	
+	setImage(fileName);
 }
 
 

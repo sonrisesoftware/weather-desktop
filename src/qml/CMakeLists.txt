@@ -16,5 +16,3 @@ set(weather-desktop_QML
  )
 
 install(FILES ${weather-desktop_QML}  DESTINATION  ${DATA_INSTALL_DIR}/weather-desktop/qml/)
-
-add_subdirectory(images)

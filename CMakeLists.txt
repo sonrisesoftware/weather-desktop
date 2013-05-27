@@ -12,9 +12,10 @@ include_directories( ${KDE4_INCLUDES} ${QT_INCLUDES} )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-#add_subdirectory( doc )
-add_subdirectory( src )
-add_subdirectory( icons )
+#add_subdirectory(doc)
+add_subdirectory(src)
+add_subdirectory(icons)
+add_subdirectory(images)
 
 set(CPACK_GENERATOR "DEB" "TGZ")
 set(CPACK_PACKAGE_NAME "weather-desktop")

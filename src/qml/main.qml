@@ -31,9 +31,11 @@ Rectangle {
 		id: style
 	}
 	
+	property alias background: backgroundImage.source
+	
 	Image {
-		id: background
-		source: "images/weather-clear.jpg"
+		id: backgroundImage
+		source: WeatherApp.currentLocation.conditions.image
 		anchors.fill: parent
 	}
 	
