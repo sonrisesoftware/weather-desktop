@@ -35,6 +35,8 @@
 #include <KDE/KActionCollection>
 #include <KDE/KMenuBar>
 #include <KDE/KInputDialog>
+#include <KDE/KConfigDialog>
+#include <KDE/KHelpMenu>
 
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
@@ -42,6 +44,7 @@ WeatherDesktop::WeatherDesktop()
 	setupActions();
 	
 	setupGUI();
+	setupMenu();
 	loadSettings();
 	
 	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
@@ -87,6 +90,7 @@ WeatherDesktop::~WeatherDesktop()
 void WeatherDesktop::setupActions()
 {
 	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
+	KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
 }
 
 void WeatherDesktop::onImplicitWidthChanged()
@@ -153,6 +157,56 @@ void WeatherDesktop::saveSettings()
 	
 	Settings::self()->writeConfig();
 }
+
+void WeatherDesktop::setupMenu()
+{
+	m_menu = new KMenu(this);
+	m_menu->setTitle("Weather Desktop");
+	
+	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
+	m_menu->addSeparator();
+	KHelpMenu* helpMenu = new KHelpMenu(m_menu, KCmdLineArgs::aboutData(), false, actionCollection());
+	m_menu->addMenu(helpMenu->menu());
+}
+
+
+void WeatherDesktop::showMenu(int x, int y)
+{
+	m_menu->popup(m_view->mapToGlobal(QPoint(x, y)));
+}
+
+
+void WeatherDesktop::showSettingsDialog()
+{
+	// An instance of your dialog could be already created and could be
+	// cached, in which case you want to display the cached dialog 
+	// instead of creating another one
+	if (KConfigDialog::showDialog("settings"))
+		return; 
+	
+	// KConfigDialog didn't find an instance of this dialog, so lets
+	// create it : 
+	KConfigDialog* dialog = new KConfigDialog(this, "settings", Settings::self());
+	dialog->setFaceType(KPageDialog::List);
+	dialog->setModal(true);
+	
+	QWidget *generalPage = new QWidget(dialog);	
+	dialog->addPage(generalPage, i18n("General"), "configure", i18n("General Settings")); 
+	
+	// User edited the configuration - update your local copies of the 
+	// configuration data 
+	//connect(dialog, SIGNAL(settingsChanged()), 
+	//		this, SLOT(updateConfiguration())); 
+	
+	dialog->show();
+}
+
+void WeatherDesktop::updateConfiguration()
+{
+	
+}
+
+
 
 Weather::Location *WeatherDesktop::addLocation(const QString& name, const QString& location)
 {
