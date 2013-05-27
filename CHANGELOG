@@ -1,3 +1,10 @@
+weather-desktop (0.2.3); urgency=low
+
+ * Fixed #29 - Added mini menu and empty configuration dialog
+
+-- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 17:23:07 -0500
+
+
 weather-desktop (0.2.2); urgency=low
 
  * Fixed #30 - Access times are now stored in UTC
