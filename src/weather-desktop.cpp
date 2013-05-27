@@ -171,6 +171,7 @@ void WeatherDesktop::setupMenu()
 {
 	m_menu = new KMenu(this);	
 	
+	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Quit)));
 	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::FullScreen)));
 	m_menu->addSeparator();
 	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
