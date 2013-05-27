@@ -124,7 +124,17 @@ Rectangle {
 				
 				Item {
 					height: parent.height
-					width: parent.width - nowButton.width - dailyButton.width - configureButton.width - (parent.children.length - 1) * parent.spacing
+					width: parent.width - nowButton.width - dailyButton.width
+							- searchField.width - configureButton.width
+							- (parent.children.length - 1) * parent.spacing
+				}
+				
+				PlasmaWidgets.LineEdit {
+					id: searchField;
+					
+					clickMessage: i18n("Search...")
+					clearButtonShown: true
+					onReturnPressed: WeatherApp.setLocation(text)
 				}
 				
 				PlasmaComponents.ToolButton {
@@ -238,29 +248,14 @@ Rectangle {
 		}
 		
 		width: 200
-	
-		PlasmaWidgets.LineEdit {
-			id: searchBox;
-			anchors {
-				top: parent.top;
-				topMargin: 5;
-				left: parent.left
-				leftMargin: 5;
-				right: parent.right;
-				rightMargin: 5;
-			}
-			clickMessage: i18n("Search...")
-			clearButtonShown: true
-			onReturnPressed: WeatherApp.setLocation(text)
-		}
 		
 		List {
 			id: list
 			
 			anchors {
 				left: parent.left;
-				top: searchBox.bottom;
-				topMargin: 5;
+				top: parent.top;
+				//topMargin: 5;
 				right: parent.right;
 				bottom: listActions.top;
 				bottomMargin: 5;
