@@ -37,6 +37,7 @@
 #include <KDE/KInputDialog>
 #include <KDE/KConfigDialog>
 #include <KDE/KHelpMenu>
+#include <KDE/KToggleFullScreenAction>
 
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
@@ -77,6 +78,7 @@ WeatherDesktop::WeatherDesktop()
 	
 	setCentralWidget(m_view);
 	
+	//menuBar()->setHidden(false); // For debugging only!!!
 	menuBar()->setHidden(true);
 	
 	Application::setWindow(this);
@@ -91,6 +93,7 @@ void WeatherDesktop::setupActions()
 {
 	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
 	KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
+	KStandardAction::fullScreen(this, SLOT(setFullScreen(bool)), this, actionCollection());
 }
 
 void WeatherDesktop::onImplicitWidthChanged()
@@ -158,11 +161,18 @@ void WeatherDesktop::saveSettings()
 	Settings::self()->writeConfig();
 }
 
+void WeatherDesktop::setFullScreen(bool fullScreen)
+{
+	KToggleFullScreenAction::setFullScreen(this, fullScreen);
+}
+
+
 void WeatherDesktop::setupMenu()
 {
-	m_menu = new KMenu(this);
-	m_menu->setTitle("Weather Desktop");
+	m_menu = new KMenu(this);	
 	
+	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::FullScreen)));
+	m_menu->addSeparator();
 	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
 	m_menu->addSeparator();
 	KHelpMenu* helpMenu = new KHelpMenu(m_menu, KCmdLineArgs::aboutData(), false, actionCollection());

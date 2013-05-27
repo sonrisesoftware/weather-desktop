@@ -80,6 +80,7 @@ private slots:
 	void saveSettings();
 	void showSettingsDialog();
 	void updateConfiguration();
+	void setFullScreen(bool fullScreen);
 	
 #include "weather-desktop.gen"
 };
