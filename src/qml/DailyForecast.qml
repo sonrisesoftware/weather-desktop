@@ -66,10 +66,8 @@ Panel {
 				text: today ? "Today" : Qt.formatDate(modelData.time, "dddd")
 				property bool today: Qt.formatDate(modelData.time) == Qt.formatDate(new Date())
 				
-				font.pixelSize: appStyle.dataFontSize
+				font.pixelSize: appStyle.headerFontSize
 				color: appStyle.textColor
-				
-				//wrapMode: Text.Wrap
 				
 				anchors {
 					topMargin: 10

@@ -48,7 +48,7 @@ Rectangle {
 	property alias temp: temp.text;
 	property alias weather: weather.text;
 	property alias iconForecast: iconForecast.source;
-	property alias tempForecast: tempForecast.text;
+	//property alias tempForecast: tempForecast.text;
 	property alias weatherForecast: weatherForecast.text;
 	
 	property bool alert: false;
@@ -147,9 +147,12 @@ Rectangle {
 				left: icon.right;
 				leftMargin: 10;
 				top: parent.verticalCenter;
+				right: parent.right;
+				rightMargin: 10;
 			}
 			
 			font.pixelSize: appStyle.headerFontSize - 2;
+			elide: Text.ElideRight;
 			color: textColor;
 		}
 	}
@@ -176,7 +179,7 @@ Rectangle {
 			}
 		}
 		
-		Text {
+		/*Text {
 			id: tempForecast
 			
 			anchors {
@@ -187,7 +190,7 @@ Rectangle {
 			
 			font.pixelSize: appStyle.titleFontSize;
 			color: textColor;
-		}
+		}*/
 		
 		Text {
 			id: weatherForecast
@@ -195,11 +198,18 @@ Rectangle {
 			anchors {
 				left: iconForecast.right;
 				leftMargin: 10;
-				top: parent.verticalCenter;
+				right: parent.right;
+				rightMargin: 10;
+				//top: iconForecast.top;//parent.verticalCenter;
+				//bottom: iconForecast.bottom;
+				verticalCenter: iconForecast.verticalCenter;
 			}
 			
 			font.pixelSize: appStyle.headerFontSize - 2;
 			color: textColor;
+			//elide: Text.ElideRight;
+			wrapMode: Text.Wrap;
+			textFormat: Text.PlainText
 		}
 	}
 	

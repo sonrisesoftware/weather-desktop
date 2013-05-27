@@ -46,10 +46,12 @@ WeatherDesktop::WeatherDesktop()
 	
 	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
 		initialSetup();
-	} else if (Weather::Location::cache()->recent().length() > 0) {
+	} else if (locations().length() > 0) {
+		setCurrentLocation((Weather::Location *) locations()[0]);
+	} else if(Weather::Location::cache()->recent().length() > 0) {
 		setLocation(Weather::Location::cache()->recent()[0]);
 	} else {
-		setCurrentLocation((Weather::Location *) locations()[0]);
+		setLocation("St. Louis, MO");
 	}
 	
 	m_view = new QDeclarativeView(this);
