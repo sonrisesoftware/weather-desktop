@@ -23,7 +23,7 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
-	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40) + listPanel.width;
+	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
 	//implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
 	implicitHeight: topToolBar.height + Math.max(creditsText.height, lastUpdatedText.height) + 5
 			+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
@@ -38,7 +38,7 @@ Rectangle {
 		anchors.fill: parent
 	}
 	
-	Rectangle {
+	/*Rectangle {
 		width: 1
 		anchors {
 			top: parent.top
@@ -47,12 +47,12 @@ Rectangle {
 		}
 		
 		color: appStyle.borderColor
-	}
+	}*/
 	
 	Item {
 		id: content
 		anchors {
-			left: listPanel.right;
+			left: parent.left;
 			top: parent.top;
 			bottom: parent.bottom;
 			right: parent.right;
@@ -203,6 +203,42 @@ Rectangle {
 				anchors.rightMargin: 3
 				spacing: 5
 				
+				ListView {
+					id: list
+					
+					height: 100
+					width: parent.width
+							- listActions.width
+							- (parent.children.length - 1) * parent.spacing
+					
+					orientation: ListView.Horizontal
+					
+					spacing: 5
+					model: WeatherApp.locations;
+					delegate: tileitem;
+					
+					focus: true
+				}
+				
+				Column {
+					id: listActions
+					
+					spacing: 5
+					
+					PlasmaComponents.ToolButton {
+						iconSource: "list-add"
+						text: i18n("Add")
+						onClicked: WeatherApp.addCurrentLocation()
+						width: minimumWidth + 5
+					}
+					
+					PlasmaComponents.ToolButton {
+						iconSource: "list-remove"
+						text: i18n("Delete")
+						onClicked: WeatherApp.removeCurrentLocation()
+						width: minimumWidth + 5
+					}
+				}
 			}
 		}
 	}
@@ -240,67 +276,6 @@ Rectangle {
 				//tempForecast: modelData.dailyForecast.at(0).temperatureMax;
 				iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
 				weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
-			}
-		}
-	}
-	
-	Rectangle {
-		id: listPanel
-		//color: "#3e3d39"
-		color: appStyle.panelColor
-		anchors {
-			left: root.left;
-			top: root.top;
-			bottom: root.bottom;
-		}
-		
-		width: 200
-		
-		List {
-			id: list
-			
-			anchors {
-				left: parent.left;
-				top: parent.top;
-				//topMargin: 5;
-				right: parent.right;
-				bottom: listActions.top;
-				bottomMargin: 5;
-			}
-			
-			spacing: -1
-			model: WeatherApp.locations;
-			delegate: tileitem;
-			
-			focus: true
-		}
-		
-		Row {
-			id: listActions
-			anchors {
-				//left: parent.left;
-				//leftMargin: 5;
-				//right: parent.right;
-				//rightMargin: 5;
-				bottom: parent.bottom;
-				bottomMargin: 5;
-				horizontalCenter: parent.horizontalCenter
-			}
-			
-			spacing: 5
-			
-			PlasmaComponents.ToolButton {
-				iconSource: "list-add"
-				text: i18n("Add")
-				onClicked: WeatherApp.addCurrentLocation()
-				width: minimumWidth + 5
-			}
-			
-			PlasmaComponents.ToolButton {
-				iconSource: "list-remove"
-				text: i18n("Delete")
-				onClicked: WeatherApp.removeCurrentLocation()
-				width: minimumWidth + 5
 			}
 		}
 	}
