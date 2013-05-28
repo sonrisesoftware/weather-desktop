@@ -63,7 +63,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	refresh();
 	// Connect slots
 	QObject::connect(this, SIGNAL(locationChanged(QString)), SLOT(onLocationChanged()));
-	QObject::connect(&s_units, SIGNAL(unitsChanged()), this, SIGNAL(refreshed()));
+	QObject::connect(&s_units, SIGNAL(unitsChanged()), this, SIGNAL(refresh()));
 	// TODO: Add to global list (if there is one)
 }
 
@@ -74,6 +74,8 @@ Weather::Location::~Location()
 
 void Weather::Location::refresh()
 {
+	if (isRefreshing()) return;
+	
 	if (location().isEmpty())
 		setDisplay(i18nc("@label", "Auto IP"));
 	else

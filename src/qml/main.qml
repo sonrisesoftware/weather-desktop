@@ -105,6 +105,7 @@ Rectangle {
 				spacing: 5
 
 				PlasmaComponents.ToolButton {
+					id: nowButton
 					iconSource: "arrow-down-double"
 					text: i18n("Now")
 					width: minimumWidth + 5
@@ -125,6 +126,7 @@ Rectangle {
 				}*/
 				
 				PlasmaComponents.ToolButton {
+					id: dailyButton
 					iconSource: "view-calendar-day"
 					text: i18n("Daily")
 					width: minimumWidth + 5
@@ -132,6 +134,20 @@ Rectangle {
 						weatherView.view = "daily"
 					}
 					checked: weatherView.view == "daily"
+				}
+				
+				Item {
+					height: parent.height
+					width: parent.width - nowButton.width - dailyButton.width - configureButton.width - (parent.children.length - 1) * parent.spacing
+				}
+				
+				PlasmaComponents.ToolButton {
+					id: configureButton
+					iconSource: "configure"
+					onClicked: {
+						var position = mapToItem(null, 0, height)
+						WeatherApp.showMenu(position.x, position.y)
+					}
 				}
 			}
 		}
@@ -219,8 +235,8 @@ Rectangle {
 				weather: modelData.conditions.summary;
 				
 				//tempForecast: modelData.dailyForecast.at(0).temperatureMax;
-				iconForecast: modelData.dailyForecast.at(0).icon;
-				weatherForecast: modelData.dailyForecast.at(0).summary;
+				iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
+				weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
 			}
 		}
 	}

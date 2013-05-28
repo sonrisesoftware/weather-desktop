@@ -23,6 +23,7 @@
 
 #include <QDeclarativeView>
 #include <KDE/KXmlGuiWindow>
+#include <KDE/KMenu>
 
 /**
  * This class serves as the main window for WeatherDesktop.  It handles the
@@ -63,17 +64,23 @@ public slots:
 	void addCurrentLocation();
 	void removeCurrentLocation();
 	void setLocation(const QString& location);
+	void showMenu(int x, int y);
 	
 private:
 	void setupActions();
+	void setupMenu();
 	
-	QDeclarativeView *m_view = 0;
+	QDeclarativeView *m_view = nullptr;
+	KMenu *m_menu = nullptr;
 	
 private slots:
 	void onImplicitWidthChanged();
 	void onImplicitHeightChanged();
 	void loadSettings();
 	void saveSettings();
+	void showSettingsDialog();
+	void updateConfiguration();
+	void setFullScreen(bool fullScreen);
 	
 #include "weather-desktop.gen"
 };

@@ -1,3 +1,19 @@
+weather-desktop (0.2.4); urgency=low
+
+ * Fixed #35 - Fixed the way changing the units works so the units can be
+   changed even before weather is actually refreshed
+ * Fixed #32 - Weather tiles update after weather refreshes
+
+-- Michael Spencer <spencers1993@gmail.com> Mon, 27 May 2013 17:51:29 -0500
+
+
+weather-desktop (0.2.3); urgency=low
+
+ * Fixed #29 - Added mini menu and empty configuration dialog
+
+-- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 17:23:07 -0500
+
+
 weather-desktop (0.2.2); urgency=low
 
  * Fixed #30 - Access times are now stored in UTC
