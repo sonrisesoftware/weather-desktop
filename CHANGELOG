@@ -1,10 +1,18 @@
+weather-desktop (0.2.5); urgency=low
+
+ * Redesigned UI
+ * Fixed bug in Forecast's data block code
+ 
+-- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 20:39:07 -0500
+
+
 weather-desktop (0.2.4); urgency=low
 
  * Fixed #35 - Fixed the way changing the units works so the units can be
    changed even before weather is actually refreshed
  * Fixed #32 - Weather tiles update after weather refreshes
 
--- Michael Spencer <spencers1993@gmail.com> Mon, 27 May 2013 17:51:29 -0500
+-- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 17:51:29 -0500
 
 
 weather-desktop (0.2.3); urgency=low
