@@ -35,7 +35,8 @@ Rectangle {
 	
 	Image {
 		id: backgroundImage
-		source: WeatherApp.currentLocation.conditions.image
+		source: WeatherApp.currentLocation.conditions.image == "" ?
+				"../images/weather-clear.jpg" : WeatherApp.currentLocation.conditions.image
 		anchors.fill: parent
 	}
 	
