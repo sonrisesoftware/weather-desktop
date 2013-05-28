@@ -52,6 +52,7 @@ Panel {
 				opacity: 0.5
 				height: parent.height	
 				width: 1
+				color: appStyle.borderColor
 				//orientation: Qt.Vertical
 				anchors {
 					right: dayItem.right
@@ -64,10 +65,14 @@ Panel {
 				//width: parent.width - 10
 				
 				text: today ? "Today" : Qt.formatDate(modelData.time, "dddd")
+				//font.bold: true
 				property bool today: Qt.formatDate(modelData.time) == Qt.formatDate(new Date())
 				
 				font.pixelSize: appStyle.headerFontSize
 				color: appStyle.textColor
+				
+				style: Text.Raised
+				styleColor: appStyle.shadowColor
 				
 				anchors {
 					topMargin: 10
@@ -121,8 +126,11 @@ Panel {
 					anchors.centerIn: parent
 					
 					text: modelData.temperatureMin
-					font.pixelSize: appStyle.dataFontSize
-					color: appStyle.textColor
+					font.pixelSize: appStyle.dataFontSize + 2
+					color: "#217ecd"//appStyle.textColor
+					
+					style: Text.Raised
+					styleColor: appStyle.shadowColor
 				}
 			}
 			
@@ -143,8 +151,11 @@ Panel {
 					anchors.centerIn: parent
 					
 					text: modelData.temperatureMax
-					font.pixelSize: appStyle.dataFontSize + 10
-					color: appStyle.textColor
+					font.pixelSize: appStyle.dataFontSize + 8
+					color: "#c31f1f"//appStyle.textColor
+					
+					style: Text.Raised
+					styleColor: appStyle.shadowColor
 				}
 			}
 			
@@ -155,6 +166,9 @@ Panel {
 				text: modelData.precip
 				font.pixelSize: appStyle.dataFontSize
 				color: appStyle.textColor
+				
+				style: Text.Raised
+				styleColor: appStyle.shadowColor
 				
 				//wrapMode: Text.Wrap
 				

@@ -36,6 +36,8 @@ Item {
 		id: label
 		x: root.indent;
 		color: root.parent.color;
+		style: Text.Raised
+		styleColor: appStyle.shadowColor
 		font.pixelSize: root.parent.fontSize;
 	}
 	
@@ -44,6 +46,8 @@ Item {
 		
 		x: root.parent.align
 		color: root.parent.color;
+		style: Text.Raised
+		styleColor: appStyle.shadowColor
 		font.pixelSize: root.parent.fontSize;
 	}
 }

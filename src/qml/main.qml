@@ -23,9 +23,10 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
-	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40) + listPanel.width;
+	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
 	//implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
-	implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
+	implicitHeight: topToolBar.height + Math.max(creditsText.height, lastUpdatedText.height) + 5
+			+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property variant appStyle: Style {
 		id: style
@@ -37,7 +38,7 @@ Rectangle {
 		anchors.fill: parent
 	}
 	
-	Rectangle {
+	/*Rectangle {
 		width: 1
 		anchors {
 			top: parent.top
@@ -46,12 +47,12 @@ Rectangle {
 		}
 		
 		color: appStyle.borderColor
-	}
+	}*/
 	
 	Item {
 		id: content
 		anchors {
-			left: listPanel.right;
+			left: parent.left;
 			top: parent.top;
 			bottom: parent.bottom;
 			right: parent.right;
@@ -59,7 +60,7 @@ Rectangle {
 		
 		WeatherHeader {
 			id: header
-			anchors.top: topToolBar.bottom
+			anchors.top: lastUpdatedText.bottom
 			//anchors.top: parent.top
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.topMargin: 20
@@ -83,12 +84,30 @@ Rectangle {
 		
 		PlasmaComponents.ToolBar {
 			id: topToolBar
-			//width: parent.width
 			
 			tools: Row {
-				anchors.leftMargin: 3
-				anchors.rightMargin: 3
+				//anchors.leftMargin: 3
+				//anchors.rightMargin: 3
 				spacing: 5
+				
+				PlasmaComponents.ToolButton {
+					id: refreshButton
+					//iconSource: (WeatherApp.currentLocation.refreshing) ?"process-stop" : "view-refresh"
+					iconSource: "view-refresh"
+					//text: (WeatherApp.currentLocation.refreshing) ? i18n("Stop") : i18n("Refresh")
+					text: i18n("Refresh")
+					onClicked: WeatherApp.currentLocation.refresh()
+					//onClicked: (WeatherApp.currentLocation.refreshing) ? 
+					//		WeatherApp.currentLocation.cancelRefresh() : WeatherApp.currentLocation.refresh()
+					width: minimumWidth + 5
+					//visible: WeatherApp.currentLocation.needsRefresh || WeatherApp.currentLocation.refreshing
+				}
+				
+				PlasmaWidgets.Separator {
+					id: refreshSeparator
+					height: parent.height
+					orientation: Qt.Vertical
+				}
 
 				PlasmaComponents.ToolButton {
 					id: nowButton
@@ -124,7 +143,19 @@ Rectangle {
 				
 				Item {
 					height: parent.height
-					width: parent.width - nowButton.width - dailyButton.width - configureButton.width - (parent.children.length - 1) * parent.spacing
+					width: parent.width - refreshButton.width
+							- refreshSeparator.width
+							- nowButton.width - dailyButton.width
+							- searchField.width - configureButton.width
+							- (parent.children.length - 1) * parent.spacing
+				}
+				
+				PlasmaWidgets.LineEdit {
+					id: searchField;
+					
+					clickMessage: i18n("Search...")
+					clearButtonShown: true
+					onReturnPressed: WeatherApp.setLocation(text)
 				}
 				
 				PlasmaComponents.ToolButton {
@@ -138,52 +169,87 @@ Rectangle {
 			}
 		}
 		
+		Text {
+			id: lastUpdatedText
+			
+			anchors {
+				top: topToolBar.bottom
+				margins: 5
+				left: parent.left
+			}
+			
+			text: i18nc("The time the weather was last downloaded", 
+						"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+		}
+		
+		Text {
+			id: creditsText
+			
+			anchors {
+				top: topToolBar.bottom
+				margins: 5
+				right: parent.right
+			}
+			
+			text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
+			textFormat: Text.RichText;
+			onLinkActivated: {
+				Qt.openUrlExternally(link)
+			}
+		}
+		
 		PlasmaComponents.ToolBar {
 			id: bottomToolBar
-			width: tools.implicitWidth + 10
+			//width: parent.width
+			
 			anchors.bottom: parent.bottom
 			
 			tools: Row {
 				anchors.leftMargin: 3
 				anchors.rightMargin: 3
 				spacing: 5
-
-				PlasmaComponents.ToolButton {
-					id: refreshButton
-					iconSource: (WeatherApp.currentLocation.refreshing) ?"process-stop" : "view-refresh"
-					text: (WeatherApp.currentLocation.refreshing) ? i18n("Stop") : i18n("Refresh")
-					onClicked: (WeatherApp.currentLocation.refreshing) ? 
-							WeatherApp.currentLocation.stopRefresh() : WeatherApp.currentLocation.refresh()
-					width: minimumWidth + 5
-					opacity: (WeatherApp.currentLocation.needsRefresh) ? 1 : 0
+				
+				ListView {
+					id: list
+					
+					height: 100
+					width: parent.width
+							- listActions.width - actionsSeparator.width
+							- (parent.children.length - 1) * parent.spacing
+					
+					orientation: ListView.Horizontal
+					
+					spacing: 5
+					model: WeatherApp.locations;
+					delegate: tileitem;
+					
+					focus: true
 				}
 				
-				Text {
-					id: lastUpdatedText
-					text: i18nc("The time the weather was last downloaded", 
-								"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
-					opacity: (WeatherApp.currentLocation.needsRefresh) ? 0 : 1
+				PlasmaWidgets.Separator {
+					id: actionsSeparator
+					height: parent.height
+					orientation: Qt.Vertical
 				}
-			}
-		}
-		
-		PlasmaComponents.ToolBar {
-			id: creditsToolBar
-			width: tools.implicitWidth + 15
-			anchors.bottom: parent.bottom;
-			anchors.right: parent.right;
-			
-			tools: Row {
-				anchors.leftMargin: 3
-				anchors.rightMargin: 3
-				spacing: 5
 				
-				Text {
-					id: creditsText
-					text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
-					textFormat: Text.RichText;
-					onLinkActivated: {
-						Qt.openUrlExternally(link)
+				Column {
+					id: listActions
+					anchors.verticalCenter: parent.verticalCenter
+					
+					spacing: 20
+					
+					PlasmaComponents.ToolButton {
+						iconSource: "list-add"
+						//text: i18n("Add")
+						onClicked: WeatherApp.addCurrentLocation()
+						//width: minimumWidth + 5
+					}
+					
+					PlasmaComponents.ToolButton {
+						iconSource: "edit-delete"
+						//text: i18n("Delete")
+						onClicked: WeatherApp.removeCurrentLocation()
+						//width: minimumWidth + 5
 					}
 				}
 			}
@@ -223,82 +289,6 @@ Rectangle {
 				//tempForecast: modelData.dailyForecast.at(0).temperatureMax;
 				iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
 				weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
-			}
-		}
-	}
-	
-	Rectangle {
-		id: listPanel
-		//color: "#3e3d39"
-		color: appStyle.panelColor
-		anchors {
-			left: root.left;
-			top: root.top;
-			bottom: root.bottom;
-		}
-		
-		width: 200
-	
-		PlasmaWidgets.LineEdit {
-			id: searchBox;
-			anchors {
-				top: parent.top;
-				topMargin: 5;
-				left: parent.left
-				leftMargin: 5;
-				right: parent.right;
-				rightMargin: 5;
-			}
-			clickMessage: i18n("Search...")
-			clearButtonShown: true
-			onReturnPressed: WeatherApp.setLocation(text)
-		}
-		
-		List {
-			id: list
-			
-			anchors {
-				left: parent.left;
-				top: searchBox.bottom;
-				topMargin: 5;
-				right: parent.right;
-				bottom: listActions.top;
-				bottomMargin: 5;
-			}
-			
-			spacing: -1
-			model: WeatherApp.locations;
-			delegate: tileitem;
-			
-			focus: true
-		}
-		
-		Row {
-			id: listActions
-			anchors {
-				//left: parent.left;
-				//leftMargin: 5;
-				//right: parent.right;
-				//rightMargin: 5;
-				bottom: parent.bottom;
-				bottomMargin: 5;
-				horizontalCenter: parent.horizontalCenter
-			}
-			
-			spacing: 5
-			
-			PlasmaComponents.ToolButton {
-				iconSource: "list-add"
-				text: i18n("Add")
-				onClicked: WeatherApp.addCurrentLocation()
-				width: minimumWidth + 5
-			}
-			
-			PlasmaComponents.ToolButton {
-				iconSource: "list-remove"
-				text: i18n("Delete")
-				onClicked: WeatherApp.removeCurrentLocation()
-				width: minimumWidth + 5
 			}
 		}
 	}

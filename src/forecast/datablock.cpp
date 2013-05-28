@@ -42,14 +42,14 @@ void Block::load()
 	
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	
-	QVariantList list = data["data"].toList();
-			
-	while (!this->data().isEmpty()) {
-		this->data().takeFirst()->deleteLater();
+	QVariantList list = data["data"].toList();	
+	
+	while (this->data().length() > list.length()) {
+		this->data().takeLast()->deleteLater();
 	}
 	
-	for (int i = 0; i < list.length(); i++) {
-		Point *point = new Point(location(), path() + ".data." + QString::number(i));
+	while (this->data().length() < list.length()) {
+		Point *point = new Point(location(), path() + ".data." + QString::number(this->data().length()));
 		point->load();
 		this->data().append(point);
 	}
