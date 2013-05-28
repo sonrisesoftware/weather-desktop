@@ -28,6 +28,7 @@ Point::Point(Weather::Location *location, const QString& path): QObject(location
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
 	setPath(path);
+	setObjectName(path);
 }
 
 Point::~Point()
@@ -72,6 +73,7 @@ void Point::load()
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	
 	foreach(const QString& item, data.keys()) {
+		Q_ASSERT(item != "location");
 		if (property(qPrintable(item)).type() == QVariant::DateTime) {
 			// Time properties are represented by the seconds since the UNIX epoch
             setProperty(qPrintable(item), QDateTime::fromMSecsSinceEpoch(data[item].toLongLong() * 1000).toUTC());

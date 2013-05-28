@@ -63,7 +63,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	refresh();
 	// Connect slots
 	QObject::connect(this, SIGNAL(locationChanged(QString)), SLOT(onLocationChanged()));
-	QObject::connect(&s_units, SIGNAL(unitsChanged()), this, SIGNAL(refresh()));
+	QObject::connect(&s_units, SIGNAL(unitsChanged()), this, SLOT(refresh()));
 	// TODO: Add to global list (if there is one)
 }
 

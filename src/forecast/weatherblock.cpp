@@ -46,7 +46,7 @@ void Forecast::WeatherBlock::refresh()
 	setIcon(Forecast::Forecast::icon(data()->icon()));
 	
 	while (data()->data().length() < items().length()) {
-		items().removeLast();
+		items().takeLast()->deleteLater();
 	}
 	
 	while (data()->data().length() > items().length()) {
