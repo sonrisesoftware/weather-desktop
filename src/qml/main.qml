@@ -25,7 +25,8 @@ Rectangle {
 	id: root
 	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40) + listPanel.width;
 	//implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + 60;
-	implicitHeight: topToolBar.height + header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
+	implicitHeight: topToolBar.height + Math.max(creditsText.height, lastUpdatedText.height) + 5
+			+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property variant appStyle: Style {
 		id: style
@@ -59,7 +60,7 @@ Rectangle {
 		
 		WeatherHeader {
 			id: header
-			anchors.top: topToolBar.bottom
+			anchors.top: lastUpdatedText.bottom
 			//anchors.top: parent.top
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.topMargin: 20
@@ -89,6 +90,16 @@ Rectangle {
 				anchors.leftMargin: 3
 				anchors.rightMargin: 3
 				spacing: 5
+				
+				PlasmaComponents.ToolButton {
+					id: refreshButton
+					iconSource: (WeatherApp.currentLocation.refreshing) ?"process-stop" : "view-refresh"
+					text: (WeatherApp.currentLocation.refreshing) ? i18n("Stop") : i18n("Refresh")
+					onClicked: (WeatherApp.currentLocation.refreshing) ? 
+							WeatherApp.currentLocation.stopRefresh() : WeatherApp.currentLocation.refresh()
+					width: minimumWidth + 5
+					//visible: WeatherApp.currentLocation.needsRefresh || WeatherApp.currentLocation.refreshing
+				}
 
 				PlasmaComponents.ToolButton {
 					id: nowButton
@@ -124,7 +135,8 @@ Rectangle {
 				
 				Item {
 					height: parent.height
-					width: parent.width - nowButton.width - dailyButton.width
+					width: parent.width - refreshButton.width
+							- nowButton.width - dailyButton.width
 							- searchField.width - configureButton.width
 							- (parent.children.length - 1) * parent.spacing
 				}
@@ -148,54 +160,46 @@ Rectangle {
 			}
 		}
 		
+		Text {
+			id: lastUpdatedText
+			
+			anchors {
+				top: topToolBar.bottom
+				margins: 5
+				left: parent.left
+			}
+			
+			text: i18nc("The time the weather was last downloaded", 
+						"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+		}
+		
+		Text {
+			id: creditsText
+			
+			anchors {
+				top: topToolBar.bottom
+				margins: 5
+				right: parent.right
+			}
+			
+			text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
+			textFormat: Text.RichText;
+			onLinkActivated: {
+				Qt.openUrlExternally(link)
+			}
+		}
+		
 		PlasmaComponents.ToolBar {
 			id: bottomToolBar
-			width: tools.implicitWidth + 10
+			//width: parent.width
+			
 			anchors.bottom: parent.bottom
 			
 			tools: Row {
 				anchors.leftMargin: 3
 				anchors.rightMargin: 3
 				spacing: 5
-
-				PlasmaComponents.ToolButton {
-					id: refreshButton
-					iconSource: (WeatherApp.currentLocation.refreshing) ?"process-stop" : "view-refresh"
-					text: (WeatherApp.currentLocation.refreshing) ? i18n("Stop") : i18n("Refresh")
-					onClicked: (WeatherApp.currentLocation.refreshing) ? 
-							WeatherApp.currentLocation.stopRefresh() : WeatherApp.currentLocation.refresh()
-					width: minimumWidth + 5
-					opacity: (WeatherApp.currentLocation.needsRefresh) ? 1 : 0
-				}
 				
-				Text {
-					id: lastUpdatedText
-					text: i18nc("The time the weather was last downloaded", 
-								"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
-					opacity: (WeatherApp.currentLocation.needsRefresh) ? 0 : 1
-				}
-			}
-		}
-		
-		PlasmaComponents.ToolBar {
-			id: creditsToolBar
-			width: tools.implicitWidth + 15
-			anchors.bottom: parent.bottom;
-			anchors.right: parent.right;
-			
-			tools: Row {
-				anchors.leftMargin: 3
-				anchors.rightMargin: 3
-				spacing: 5
-				
-				Text {
-					id: creditsText
-					text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
-					textFormat: Text.RichText;
-					onLinkActivated: {
-						Qt.openUrlExternally(link)
-					}
-				}
 			}
 		}
 	}
