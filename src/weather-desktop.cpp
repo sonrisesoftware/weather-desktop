@@ -34,6 +34,7 @@
 #include <KDE/KStandardAction>
 #include <KDE/KActionCollection>
 #include <KDE/KMenuBar>
+#include <KDE/KStatusBar>
 #include <KDE/KInputDialog>
 #include <KDE/KConfigDialog>
 #include <KDE/KHelpMenu>
@@ -80,6 +81,7 @@ WeatherDesktop::WeatherDesktop()
 	
 	//menuBar()->setHidden(false); // For debugging only!!!
 	menuBar()->setHidden(true);
+	statusBar()->setHidden(true);
 	
 	Application::setWindow(this);
 }

@@ -84,11 +84,10 @@ Rectangle {
 		
 		PlasmaComponents.ToolBar {
 			id: topToolBar
-			//width: parent.width
 			
 			tools: Row {
-				anchors.leftMargin: 3
-				anchors.rightMargin: 3
+				//anchors.leftMargin: 3
+				//anchors.rightMargin: 3
 				spacing: 5
 				
 				PlasmaComponents.ToolButton {
@@ -102,6 +101,12 @@ Rectangle {
 					//		WeatherApp.currentLocation.cancelRefresh() : WeatherApp.currentLocation.refresh()
 					width: minimumWidth + 5
 					//visible: WeatherApp.currentLocation.needsRefresh || WeatherApp.currentLocation.refreshing
+				}
+				
+				PlasmaWidgets.Separator {
+					id: refreshSeparator
+					height: parent.height
+					orientation: Qt.Vertical
 				}
 
 				PlasmaComponents.ToolButton {
@@ -139,6 +144,7 @@ Rectangle {
 				Item {
 					height: parent.height
 					width: parent.width - refreshButton.width
+							- refreshSeparator.width
 							- nowButton.width - dailyButton.width
 							- searchField.width - configureButton.width
 							- (parent.children.length - 1) * parent.spacing
@@ -208,7 +214,7 @@ Rectangle {
 					
 					height: 100
 					width: parent.width
-							- listActions.width
+							- listActions.width - actionsSeparator.width
 							- (parent.children.length - 1) * parent.spacing
 					
 					orientation: ListView.Horizontal
@@ -220,23 +226,30 @@ Rectangle {
 					focus: true
 				}
 				
+				PlasmaWidgets.Separator {
+					id: actionsSeparator
+					height: parent.height
+					orientation: Qt.Vertical
+				}
+				
 				Column {
 					id: listActions
+					anchors.verticalCenter: parent.verticalCenter
 					
-					spacing: 5
+					spacing: 20
 					
 					PlasmaComponents.ToolButton {
 						iconSource: "list-add"
-						text: i18n("Add")
+						//text: i18n("Add")
 						onClicked: WeatherApp.addCurrentLocation()
-						width: minimumWidth + 5
+						//width: minimumWidth + 5
 					}
 					
 					PlasmaComponents.ToolButton {
-						iconSource: "list-remove"
-						text: i18n("Delete")
+						iconSource: "edit-delete"
+						//text: i18n("Delete")
 						onClicked: WeatherApp.removeCurrentLocation()
-						width: minimumWidth + 5
+						//width: minimumWidth + 5
 					}
 				}
 			}

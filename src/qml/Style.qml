@@ -28,7 +28,9 @@ QtObject {
 	property color textColor: "white";
 	//property color panelColor: "#99333333";
 	property color panelColor: Qt.rgba(0.2,0.2,0.2,0.75);
-	property color borderColor: "white"
-	property color internalBorderColor: panelColor//Qt.lighter(panelColor, 2)
+	//property color borderColor: "white"
+	property color borderColor: Qt.darker(panelColor, 1.4)
+	//property color internalBorderColor: panelColor//Qt.lighter(panelColor, 2)
+	property color internalBorderColor: Qt.darker(panelColor, 1.4)
 	property int panelRadius: 6;
 }
