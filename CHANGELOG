@@ -1,3 +1,10 @@
+weather-desktop (0.2.6); urgency=low
+
+ * Added support for weather-based backgrounds
+ 
+-- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 21:10:09 -0500
+
+
 weather-desktop (0.2.5); urgency=low
 
  * Redesigned UI
