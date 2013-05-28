@@ -57,7 +57,6 @@ public:
 	Q_INVOKABLE Weather::Location* location(int index);
 	
 	Q_INVOKABLE void initialSetup();
-	Q_INVOKABLE void move_location(int to, int from, int n);
 	
 public slots:
 	Weather::Location *addLocation(const QString& name, const QString &location);
@@ -65,6 +64,7 @@ public slots:
 	void removeCurrentLocation();
 	void setLocation(const QString& location);
 	void showMenu(int x, int y);
+	void showError(const QString& error);
 	
 private:
 	void setupActions();

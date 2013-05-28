@@ -39,6 +39,8 @@
 #include <KDE/KConfigDialog>
 #include <KDE/KHelpMenu>
 #include <KDE/KToggleFullScreenAction>
+#include <Plasma/Dialog>
+#include <KMessageBox>
 
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
@@ -188,6 +190,10 @@ void WeatherDesktop::showMenu(int x, int y)
 	m_menu->popup(m_view->mapToGlobal(QPoint(x, y)));
 }
 
+void WeatherDesktop::showError(const QString& error)
+{
+	KMessageBox::error(this, error);
+}
 
 void WeatherDesktop::showSettingsDialog()
 {
@@ -276,19 +282,6 @@ Weather::Location* WeatherDesktop::location(QString name)
 	}
 	
 	return nullptr;
-}
-
-void WeatherDesktop::move_location(int to, int from, int n)
-{
-	QList<QObject *> list;
-	for (int i = 0; i < n; i++) {
-		list.append(locations().takeAt(from));
-	}
-	if (to - n < from) to -= n;
-	while (!list.isEmpty()) {
-		locations().insert(to, list[0]);
-	}
-	emit locationsChanged(locations());
 }
 
 Weather::Location* WeatherDesktop::location(int index)

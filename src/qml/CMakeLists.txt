@@ -1,7 +1,6 @@
 set(weather-desktop_QML
    main.qml
    DailyForecast.qml
-   ErrorDialog.qml
    Form.qml
    FormItem.qml
    FormHeader.qml
