@@ -39,6 +39,17 @@ Rectangle {
 		anchors.fill: parent
 	}
 	
+	/*Rectangle {
+		id: nightTimeShading
+		anchors.fill: parent
+		opacity: WeatherApp.currentLocation.day ? 0 : 1
+ 		color: Qt.rgba(0,0,0,0.7)
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
+	}*/
+	
 	Rectangle {
 		width: 1
 		anchors {
