@@ -93,10 +93,13 @@ Rectangle {
 				
 				PlasmaComponents.ToolButton {
 					id: refreshButton
-					iconSource: (WeatherApp.currentLocation.refreshing) ?"process-stop" : "view-refresh"
-					text: (WeatherApp.currentLocation.refreshing) ? i18n("Stop") : i18n("Refresh")
-					onClicked: (WeatherApp.currentLocation.refreshing) ? 
-							WeatherApp.currentLocation.stopRefresh() : WeatherApp.currentLocation.refresh()
+					//iconSource: (WeatherApp.currentLocation.refreshing) ?"process-stop" : "view-refresh"
+					iconSource: "view-refresh"
+					//text: (WeatherApp.currentLocation.refreshing) ? i18n("Stop") : i18n("Refresh")
+					text: i18n("Refresh")
+					onClicked: WeatherApp.currentLocation.refresh()
+					//onClicked: (WeatherApp.currentLocation.refreshing) ? 
+					//		WeatherApp.currentLocation.cancelRefresh() : WeatherApp.currentLocation.refresh()
 					width: minimumWidth + 5
 					//visible: WeatherApp.currentLocation.needsRefresh || WeatherApp.currentLocation.refreshing
 				}
