@@ -24,22 +24,13 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Rectangle {
 	id: root;
 	
-// 	color: selected || state == "mouse-over" ?
-// 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : "#ef7645") :
-// 			(alert ? Qt.rgba(0.75,0.25,0.25,1) : Qt.rgba(33/256,126/256,205/256,1))
-			
-	//color: selected || state == "mouse-over" ? "#ef7645" : //"white"
-	//		Qt.rgba(33/256,126/256,205/256,1)
-	color: selected || state == "mouse-over" ? appStyle.panelColor : "transparent"
-	
+	color: highlighted ? Qt.darker(appStyle.panelColor, 2) : appStyle.panelColor
+	border.color: appStyle.internalBorderColor;
 	property color textColor: appStyle.textColor;
-	//property color textColor: "black";
-			
+	
 	smooth: true
 	width: 200
 	height: 100
-	//border.color: "gray"
-	//radius: 3
 	
 	signal clicked
 	
@@ -53,30 +44,7 @@ Rectangle {
 	
 	property bool alert: false;
 	property bool selected: false;
-	
-	Rectangle {
-		height: 1
-		
-		color: appStyle.internalBorderColor;
-		
-		anchors {
-			left: parent.left
-			top: parent.top
-			right: parent.right
-		}
-	}
-	
-	Rectangle {
-		height: 1
-		
-		color: appStyle.internalBorderColor;
-		
-		anchors {
-			left: parent.left
-			bottom: parent.bottom
-			right: parent.right
-		}
-	}
+	property bool highlighted: selected || state == "mouse-over"
 	
 	Text {
 		id: title
@@ -90,6 +58,8 @@ Rectangle {
 		
 		font.pixelSize: appStyle.titleFontSize;
 		color: textColor;
+		style: Text.Raised
+		styleColor: appStyle.shadowColor
 	}
 	
 	PlasmaCore.IconItem {
@@ -138,6 +108,8 @@ Rectangle {
 			
 			font.pixelSize: appStyle.titleFontSize;
 			color: textColor;
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 		}
 		
 		Text {
@@ -154,6 +126,8 @@ Rectangle {
 			font.pixelSize: appStyle.headerFontSize - 2;
 			elide: Text.ElideRight;
 			color: textColor;
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 		}
 	}
 	
@@ -207,6 +181,8 @@ Rectangle {
 			
 			font.pixelSize: appStyle.headerFontSize - 2;
 			color: textColor;
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 			//elide: Text.ElideRight;
 			wrapMode: Text.Wrap;
 			textFormat: Text.PlainText

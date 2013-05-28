@@ -41,6 +41,9 @@ Rectangle {
 		color: appStyle.textColor;
 		font.pixelSize: appStyle.titleFontSize
 		
+		style: Text.Raised
+		styleColor: appStyle.shadowColor
+		
 		anchors { horizontalCenter: root.horizontalCenter; top: root.top; topMargin: 5 }
 	}
 	

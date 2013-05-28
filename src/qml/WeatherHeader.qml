@@ -28,7 +28,7 @@ Rectangle {
 	border.color: appStyle.borderColor;
 	radius: appStyle.panelRadius;
 	
-	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_refreshing
+	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_updating
 	property bool is_updating: (WeatherApp.currentLocation.refreshing == true)
 	property bool is_regular: !(is_error || is_updating)
 	
@@ -55,6 +55,8 @@ Rectangle {
 		opacity: (is_updating || is_error) ? 1 : 0
 		text: (root.name == "") ? root.location : (root.name + " - " + root.location)
 		color: appStyle.textColor
+		style: Text.Raised
+		styleColor: appStyle.shadowColor
 		font.pixelSize: appStyle.mainTitleFontSize
 	}
 	
@@ -72,6 +74,8 @@ Rectangle {
 		Text {
 			id: name
 			color: appStyle.textColor
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 			font.pixelSize: 20
 			opacity: root.name == "" ? 0 : 1
 			anchors {
@@ -84,6 +88,8 @@ Rectangle {
 		Text {
 			id: location
 			color: appStyle.textColor
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 			font.pixelSize: 16
 			opacity: root.name == "" ? 0 : 1
 			anchors {
@@ -96,6 +102,8 @@ Rectangle {
 		Text {
 			id: locationOnly
 			color: appStyle.textColor
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 			text: root.location
 			font.pixelSize: 18
 			opacity: (root.name == "") ? 1 : 0
@@ -109,6 +117,8 @@ Rectangle {
 		Text {
 			id: temp
 			color: appStyle.textColor
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 			font.pixelSize: 20
 			anchors {
 				bottom: regularView.verticalCenter
@@ -121,6 +131,8 @@ Rectangle {
 			id: weather
 			font.pixelSize: 16
 			color: appStyle.textColor
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 			anchors {
 				top: regularView.verticalCenter
 				left: icon.right

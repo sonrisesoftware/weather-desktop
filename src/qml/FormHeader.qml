@@ -26,4 +26,6 @@ Text {
 	property int align: 0;
 	font.pixelSize: root.parent.headerSize
 	color: root.parent.color
+	style: Text.Raised
+	styleColor: appStyle.shadowColor
 }

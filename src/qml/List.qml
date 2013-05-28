@@ -27,17 +27,19 @@ Item {
 	property alias model: list.model;
 	property alias delegate: list.delegate;
 	property alias spacing: list.spacing;
+	property alias orientation: list.orientation;
 	
 	ListView {
 		id: list
-		anchors {
+		anchors.fill
+		/*anchors {
 			left: parent.left;
 			top: parent.top;
 			topMargin: 5;
 			right: parent.right;
 			bottom: parent.bottom;
 			bottomMargin: 5;
-		}
+		}*/
 	}
 	
 	/*Rectangle {
