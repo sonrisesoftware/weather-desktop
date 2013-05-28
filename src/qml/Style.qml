@@ -32,5 +32,6 @@ QtObject {
 	property color borderColor: Qt.darker(panelColor, 1.4)
 	//property color internalBorderColor: panelColor//Qt.lighter(panelColor, 2)
 	property color internalBorderColor: Qt.darker(panelColor, 1.4)
+	property color shadowColor: Qt.rgba(0,0,0,0.75)
 	property int panelRadius: 6;
 }

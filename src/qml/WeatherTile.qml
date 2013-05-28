@@ -58,6 +58,8 @@ Rectangle {
 		
 		font.pixelSize: appStyle.titleFontSize;
 		color: textColor;
+		style: Text.Raised
+		styleColor: appStyle.shadowColor
 	}
 	
 	PlasmaCore.IconItem {
@@ -106,6 +108,8 @@ Rectangle {
 			
 			font.pixelSize: appStyle.titleFontSize;
 			color: textColor;
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 		}
 		
 		Text {
@@ -122,6 +126,8 @@ Rectangle {
 			font.pixelSize: appStyle.headerFontSize - 2;
 			elide: Text.ElideRight;
 			color: textColor;
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 		}
 	}
 	
@@ -175,6 +181,8 @@ Rectangle {
 			
 			font.pixelSize: appStyle.headerFontSize - 2;
 			color: textColor;
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
 			//elide: Text.ElideRight;
 			wrapMode: Text.Wrap;
 			textFormat: Text.PlainText
