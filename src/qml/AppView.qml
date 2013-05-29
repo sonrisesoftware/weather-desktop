@@ -27,20 +27,7 @@ Rectangle {
 	implicitHeight: topToolBar.height + Math.max(creditsText.height, lastUpdatedText.height) + 5
 			+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
-	property variant appStyle: Style {
-		id: style
-	}
-	
-	property url background: WeatherApp.currentLocation.conditions.image
-	
-	onBackgroundChanged: {
-		console.log("Background: NULL = " + (background == null) + " EMPTY = " + (background == ""));
-		if (background != "") {
-			backgroundImage.source = background
-		} else {
-			backgroundImage.source = "../images/weather-clear.jpg"
-		}
-	}
+	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
 	
 	anchors {
 		left: parent.left;
@@ -54,7 +41,7 @@ Rectangle {
 		//source: (WeatherApp.currentLocation == null || WeatherApp.currentLocation.conditions.image == "") ?
 		//		"../images/weather-clear.jpg" : WeatherApp.currentLocation.conditions.image
 		//source: WeatherApp.currentLocation == null ? "../images/weather-clear.jpg" : WeatherApp.currentLocation.conditions.image
-		source: "../images/weather-clear.jpg"
+		source: background
 		anchors.fill: parent
 	}
 	

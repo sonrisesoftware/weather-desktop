@@ -73,6 +73,8 @@ private:
 	void setupMenu();
 	void init();
 	
+	Weather::Location *loadLocation(const QString& name, const QString &location);
+	
 	QDeclarativeView *m_view = nullptr;
 	KMenu *m_menu = nullptr;
 	

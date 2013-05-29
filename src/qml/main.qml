@@ -26,6 +26,10 @@ Rectangle {
 	implicitWidth: appview.implicitWidth
 	implicitHeight: appview.implicitHeight
 	
+	property variant appStyle: Style {
+		id: style
+	}
+	
 	AppView {
 		id: appview
 		

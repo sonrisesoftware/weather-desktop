@@ -148,7 +148,7 @@ void WeatherDesktop::loadSettings()
 	foreach(const QString& str, Settings::locations()) {
 		QStringList list = str.split(':');
 		Q_ASSERT(list.length() == 2);
-		addLocation(list[0], list[1]);
+		loadLocation(list[0], list[1]);
 	}
 }
 
@@ -235,7 +235,14 @@ void WeatherDesktop::updateConfiguration()
 	
 }
 
-
+Weather::Location *WeatherDesktop::loadLocation(const QString& name, const QString& location)
+{
+	Q_ASSERT(!location.isEmpty());
+	Weather::Location *l = new Weather::Location(name, location, this);
+	locations().append(l);
+	emit locationsChanged(locations());
+	return l;
+}
 
 Weather::Location *WeatherDesktop::addLocation(const QString& name, const QString& location)
 {
