@@ -42,6 +42,8 @@ class WeatherDesktop : public KXmlGuiWindow
 	Q_PROPERTY(Weather::Location *autoLocation READ autoLocation)
 	Q_PROPERTY(QList<QObject*> locations READ locations NOTIFY locationsChanged)
 	
+	Q_PROPERTY(bool showWelcomeScreen READ showWelcomeScreen WRITE setShowWelcomeScreen NOTIFY showWelcomeScreenChanged)
+	
 public:
 	/**
 	 * Default Constructor
@@ -69,6 +71,7 @@ public slots:
 private:
 	void setupActions();
 	void setupMenu();
+	void init();
 	
 	QDeclarativeView *m_view = nullptr;
 	KMenu *m_menu = nullptr;
@@ -81,6 +84,7 @@ private slots:
 	void showSettingsDialog();
 	void updateConfiguration();
 	void setFullScreen(bool fullScreen);
+	void delayedInit();
 	
 #include "weather-desktop.gen"
 };

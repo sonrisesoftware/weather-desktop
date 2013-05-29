@@ -258,16 +258,15 @@ Rectangle {
 			}
 		}
 		
-		opacity: 0
+		opacity: WeatherApp.showWelcomeScreen ? 0 : 1
 		
 		Behavior on opacity {
 			NumberAnimation { duration: 1500 }
 		}
-		
-		Component.onCompleted: opacity = 1
 	}
 	
 	Item {
+		id: startupScreen
 		anchors.fill: parent
 		
 		Image {
@@ -302,13 +301,11 @@ Rectangle {
 			}
 		}
 		
-		opacity: 1
+		opacity: WeatherApp.showWelcomeScreen ? 1 : 0
 		
 		Behavior on opacity {
 			NumberAnimation { duration: 1500 }
 		}
-		
-		Component.onCompleted: opacity = 0
 	}
 	
 	Component  {

@@ -43,21 +43,24 @@
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
 {	
+	Application::setWindow(this);
+	setShowWelcomeScreen(true);
+	
+	init();
+	QTimer::singleShot(0, this, SLOT(delayedInit()));
+}
+
+WeatherDesktop::~WeatherDesktop()
+{
+	saveSettings();
+}
+
+void WeatherDesktop::init()
+{
 	setupActions();
 	
 	setupGUI();
 	setupMenu();
-	loadSettings();
-	
-	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
-		initialSetup();
-	} else if (locations().length() > 0) {
-		setCurrentLocation((Weather::Location *) locations()[0]);
-	} else if(Weather::Location::cache()->recent().length() > 0) {
-		setLocation(Weather::Location::cache()->recent()[0]);
-	} else {
-		setLocation("St. Louis, MO");
-	}
 	
 	m_view = new QDeclarativeView(this);
 	m_view->rootContext()->setContextProperty("WeatherApp", this);
@@ -77,19 +80,34 @@ WeatherDesktop::WeatherDesktop()
 	onImplicitWidthChanged();
 	onImplicitHeightChanged();
 	
+	setShowWelcomeScreen(true);
+	
 	setCentralWidget(m_view);
 	
 	//menuBar()->setHidden(false); // For debugging only!!!
 	menuBar()->setHidden(true);
 	statusBar()->setHidden(true);
-	
-	Application::setWindow(this);
 }
 
-WeatherDesktop::~WeatherDesktop()
+
+void WeatherDesktop::delayedInit()
 {
-	saveSettings();
+	qDebug() << "DELAYED INIT!!!";
+	loadSettings();
+	
+	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
+		initialSetup();
+	} else if (locations().length() > 0) {
+		setCurrentLocation((Weather::Location *) locations()[0]);
+	} else if(Weather::Location::cache()->recent().length() > 0) {
+		setLocation(Weather::Location::cache()->recent()[0]);
+	} else {
+		setLocation("St. Louis, MO");
+	}
+	
+	setShowWelcomeScreen(false);
 }
+
 
 void WeatherDesktop::setupActions()
 {
@@ -133,6 +151,7 @@ void WeatherDesktop::loadSettings()
 		QStringList list = str.split(':');
 		Q_ASSERT(list.length() == 2);
 		addLocation(list[0], list[1]);
+		qDebug() << "ADDING" << list[0] << "AS" << list[1];
 	}
 }
 
