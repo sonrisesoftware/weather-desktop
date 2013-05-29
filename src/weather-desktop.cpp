@@ -47,6 +47,7 @@ WeatherDesktop::WeatherDesktop()
 	setShowWelcomeScreen(true);
 	
 	init();
+	
 	QTimer::singleShot(0, this, SLOT(delayedInit()));
 }
 
@@ -80,11 +81,8 @@ void WeatherDesktop::init()
 	onImplicitWidthChanged();
 	onImplicitHeightChanged();
 	
-	setShowWelcomeScreen(true);
-	
 	setCentralWidget(m_view);
 	
-	//menuBar()->setHidden(false); // For debugging only!!!
 	menuBar()->setHidden(true);
 	statusBar()->setHidden(true);
 }
@@ -151,7 +149,6 @@ void WeatherDesktop::loadSettings()
 		QStringList list = str.split(':');
 		Q_ASSERT(list.length() == 2);
 		addLocation(list[0], list[1]);
-		qDebug() << "ADDING" << list[0] << "AS" << list[1];
 	}
 }
 

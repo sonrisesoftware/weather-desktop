@@ -1,4 +1,5 @@
 set(weather-desktop_QML
+   AppView.qml
    main.qml
    DailyForecast.qml
    ErrorDialog.qml
