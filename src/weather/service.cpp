@@ -21,7 +21,6 @@
 #include "main.h"
 #include "application.h"
 #include "weather/location.h"
-#include "weather/conditions.h"
 
 #include <QUrl>
 #include <QNetworkAccessManager>

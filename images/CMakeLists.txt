@@ -1,5 +1,6 @@
 set(weather-desktop_IMAGES
    weather-clear.jpg
+   weather-clouds.jpg
    weather-many-clouds.jpg
    weather-mist.jpg
    weather-showers.jpg

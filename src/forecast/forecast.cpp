@@ -209,7 +209,7 @@ QString Forecast::Forecast::precip(Point* data)
 		weather = "<font color=\"" + color + "\">" + weather + "</font>";
 	}
 	
-	return weather == "Very light " ? "None" : weather;
+	return weather == "Light " ? "None" : weather;
 }
 
 #include "forecast/forecast.moc"
