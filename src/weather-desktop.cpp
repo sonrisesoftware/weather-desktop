@@ -93,11 +93,36 @@ WeatherDesktop::~WeatherDesktop()
 	saveSettings();
 }
 
+KAction *WeatherDesktop::createAction(QString name, QString text, KIcon icon, QObject *obj, const char *slot) {
+	KAction* action = new KAction(this);
+	action->setText(text);
+	action->setIcon(icon);
+	actionCollection()->addAction(name, action);
+	connect(action, SIGNAL(triggered(bool)),
+			obj, slot);
+	return action;
+}
+
 void WeatherDesktop::setupActions()
 {
 	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
 	KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
 	KStandardAction::fullScreen(this, SLOT(setFullScreen(bool)), this, actionCollection());
+	createAction("weather-info", i18n("Weather Information..."), KIcon ("help-about"), this, SLOT(showWeatherInfo()));
+}
+
+void WeatherDesktop::setupMenu()
+{
+	m_menu = new KMenu(this);	
+	
+	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Quit)));
+	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::FullScreen)));
+	m_menu->addSeparator();
+	m_menu->addAction(actionCollection()->action("weather-info"));
+	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
+	m_menu->addSeparator();
+	KHelpMenu* helpMenu = new KHelpMenu(m_menu, KCmdLineArgs::aboutData(), false, actionCollection());
+	m_menu->addMenu(helpMenu->menu());
 }
 
 void WeatherDesktop::onImplicitWidthChanged()
@@ -170,21 +195,6 @@ void WeatherDesktop::setFullScreen(bool fullScreen)
 	KToggleFullScreenAction::setFullScreen(this, fullScreen);
 }
 
-
-void WeatherDesktop::setupMenu()
-{
-	m_menu = new KMenu(this);	
-	
-	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Quit)));
-	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::FullScreen)));
-	m_menu->addSeparator();
-	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
-	m_menu->addSeparator();
-	KHelpMenu* helpMenu = new KHelpMenu(m_menu, KCmdLineArgs::aboutData(), false, actionCollection());
-	m_menu->addMenu(helpMenu->menu());
-}
-
-
 void WeatherDesktop::showMenu(int x, int y)
 {
 	m_menu->popup(m_view->mapToGlobal(QPoint(x, y)));
@@ -194,6 +204,16 @@ void WeatherDesktop::showError(const QString& error)
 {
 	KMessageBox::error(this, error);
 }
+
+void WeatherDesktop::showWeatherInfo()
+{
+	KMessageBox::information(this,
+			i18n("Service:\t%1\nUsage:\t%2\nMax Usage:\t%3",
+				App->service()->objectName(), App->service()->accessCount(),
+				App->service()->maxCalls()
+			), i18n("Weather Information"));
+}
+
 
 void WeatherDesktop::showSettingsDialog()
 {

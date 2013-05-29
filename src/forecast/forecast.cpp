@@ -36,7 +36,7 @@ QString units(const QString& units) {
 
 Forecast::Forecast::Forecast(QObject* parent): Service(parent)
 {
-	
+	setObjectName("Forecast.io");
 }
 
 Forecast::Forecast::~Forecast()

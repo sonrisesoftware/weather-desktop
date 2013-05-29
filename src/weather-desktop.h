@@ -24,6 +24,8 @@
 #include <QDeclarativeView>
 #include <KDE/KXmlGuiWindow>
 #include <KDE/KMenu>
+#include <KDE/KAction>
+#include <KDE/KIcon>
 
 /**
  * This class serves as the main window for WeatherDesktop.  It handles the
@@ -65,10 +67,12 @@ public slots:
 	void setLocation(const QString& location);
 	void showMenu(int x, int y);
 	void showError(const QString& error);
+	void showWeatherInfo();
 	
 private:
 	void setupActions();
 	void setupMenu();
+	KAction *createAction(QString name, QString text, KIcon icon, QObject *obj, const char *slot);
 	
 	QDeclarativeView *m_view = nullptr;
 	KMenu *m_menu = nullptr;
