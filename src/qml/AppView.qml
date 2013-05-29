@@ -24,7 +24,7 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Rectangle {
 	id: root
 	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
-	implicitHeight: topToolBar.height + Math.max(creditsText.height, lastUpdatedText.height) + 5
+	implicitHeight: topToolBar.height + Math.max(creditsText.height, infoText.height) + 5
 			+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
@@ -58,7 +58,7 @@ Rectangle {
 	
 	WeatherHeader {
 		id: header
-		anchors.top: lastUpdatedText.bottom
+		anchors.top: infoText.bottom
 		//anchors.top: parent.top
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.topMargin: 20
@@ -186,53 +186,59 @@ Rectangle {
 		}
 	}
 		
-	//PlasmaComponents.ToolButton {
-	PlasmaCore.IconItem {
-		id: statusIcon
-		anchors {
-			top: topToolBar.bottom
-			margins: 5
-			left: lastUpdatedText.right
-		}
-		
-		width: 16; height: 16;
-		source: "dialog-warning"
-		visible: WeatherApp.currentLocation.error
-		
-		MouseArea {
-			anchors.fill:parent
-			onClicked: {
-				showError(WeatherApp.currentLocation.location, WeatherApp.currentLocation.errorString)
-			}
-		}
-	}
-	
-	Text {
-		id: lastUpdatedText
+	Row {
+		id: infoText
 		
 		anchors {
 			top: topToolBar.bottom
 			margins: 5
 			left: parent.left
-		}
-		
-		text: i18nc("The time the weather was last downloaded", 
-					"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
-	}
-	
-	Text {
-		id: creditsText
-		
-		anchors {
-			top: topToolBar.bottom
-			margins: 5
 			right: parent.right
 		}
 		
-		text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
-		textFormat: Text.RichText;
-		onLinkActivated: {
-			Qt.openUrlExternally(link)
+		PlasmaCore.IconItem {
+			id: statusIcon
+			anchors.verticalCenter: parent.verticalCenter
+			
+			width: visible ? height : 0;
+			height: 16;
+			source: "dialog-warning"
+			visible: WeatherApp.currentLocation.error
+			
+			MouseArea {
+				anchors.fill:parent
+				onClicked: {
+					showError(WeatherApp.currentLocation.location, WeatherApp.currentLocation.errorString)
+				}
+			}
+		}
+		
+		Text {
+			id: lastUpdatedText
+			anchors.verticalCenter: parent.verticalCenter
+			
+			text: i18nc("The time the weather was last downloaded", 
+						"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+			visible: WeatherApp.currentLocation.valid
+			width: visible ? implicitWidth : 0;
+		}
+		
+		Item {
+			height: parent.height
+			width: parent.width - creditsText.width
+					- lastUpdatedText.width - statusIcon.width
+					- (parent.children.length - 1) * parent.spacing
+		}
+	
+		Text {
+			id: creditsText
+			anchors.verticalCenter: parent.verticalCenter
+			
+			text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
+			textFormat: Text.RichText;
+			onLinkActivated: {
+				Qt.openUrlExternally(link)
+			}
 		}
 	}
 	
@@ -289,6 +295,43 @@ Rectangle {
 					onClicked: WeatherApp.removeCurrentLocation()
 					//width: minimumWidth + 5
 				}
+			}
+		}
+	}
+	
+	Component  {
+		id: tileitem
+		
+		Item {
+			id: wrapper
+			
+			width: 200
+			height: 100
+			
+			WeatherTile {
+				anchors.centerIn: parent;
+				selected: modelData.location == WeatherApp.currentLocation.location;
+				
+				onSelectedChanged: {
+					if (selected) {
+						wrapper.ListView.view.currentIndex = index
+					} else {
+						wrapper.ListView.view.currentIndex = -1
+					}
+				}
+				
+				onClicked: {
+					WeatherApp.currentLocation = modelData
+				}
+				
+				title: modelData.name;
+				temp: modelData.conditions.temperature;
+				icon: modelData.conditions.icon;
+				weather: modelData.conditions.summary;
+				
+				//tempForecast: modelData.dailyForecast.at(0).temperatureMax;
+				iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
+				weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
 			}
 		}
 	}
