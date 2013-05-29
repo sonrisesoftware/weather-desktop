@@ -29,6 +29,12 @@ Rectangle {
 	
 	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
 	
+	onBackgroundChanged: {
+		if (backgroundImage.visible) {
+			backgroundImage.source = background
+		}
+	}
+	
 	anchors {
 		left: parent.left;
 		top: parent.top;
@@ -41,8 +47,15 @@ Rectangle {
 		//source: (WeatherApp.currentLocation == null || WeatherApp.currentLocation.conditions.image == "") ?
 		//		"../images/weather-clear.jpg" : WeatherApp.currentLocation.conditions.image
 		//source: WeatherApp.currentLocation == null ? "../images/weather-clear.jpg" : WeatherApp.currentLocation.conditions.image
-		source: background
+		source: "../images/weather-clear.jpg"
 		anchors.fill: parent
+		visible: root.opacity > 0
+		
+		onVisibleChanged: {
+			if (visible) {
+				source = background
+			}
+		}
 	}
 	
 	/*Rectangle {
