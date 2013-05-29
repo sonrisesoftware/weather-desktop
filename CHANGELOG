@@ -1,3 +1,12 @@
+weather-desktop (0.2.7); urgency=low
+
+ * Fixed #45 - Moved handling of errors and refreshing into background
+ * Added some weather backgrounds
+ * Fixed #20 - Added a startup animation
+ 
+-- Michael Spencer <spencers1993@gmail.com>  Tue, 28 May 2013 22:30:43 -0500
+ 
+
 weather-desktop (0.2.6); urgency=low
 
  * Added support for weather-based backgrounds

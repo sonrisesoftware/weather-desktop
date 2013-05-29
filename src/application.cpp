@@ -41,7 +41,6 @@ Application::Application(): KApplication(true)
 {
 	registerQMLTypes();
 	setService(new Forecast::Forecast(this));
-	service()->setObjectName("Forecast.io");
 	service()->setMaxCalls(MAX_API_CALLS);
 	service()->setApiKey(FORECAST_API_KEY);
 	Weather::Location::setDefaultService(service());

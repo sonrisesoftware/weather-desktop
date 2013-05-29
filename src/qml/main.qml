@@ -30,6 +30,10 @@ Rectangle {
 		id: style
 	}
 	
+	function showError(location, error) {
+		WeatherApp.showError("<b>" + location + "</b>:<p><p>" + error)
+	}
+	
 	AppView {
 		id: appview
 		

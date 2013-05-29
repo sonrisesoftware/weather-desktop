@@ -59,6 +59,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	setDailyForecast(this->service()->create_dailyForecast(this));
 	// Needs an refresh
 	setNeedsRefresh(true);
+	setValid(false);
 	// Refresh
 	refresh();
 	// Connect slots
@@ -101,8 +102,9 @@ void Weather::Location::refresh()
 			//qDebug() << "Using location from cache:" << location();
 			setData(var.toMap());
 			QDateTime lastUpdatedTime = cache()->lastUpdated(location(), &error);
-			if (error.isEmpty())
-				setLastUpdated(lastUpdatedTime.time());
+			setLastUpdated(lastUpdatedTime.time());
+			setValid(true);
+			emit refreshed();
 		}
 		
 		if (error.isEmpty()) {
@@ -151,6 +153,7 @@ void Weather::Location::finishRefresh(QVariantMap data, QString error)
 		setData(data);
 		setLastUpdated(QTime::currentTime());
 		setNeedsRefresh(false);
+		setValid(true);
 		
 		QString internalError;
 		if (!location().isEmpty()) {
@@ -192,6 +195,7 @@ void Weather::Location::timeToRefresh()
  */
 void Weather::Location::onLocationChanged()
 {
+	setValid(false);
 	timeToRefresh();
 	
 	if (!autoRefresh()) {

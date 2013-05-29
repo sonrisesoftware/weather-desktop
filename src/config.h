@@ -23,7 +23,7 @@
 // ***** Configuration Options ***** //
 
 // Max number of API calls
-#define MAX_API_CALLS 25
+#define MAX_API_CALLS 50
 
 // Time until refreshing is allowed
 #define UPDATE_TIME 60 * 60 * 1000
