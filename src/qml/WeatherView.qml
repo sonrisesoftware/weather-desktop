@@ -28,20 +28,7 @@ Rectangle {
 	//radius: 6
 	
 	property string view: "conditions"
-	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_updating
-	property bool is_updating: (WeatherApp.currentLocation.refreshing == true)
-	property bool is_regular: !(is_error || is_updating)
-	
-	PlasmaWidgets.BusyWidget {
-		id: updating
-		
-		width: 100; height: 100;
-		anchors.centerIn: root
-		
-		opacity: 0
-		running: false
-		//label: "Updating weather..."
-	}
+	property bool is_valid: WeatherApp.currentLocation.valid
 	
 	WeatherConditions {
 		id: conditions
@@ -91,31 +78,24 @@ Rectangle {
 	states: [
 		State {
 			name: "conditions"
-			when: is_regular && view == "conditions"
+			when: is_valid && view == "conditions"
 			PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: conditions.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: conditions.implicitHeight; }
 		},
 		State {
 			name: "daily"
-			when: is_regular && view == "daily"
+			when: is_valid && view == "daily"
 			PropertyChanges { target: dailyForecast; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: dailyForecast.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: dailyForecast.implicitHeight; }
 		},
 		State {
 			name: "error"
-			when: is_error
+			when: !is_valid
 			PropertyChanges { target: error; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: error.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: error.implicitHeight; }
-		},
-		State {
-			name: "updating"
-			when: is_updating
-			PropertyChanges { target: updating; opacity: 1; running: true; restoreEntryValues: true; }
-			PropertyChanges { target: root; implicitWidth: updating.width; }
-			PropertyChanges { target: root; implicitHeight: updating.height; }
 		}
 	]
 	

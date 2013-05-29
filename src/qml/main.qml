@@ -34,6 +34,10 @@ Rectangle {
 	
 	property alias background: backgroundImage.source
 	
+	function showError(location, error) {
+		WeatherApp.showError("<b>" + location + "</b>:<p><p>" + error)
+	}
+	
 	Image {
 		id: backgroundImage
 		source: WeatherApp.currentLocation.conditions.image == "" ?
@@ -93,23 +97,43 @@ Rectangle {
 				//anchors.rightMargin: 3
 				spacing: 5
 				
-				PlasmaComponents.ToolButton {
-					id: refreshButton
-					//iconSource: (WeatherApp.currentLocation.refreshing) ?"process-stop" : "view-refresh"
-					iconSource: "view-refresh"
-					//text: (WeatherApp.currentLocation.refreshing) ? i18n("Stop") : i18n("Refresh")
-					text: i18n("Refresh")
-					onClicked: WeatherApp.currentLocation.refresh()
-					//onClicked: (WeatherApp.currentLocation.refreshing) ? 
-					//		WeatherApp.currentLocation.cancelRefresh() : WeatherApp.currentLocation.refresh()
-					width: minimumWidth + 5
-					//visible: WeatherApp.currentLocation.needsRefresh || WeatherApp.currentLocation.refreshing
-				}
+				Row {
+					id: refreshTools
+					spacing: 5
 				
-				PlasmaWidgets.Separator {
-					id: refreshSeparator
-					height: parent.height
-					orientation: Qt.Vertical
+					PlasmaComponents.ToolButton {
+						id: refreshButton
+						iconSource: "view-refresh"
+						text: i18n("Refresh")
+						onClicked: WeatherApp.currentLocation.refresh()
+						width: minimumWidth + 5
+						visible: WeatherApp.currentLocation.needsRefresh && !WeatherApp.currentLocation.refreshing
+					}
+					
+					PlasmaWidgets.BusyWidget {
+						id: refreshingWidget
+						anchors.verticalCenter: parent.verticalCenter
+						
+						width: height
+						height: refreshButton.height
+						visible: WeatherApp.currentLocation.refreshing
+						running: true
+					}
+					
+					Text {
+						id: refreshingLabel
+						anchors.verticalCenter: parent.verticalCenter
+						
+						text: "Refreshing"
+						visible: refreshingWidget.visible
+					}
+					
+					PlasmaWidgets.Separator {
+						id: refreshSeparator
+						height: parent.height
+						orientation: Qt.Vertical
+						visible: refreshingWidget.visible || refreshButton.visible
+					}
 				}
 
 				PlasmaComponents.ToolButton {
@@ -146,8 +170,7 @@ Rectangle {
 				
 				Item {
 					height: parent.height
-					width: parent.width - refreshButton.width
-							- refreshSeparator.width
+					width: parent.width - refreshTools.width
 							- nowButton.width - dailyButton.width
 							- searchField.width - configureButton.width
 							- (parent.children.length - 1) * parent.spacing
@@ -168,6 +191,27 @@ Rectangle {
 						var position = mapToItem(null, 0, height)
 						WeatherApp.showMenu(position.x, position.y)
 					}
+				}
+			}
+		}
+		
+		//PlasmaComponents.ToolButton {
+		PlasmaCore.IconItem {
+			id: statusIcon
+			anchors {
+				top: topToolBar.bottom
+				margins: 5
+				left: lastUpdatedText.right
+			}
+			
+			width: 16; height: 16;
+			source: "dialog-warning"
+			visible: WeatherApp.currentLocation.error
+			
+			MouseArea {
+				anchors.fill:parent
+				onClicked: {
+					showError(WeatherApp.currentLocation.location, WeatherApp.currentLocation.errorString)
 				}
 			}
 		}

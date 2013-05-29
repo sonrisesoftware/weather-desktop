@@ -58,6 +58,7 @@ namespace Weather
 		Q_PROPERTY(bool refreshing READ isRefreshing NOTIFY refreshingChanged)
 		Q_PROPERTY(bool error READ hasError NOTIFY errorChanged)
 		Q_PROPERTY(QString errorString READ errorString NOTIFY errorStringChanged)
+		Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
 		
 		Q_PROPERTY(bool day READ isDay WRITE setDay NOTIFY dayChanged)
 		

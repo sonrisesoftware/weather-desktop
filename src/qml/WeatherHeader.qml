@@ -22,17 +22,13 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
 	id: root
-	//width: 400
-	//height: 64
 	color: appStyle.panelColor;
 	border.color: appStyle.borderColor;
 	radius: appStyle.panelRadius;
 	
-	property bool is_error: (WeatherApp.currentLocation.error == true) && !is_updating
-	property bool is_updating: (WeatherApp.currentLocation.refreshing == true)
-	property bool is_regular: !(is_error || is_updating)
+	property bool is_valid: WeatherApp.currentLocation.valid
 	
-	implicitWidth: is_regular ? Math.max(400, icon.width + 80 + 2 * Math.max(
+	implicitWidth: is_valid ? Math.max(400, icon.width + 80 + 2 * Math.max(
 			Math.max(location.width, name.width), 
 			Math.max(temp.width, weather.width))) : Math.max(400, noneView.width)
 	implicitHeight: 6 + Math.max(Math.max(icon.height, name.height + location.height), temp.height + weather.height)
@@ -52,7 +48,7 @@ Rectangle {
 	Text {
 		id: noneView
 		anchors.centerIn: root
-		opacity: (is_updating || is_error) ? 1 : 0
+		opacity: !is_valid ? 1 : 0
 		text: (root.name == "") ? root.location : (root.name + " - " + root.location)
 		color: appStyle.textColor
 		style: Text.Raised
@@ -63,7 +59,7 @@ Rectangle {
 	Item {
 		id: regularView
 		anchors.fill: root
-		opacity: is_regular ? 1 : 0
+		opacity: is_valid ? 1 : 0
 	
 		PlasmaCore.IconItem {
 			id: icon
