@@ -44,17 +44,26 @@ Application *App;
 
 int main(int argc, char **argv)
 {
-	KAboutData about("weather-desktop", 0, ki18nc("@title", "Weather Desktop"),
-			version, ki18nc("@title", description), KAboutData::License_GPL_V3, 
-			ki18nc("@info", "(C) 2013 Michael Spencer"), ki18nc("@info", credits),
-			"https://github.com/iBeliever/weather-desktop" /* Home page */,
-			"https://github.com/iBeliever/weather-desktop/issues" /* Reporting bugs */);
+	KAboutData about("weather-desktop", 0, 
+			ki18nc("@title", "Weather Desktop"), 			// Title
+			version,										// Version number
+			ki18nc("@title", description),					// Description
+			KAboutData::License_GPL_V3,						// License
+			ki18nc("@info",									// Copyright
+				   "(C) 2013 Michael Spencer"
+			),
+			ki18nc("@info", credits),						// Credits
+			"https://github.com/iBeliever/weather-desktop",	// Home page
+			"spencers199@gmail.com"							// Bugs email address
+	);
 	about.addAuthor(ki18nc("@info:credit", "Michael Spencer"),
 			ki18nc("@info:credit", "Maintainer, developer, and designer"),
-			"spencers1993@gmail.com");
+			"spencers1993@gmail.com", "http://ibeliever.github.io");
 	about.addAuthor(ki18nc("@info:credit", "Christopher Spencer"),
 			ki18nc("@info:credit", "Designer"),
 			"spencers1993@gmail.com");
+	
+	
 	KCmdLineArgs::init(argc, argv, &about);
 	
 	KCmdLineOptions options;
