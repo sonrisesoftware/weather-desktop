@@ -45,21 +45,25 @@
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
 {	
+	Application::setWindow(this);
+	setShowWelcomeScreen(true);
+	
+	init();
+	
+	QTimer::singleShot(0, this, SLOT(delayedInit()));
+}
+
+WeatherDesktop::~WeatherDesktop()
+{
+	saveSettings();
+}
+
+void WeatherDesktop::init()
+{
 	setupActions();
 	
 	setupGUI();
 	setupMenu();
-	loadSettings();
-	
-	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
-		initialSetup();
-	} else if (locations().length() > 0) {
-		setCurrentLocation((Weather::Location *) locations()[0]);
-	} else if(Weather::Location::cache()->recent().length() > 0) {
-		setLocation(Weather::Location::cache()->recent()[0]);
-	} else {
-		setLocation("St. Louis, MO");
-	}
 	
 	m_view = new QDeclarativeView(this);
 	m_view->rootContext()->setContextProperty("WeatherApp", this);
@@ -81,16 +85,27 @@ WeatherDesktop::WeatherDesktop()
 	
 	setCentralWidget(m_view);
 	
-	//menuBar()->setHidden(false); // For debugging only!!!
 	menuBar()->setHidden(true);
 	statusBar()->setHidden(true);
-	
-	Application::setWindow(this);
 }
 
-WeatherDesktop::~WeatherDesktop()
+
+void WeatherDesktop::delayedInit()
 {
-	saveSettings();
+	qDebug() << "DELAYED INIT!!!";
+	loadSettings();
+	
+	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
+		initialSetup();
+	} else if (locations().length() > 0) {
+		setCurrentLocation((Weather::Location *) locations()[0]);
+	} else if(Weather::Location::cache()->recent().length() > 0) {
+		setLocation(Weather::Location::cache()->recent()[0]);
+	} else {
+		setLocation("St. Louis, MO");
+	}
+	
+	setShowWelcomeScreen(false);
 }
 
 KAction *WeatherDesktop::createAction(QString name, QString text, KIcon icon, QObject *obj, const char *slot) {
@@ -159,7 +174,7 @@ void WeatherDesktop::loadSettings()
 	foreach(const QString& str, Settings::locations()) {
 		QStringList list = str.split(':');
 		Q_ASSERT(list.length() == 2);
-		addLocation(list[0], list[1]);
+		loadLocation(list[0], list[1]);
 	}
 }
 
@@ -245,7 +260,14 @@ void WeatherDesktop::updateConfiguration()
 	
 }
 
-
+Weather::Location *WeatherDesktop::loadLocation(const QString& name, const QString& location)
+{
+	Q_ASSERT(!location.isEmpty());
+	Weather::Location *l = new Weather::Location(name, location, this);
+	locations().append(l);
+	emit locationsChanged(locations());
+	return l;
+}
 
 Weather::Location *WeatherDesktop::addLocation(const QString& name, const QString& location)
 {

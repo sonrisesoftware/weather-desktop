@@ -29,6 +29,22 @@ Rectangle {
 	
 	property string view: "conditions"
 	property bool is_valid: WeatherApp.currentLocation.valid
+	property bool is_refreshing: !is_valid && WeatherApp.currentLocation.refreshing
+	property bool is_error: !is_valid && WeatherApp.currentLocation.error
+	
+	PlasmaWidgets.BusyWidget {
+		id: refreshingWidget
+		anchors.centerIn: parent
+		
+		width: height
+ 		height: 80
+		opacity: 0
+		running: false
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
+	}
 	
 	WeatherConditions {
 		id: conditions
@@ -91,8 +107,15 @@ Rectangle {
 			PropertyChanges { target: root; implicitHeight: dailyForecast.implicitHeight; }
 		},
 		State {
+			name: "refreshing"
+			when: is_refreshing
+			PropertyChanges { target: refreshingWidget; opacity: 1; running: true; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: error.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: error.implicitHeight; }
+		},		
+		State {
 			name: "error"
-			when: !is_valid
+			when: is_error
 			PropertyChanges { target: error; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: error.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: error.implicitHeight; }
