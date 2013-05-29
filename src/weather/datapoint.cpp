@@ -47,7 +47,7 @@ void DataPoint::updateColor(float temp)
 
 void Weather::DataPoint::onIconChanged(const QIcon& icon)
 {
-	QString fileName = RESOURCE_FILE("images/" + icon.name());
+	QString fileName = RESOURCE_FILE("images/" + icon.name() + ".jpg");
 	
 	if (!QFile(fileName).exists()) {
 		fileName = RESOURCE_FILE("images/weather-clear.jpg");
