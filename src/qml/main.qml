@@ -257,6 +257,58 @@ Rectangle {
 				}
 			}
 		}
+		
+		opacity: 0
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 1500 }
+		}
+		
+		Component.onCompleted: opacity = 1
+	}
+	
+	Item {
+		anchors.fill: parent
+		
+		Image {
+			id: startupImage
+			source: "../images/weather-clear.jpg"
+			anchors.fill: parent
+		}
+		
+		Column {
+			
+			anchors.centerIn: parent
+			
+			PlasmaCore.IconItem {
+				id: statupIcon
+				anchors.horizontalCenter: parent.horizontalCenter
+				
+				source: "weather-desktop"
+				width: 128; height: 128;
+			}
+			
+			Text {
+				id: statupTitle
+				anchors.horizontalCenter: parent.horizontalCenter
+				
+				color: appStyle.textColor;
+				font.pixelSize: 1.2 * appStyle.titleFontSize
+				
+				style: Text.Raised
+				styleColor: appStyle.shadowColor
+				
+				text: i18n("Weather Desktop")
+			}
+		}
+		
+		opacity: 1
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 1500 }
+		}
+		
+		Component.onCompleted: opacity = 0
 	}
 	
 	Component  {
