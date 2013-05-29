@@ -34,6 +34,10 @@ Rectangle {
 	
 	property alias background: backgroundImage.source
 	
+	function showError(location, error) {
+		WeatherApp.showError("<b>" + location + "</b>:<p><p>" + error)
+	}
+	
 	Image {
 		id: backgroundImage
 		source: WeatherApp.currentLocation.conditions.image == "" ?
@@ -207,7 +211,7 @@ Rectangle {
 			MouseArea {
 				anchors.fill:parent
 				onClicked: {
-					WeatherApp.showError(WeatherApp.currentLocation.errorString)
+					showError(WeatherApp.currentLocation.location, WeatherApp.currentLocation.errorString)
 				}
 			}
 		}
