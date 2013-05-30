@@ -18,6 +18,9 @@
 			<label>True to run the first run wizard</label>
 			<default>true</default>
 		</entry>
+		<entry name="API Key" type="String">
+			<label>The API key for Forecast.io</label>
+		</entry>
 		<entry name="Units" type="Enum">
 			<label>The units used for displaying weather</label>
 			<default>English</default>

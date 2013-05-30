@@ -45,7 +45,7 @@ Rectangle {
 		id: noneView
 		anchors.centerIn: root
 		opacity: !is_valid ? 1 : 0
-		text: (root.name == "") ? weatherLocation.location : (weatherLocation.name + " - " + weatherLocation.location)
+		text: (weatherLocation.name == "") ? weatherLocation.location : (weatherLocation.name + " - " + weatherLocation.location)
 		color: appStyle.textColor
 		style: Text.Raised
 		styleColor: appStyle.shadowColor
@@ -71,7 +71,7 @@ Rectangle {
 			style: Text.Raised
 			styleColor: appStyle.shadowColor
 			font.pixelSize: 20
-			opacity: root.name == "" ? 0 : 1
+			opacity: weatherLocation.name == "" ? 0 : 1
 			anchors {
 				bottom: regularView.verticalCenter
 				right: icon.left

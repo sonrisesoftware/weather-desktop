@@ -42,7 +42,9 @@ Application::Application(): KApplication(true)
 	registerQMLTypes();
 	setService(new Forecast::Forecast(this));
 	service()->setMaxCalls(MAX_API_CALLS);
+#ifdef FORECAST_API_KEY
 	service()->setApiKey(FORECAST_API_KEY);
+#endif
 	Weather::Location::setDefaultService(service());
 	Weather::Location::setAutoRefresh(AUTO_REFRESH);
 	Weather::Location::setHtml(true);

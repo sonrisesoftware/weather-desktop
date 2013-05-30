@@ -23,6 +23,7 @@
 #include "weather/service.h"
 #include "cache.h"
 #include "settings.h"
+#include "api_key.h"
 
 #include <QGraphicsObject>
 #include <QDeclarativeEngine>
@@ -152,6 +153,11 @@ void WeatherDesktop::onImplicitHeightChanged()
 
 void WeatherDesktop::loadSettings()
 {
+#ifndef FORECAST_API_KEY
+	App->service()->setApiKey(Settings::aPIKey());
+#endif
+	
+	
 	QStringList list = Settings::accessCount().split(':');
 	QDate current = QDateTime::currentDateTimeUtc().date();
 	QDate lastUsed = QDate::fromString(list[0]);
@@ -201,6 +207,10 @@ void WeatherDesktop::saveSettings()
 	}
 
 	Settings::setFirstRun(false);
+	
+#ifndef FORECAST_API_KEY
+	Settings::setAPIKey(App->service()->apiKey());
+#endif
 	
 	Settings::self()->writeConfig();
 }
@@ -360,6 +370,20 @@ void WeatherDesktop::setLocation(const QString& location)
 void WeatherDesktop::initialSetup()
 {
 	bool ok;	
+	
+#ifndef FORECAST_API_KEY
+	QString key = KInputDialog::getText(i18n("Setup Weather Desktop"),
+			i18n("Enter your Forecast.io API key:"), 
+			QString(), &ok, this);
+	
+	if (ok) {
+		App->service()->setApiKey(key);
+	} else {
+		KMessageBox::error(this, i18n("Weather Desktop will not work without an API key!"));
+	}
+#endif
+	
+	
 	QString location = KInputDialog::getText(i18n("Setup Weather Desktop"),
 			i18n("Enter your home location:"), 
 			QString(), &ok, this);
