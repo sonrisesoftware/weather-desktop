@@ -24,7 +24,7 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Rectangle {
 	id: root;
 	
-	color: highlighted ? Qt.darker(appStyle.panelColor, 2) : appStyle.panelColor
+	color: highlighted ? Qt.darker(appStyle.panelColor,5) : appStyle.panelColor
 	border.color: appStyle.internalBorderColor;
 	property color textColor: appStyle.textColor;
 	
@@ -183,9 +183,10 @@ Rectangle {
 			color: textColor;
 			style: Text.Raised
 			styleColor: appStyle.shadowColor
-			//elide: Text.ElideRight;
+			elide: Text.ElideRight;
 			wrapMode: Text.Wrap;
 			textFormat: Text.PlainText
+			maximumLineCount: 3
 		}
 	}
 	

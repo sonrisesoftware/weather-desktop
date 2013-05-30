@@ -25,7 +25,7 @@ Rectangle {
 	id: root
 	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
 	implicitHeight: topToolBar.height + Math.max(creditsText.height, infoText.height) + 5
-			+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
+	+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
 	
@@ -44,9 +44,6 @@ Rectangle {
 	
 	Image {
 		id: backgroundImage
-		//source: (WeatherApp.currentLocation == null || WeatherApp.currentLocation.conditions.image == "") ?
-		//		"../images/weather-clear.jpg" : WeatherApp.currentLocation.conditions.image
-		//source: WeatherApp.currentLocation == null ? "../images/weather-clear.jpg" : WeatherApp.currentLocation.conditions.image
 		source: "../images/weather-clear.jpg"
 		anchors.fill: parent
 		visible: root.opacity > 0
@@ -59,13 +56,13 @@ Rectangle {
 	}
 	
 	/*Rectangle {
-		*		 i d*: nightTimeShading
-		*		 anchors.fill: parent
-		*		 opacity: WeatherApp.currentLocation.day ? 0 : 1
-		*		 color: Qt.rgba(0,0,0,0.7)
-		*		 
-		*		 Behavior on opacity {
-		*			 NumberAnimation { duration: 500 }
+	 *		 i d*: nightTimeShading
+	 *		 anchors.fill: parent
+	 *		 opacity: WeatherApp.currentLocation.day ? 0 : 1
+	 *		 color: Qt.rgba(0,0,0,0.7)
+	 *		 
+	 *		 Behavior on opacity {
+	 *			 NumberAnimation { duration: 500 }
 }
 }*/
 	
@@ -75,11 +72,7 @@ Rectangle {
 		//anchors.top: parent.top
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.topMargin: 20
-		name: WeatherApp.currentLocation.name;
-		location: WeatherApp.currentLocation.display;
-		temp: WeatherApp.currentLocation.conditions.temperature;
-		weather: WeatherApp.currentLocation.conditions.summary;
-		icon: WeatherApp.currentLocation.conditions.icon;
+		weatherLocation: WeatherApp.currentLocation
 	}
 	
 	WeatherView {
@@ -91,6 +84,8 @@ Rectangle {
 			left: parent.left; leftMargin: 20;
 			right: parent.right; rightMargin: 20;
 		}
+		
+		weatherLocation: WeatherApp.currentLocation
 	}
 	
 	PlasmaComponents.ToolBar {
@@ -140,15 +135,26 @@ Rectangle {
 				}
 			}
 			
+			/*PlasmaComponents.ToolButton {
+			 *			id: nowButton
+			 *			iconSource: "arrow-down-double"
+			 *			text: i18n("Now")
+			 *			width: minimumWidth + 5
+			 *			onClicked: {
+			 *				weatherView.view = "conditions"
+			 }
+			 checked: weatherView.view == "conditions"
+			 }*/
+			
 			PlasmaComponents.ToolButton {
-				id: nowButton
-				iconSource: "arrow-down-double"
-				text: i18n("Now")
+				id: todayButton
+				iconSource: "go-jump-today"
+				text: i18n("Today")
 				width: minimumWidth + 5
 				onClicked: {
-					weatherView.view = "conditions"
+					weatherView.view = "today"
 				}
-				checked: weatherView.view == "conditions"
+				checked: weatherView.view == "today"
 			}
 			
 			/*PlasmaComponents.ToolButton {
@@ -175,9 +181,9 @@ Rectangle {
 			Item {
 				height: parent.height
 				width: parent.width - refreshTools.width
-				- nowButton.width - dailyButton.width
-				- searchField.width - configureButton.width
-				- (parent.children.length - 1) * parent.spacing
+						- todayButton.width - dailyButton.width
+						- searchField.width - configureButton.width
+						- (parent.children.length - 1) * parent.spacing
 			}
 			
 			PlasmaWidgets.LineEdit {
@@ -198,7 +204,7 @@ Rectangle {
 			}
 		}
 	}
-		
+	
 	Row {
 		id: infoText
 		
@@ -231,7 +237,7 @@ Rectangle {
 			anchors.verticalCenter: parent.verticalCenter
 			
 			text: i18nc("The time the weather was last downloaded", 
-						"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+					"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
 			visible: WeatherApp.currentLocation.valid
 			width: visible ? implicitWidth : 0;
 		}
@@ -242,7 +248,7 @@ Rectangle {
 					- lastUpdatedText.width - statusIcon.width
 					- (parent.children.length - 1) * parent.spacing
 		}
-	
+		
 		Text {
 			id: creditsText
 			anchors.verticalCenter: parent.verticalCenter
@@ -257,7 +263,6 @@ Rectangle {
 	
 	PlasmaComponents.ToolBar {
 		id: bottomToolBar
-		//width: parent.width
 		
 		anchors.bottom: parent.bottom
 		
@@ -271,16 +276,16 @@ Rectangle {
 				
 				height: 100
 				width: parent.width
-				- listActions.width - actionsSeparator.width
-				- (parent.children.length - 1) * parent.spacing
+						- listActions.width - actionsSeparator.width
+						- (parent.children.length - 1) * parent.spacing
 				
 				orientation: ListView.Horizontal
-				
+				clip: true
 				spacing: 5
+				
+				
 				model: WeatherApp.locations;
 				delegate: tileitem;
-				
-				focus: true
 			}
 			
 			PlasmaWidgets.Separator {

@@ -23,14 +23,14 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
-	//color: "#99333333" // temporary, for visualization - will be transparent
 	color: "#00000000" // transparent
-	//radius: 6
 	
-	property string view: "conditions"
-	property bool is_valid: WeatherApp.currentLocation.valid
-	property bool is_refreshing: !is_valid && WeatherApp.currentLocation.refreshing
-	property bool is_error: !is_valid && WeatherApp.currentLocation.error
+	property string view: "today"
+	property bool is_valid: weatherLocation.valid
+	property bool is_refreshing: !is_valid && weatherLocation.refreshing;
+	property bool is_error: !is_valid && weatherLocation.error;
+	
+	property variant weatherLocation;
 	
 	PlasmaWidgets.BusyWidget {
 		id: refreshingWidget
@@ -51,18 +51,18 @@ Rectangle {
 		anchors.centerIn: root
 		opacity: 0
 		
-		windchill: WeatherApp.currentLocation.conditions.feelsLike;
-		dewpoint: WeatherApp.currentLocation.conditions.dewPoint;
+		windchill: weatherLocation.conditions.feelsLike;
+		dewpoint:  weatherLocation.conditions.dewPoint;
 		
-		pressure: WeatherApp.currentLocation.conditions.pressure;
-		visibility: WeatherApp.currentLocation.conditions.visibility;
-		clouds: WeatherApp.currentLocation.conditions.cloudCover;
+		pressure: weatherLocation.conditions.pressure;
+		visibility: weatherLocation.conditions.visibility;
+		clouds: weatherLocation.conditions.cloudCover;
 		
-		wind: WeatherApp.currentLocation.conditions.wind;
-		windgust: WeatherApp.currentLocation.conditions.windGust;
+		wind: weatherLocation.conditions.wind;
+		windgust: weatherLocation.conditions.windGust;
 		
-		humidity: WeatherApp.currentLocation.conditions.humidity;
-		precip: WeatherApp.currentLocation.conditions.precip;
+		humidity: weatherLocation.conditions.humidity;
+		precip: weatherLocation.conditions.precip;
 		
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }
@@ -74,7 +74,7 @@ Rectangle {
 		opacity: 0
 		anchors.centerIn: root
 		title: i18n("Unable to access weather")
-		text: WeatherApp.currentLocation.errorString;
+		text: weatherLocation.errorString;
 		
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }
@@ -89,6 +89,20 @@ Rectangle {
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }
 		}
+		
+		weatherLocation: root.weatherLocation
+	}
+	
+	WeatherToday {
+		id: today
+		anchors.centerIn: root
+		opacity: 0
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
+		
+		weatherLocation: root.weatherLocation
 	}
 	
 	states: [
@@ -105,6 +119,13 @@ Rectangle {
 			PropertyChanges { target: dailyForecast; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: dailyForecast.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: dailyForecast.implicitHeight; }
+		},
+		State {
+			name: "today"
+			when: is_valid && view == "today"
+			PropertyChanges { target: today; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: today.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: today.implicitHeight; }
 		},
 		State {
 			name: "refreshing"

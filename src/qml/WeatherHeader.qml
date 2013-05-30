@@ -26,18 +26,14 @@ Rectangle {
 	border.color: appStyle.borderColor;
 	radius: appStyle.panelRadius;
 	
-	property bool is_valid: WeatherApp.currentLocation.valid
+	property bool is_valid: weatherLocation.valid
 	
 	implicitWidth: is_valid ? Math.max(400, icon.width + 80 + 2 * Math.max(
 			Math.max(location.width, name.width), 
 			Math.max(temp.width, weather.width))) : Math.max(400, noneView.width)
 	implicitHeight: 6 + Math.max(Math.max(icon.height, name.height + location.height), temp.height + weather.height)
 	
-	property alias name: name.text;
-	property alias location: location.text;
-	property alias icon: icon.source;
-	property alias temp: temp.text;
-	property alias weather: weather.text;
+	property variant weatherLocation
 	
 //  	BorderImage {
 //  		id: background
@@ -49,7 +45,7 @@ Rectangle {
 		id: noneView
 		anchors.centerIn: root
 		opacity: !is_valid ? 1 : 0
-		text: (root.name == "") ? root.location : (root.name + " - " + root.location)
+		text: (root.name == "") ? weatherLocation.location : (weatherLocation.name + " - " + weatherLocation.location)
 		color: appStyle.textColor
 		style: Text.Raised
 		styleColor: appStyle.shadowColor
@@ -63,8 +59,10 @@ Rectangle {
 	
 		PlasmaCore.IconItem {
 			id: icon
-			width: 64; height: 64;
 			anchors.centerIn: regularView
+			
+			source: weatherLocation.conditions.icon
+			width: 64; height: 64;
 		}
 		
 		Text {
@@ -79,6 +77,8 @@ Rectangle {
 				right: icon.left
 				rightMargin: 10
 			}
+			
+			text: weatherLocation.name
 		}
 		
 		Text {
@@ -93,6 +93,8 @@ Rectangle {
 				right: icon.left
 				rightMargin: 10
 			}
+			
+			text: weatherLocation.location
 		}
 		
 		Text {
@@ -100,9 +102,9 @@ Rectangle {
 			color: appStyle.textColor
 			style: Text.Raised
 			styleColor: appStyle.shadowColor
-			text: root.location
+			text: weatherLocation.location
 			font.pixelSize: 18
-			opacity: (root.name == "") ? 1 : 0
+			opacity: (weatherLocation.name == "") ? 1 : 0
 			anchors {
 				verticalCenter: regularView.verticalCenter
 				right: icon.left
@@ -121,6 +123,8 @@ Rectangle {
 				left: icon.right
 				leftMargin: 10
 			}
+			
+			text: weatherLocation.conditions.temperature
 		}
 		
 		Text {
@@ -134,6 +138,8 @@ Rectangle {
 				left: icon.right
 				leftMargin: 10
 			}
+			
+			text: weatherLocation.conditions.summary
 		}
 	}
 }
