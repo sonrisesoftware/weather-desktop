@@ -30,6 +30,8 @@ Panel {
 	
 	property int tileWidth: 120
 	property int tileHeight: 190
+	
+	property variant weatherLocation
 
 	title: "Daily Forecast"
 	
@@ -40,7 +42,7 @@ Panel {
 		Item {
 			id: dayItem
 			
-			property variant modelData: WeatherApp.currentLocation.dailyForecast.at(index)
+			property variant modelData: weatherLocation.dailyForecast.at(index)
 			property bool last: index == (repeat.model - 1)
 			//color: Qt.rgba(33/256,126/256,205/256,0.5)
 			width: tileWidth
@@ -196,7 +198,7 @@ Panel {
 	
 		Repeater {
 			id: repeat
-			model: Math.min(WeatherApp.currentLocation.dailyForecast.length, 5)
+			model: Math.min(weatherLocation.dailyForecast.length, 5)
 			delegate: dayForecast
 		}
 	

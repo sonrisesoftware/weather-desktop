@@ -28,11 +28,11 @@ Panel {
 	implicitWidth: Math.max(header.width + 10, contents.width + 20)
 	implicitHeight: header.height + contents.height + 30
 	
-	property variant today: WeatherApp.currentLocation.dailyForecast.length > 0 ?
-			WeatherApp.currentLocation.dailyForecast.at(0) :
-			null
+	property variant weatherLocation
+	property variant today: weatherLocation.dailyForecast.length > 0 ?
+			weatherLocation.dailyForecast.at(0) : null
 	
-	property variant conditions: WeatherApp.currentLocation.conditions;
+	property variant conditions: weatherLocation.conditions;
 
 	Column {
 		id: contents
@@ -245,7 +245,7 @@ Panel {
 						
 						FormItem {
 							label: i18n("Feels like:")
-							value: conditions.windChill
+							value: conditions.feelsLike
 						}
 						
 						FormItem {
@@ -275,7 +275,7 @@ Panel {
 						
 						FormItem {
 							label: i18n("Wind Gust:")
-							value: conditions.windgust
+							value: conditions.windGust
 						}
 					}
 				}

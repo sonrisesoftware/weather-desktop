@@ -24,7 +24,7 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Rectangle {
 	id: root;
 	
-	color: highlighted ?Qt.rgba(0.3,0.3,0.35,0.75) : appStyle.panelColor
+	color: highlighted ? Qt.darker(appStyle.panelColor,5) : appStyle.panelColor
 	border.color: appStyle.internalBorderColor;
 	property color textColor: appStyle.textColor;
 	
