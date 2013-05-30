@@ -34,6 +34,12 @@ Rectangle {
 		WeatherApp.showError("<b>" + location + "</b>:<p><p>" + error)
 	}
 	
+	Image {
+		id: backgroundImage
+		source: "../images/weather-clear.jpg"
+		anchors.fill: parent
+	}
+	
 	AppView {
 		id: appview
 		

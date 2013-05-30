@@ -2,6 +2,7 @@ set(weather-desktop_QML
    AppView.qml
    main.qml
    DailyForecast.qml
+   DropDown.qml
    ErrorDialog.qml
    Form.qml
    FormItem.qml

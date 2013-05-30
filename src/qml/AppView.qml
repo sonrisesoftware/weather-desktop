@@ -21,7 +21,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
-Rectangle {
+Item {
 	id: root
 	implicitWidth: Math.max(locations.currentItem.header.implicitWidth + 40, locations.currentItem.view.implicitWidth + 40);
 	implicitHeight: topToolBar.height + locations.currentItem.minimumHeight + bottomToolBar.height;
@@ -48,7 +48,7 @@ Rectangle {
 		id: locations
 		anchors.fill: parent
 		
-		clip: true
+		cacheBuffer: 5
 		highlightMoveSpeed: 2500
 		
 		orientation: ListView.Horizontal

@@ -24,7 +24,8 @@ Column {
 	id: root
 	spacing: 0;
 	property int indent: 15
-	property int align: calc_align();
+    property int implicitAlign: calc_align();
+    property int align: implicitAlign
 	
 	property color color;
 	property int fontSize;

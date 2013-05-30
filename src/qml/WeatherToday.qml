@@ -137,149 +137,73 @@ Panel {
 		PlasmaWidgets.Separator {
 			width: parent.width
 		}
-		
-		Rectangle {
-			id: conditionsBox
-			
-			radius: 2
-			color: mouseArea.containsMouse ? Qt.rgba(0.5,0.5,0.6,0.2) : "transparent"
-			
-			height: conditionsOpener.height + 2 + conditionsDropDown.height
-			width: Math.max(parent.width, conditionsDropDown.width)
-			//width: parent.width
-			//height: conditionsOpener.height
-			
-			MouseArea {
-				id: mouseArea
-				hoverEnabled: true
-				anchors.fill: conditionsOpener
-				
-				onClicked: {
-					conditionsDropDown.open = !conditionsDropDown.open
-				}
-			}
-			
-			Row {
-				id: conditionsOpener
-				anchors {
-					left: parent.left;
-					right: parent.right;
-					top: parent.top;
-					margins: 3;
-					topMargin: 1;
-				}
-				
-				Text {
-					id: conditionsHeader
-					anchors.verticalCenter: parent.verticalCenter
-					
-					text: i18n("Conditions")
-					font.pixelSize: appStyle.headerFontSize;
-					color: appStyle.textColor
-					
-					style: Text.Raised
-					styleColor: appStyle.shadowColor
-				}
-				
-				Item {
-					height: parent.height
-					width: parent.width
-							- conditionsHeader.width
-							- conditionsIcon.width
-							- (parent.children.length - 1) * parent.spacing
-				}
 
-				PlasmaCore.IconItem {
-					id: conditionsIcon
-					anchors.verticalCenter: parent.verticalCenter
-					
-					width: 16; height: 16;
-					source: "draw-arrow-forward";
-					rotation: conditionsDropDown.open ? 90 : 0
-					
-					Behavior on rotation {
-						NumberAnimation { duration: 250 }
-					}
-				}
-			}
-			
-			Item {
-				id: conditionsDropDown
-				clip: true
-				
-				anchors {
-					left: parent.left;
-					right: parent.right;
-					top: conditionsOpener.bottom;
-					topMargin: 2
-				}
-				height: open ? conditionsView.height : 0
-				
-				property bool open: false
-				
-				Behavior on height {
-					NumberAnimation { duration: 250 }
-				}
-				
-				Item {
-					id: conditionsView
-					y: parent.height-height
-					height: left.height + 5
-					width: left.width
-					
-					Form {
-						id: left
-						fontSize: appStyle.dataFontSize;
-						headerSize: appStyle.headerFontSize;
-						color: appStyle.textColor;
-						
-						FormItem {
-							label: i18n("Humidity:")
-							value: conditions.humidity
-						}
-						
-						FormItem {
-							label: i18n("Precipitation:")
-							value: conditions.precip
-						}
-						
-						FormItem {
-							label: i18n("Feels like:")
-							value: conditions.feelsLike
-						}
-						
-						FormItem {
-							label: i18n("Dew point:")
-							value: conditions.dewPoint
-						}
-						
-						FormItem {
-							label: i18n("Pressure:")
-							value: conditions.pressure
-						}
-						
-						FormItem {
-							label: i18n("Visibility:")
-							value: conditions.visibility
-						}
-						
-						FormItem {
-							label: i18n("Cloud Cover:")
-							value: conditions.cloudCover
-						}
-						
-						FormItem {
-							label: i18n("Wind:")
-							value: conditions.wind
-						}
-						
-						FormItem {
-							label: i18n("Wind Gust:")
-							value: conditions.windGust
-						}
-					}
-				}
-			}
-		}
+        DropDown {
+            id: conditionsDropDown
+
+            width: Math.max(parent.width, implicitWidth)
+
+            title: i18n("Conditions")
+            font.pixelSize: appStyle.headerFontSize;
+            titleColor: appStyle.textColor
+
+            style: Text.Raised
+            styleColor: appStyle.shadowColor
+            highlightColor: Qt.rgba(0.5,0.5,0.6,0.2)
+
+            contents: [
+                Form {
+                    id: left
+                    fontSize: appStyle.dataFontSize;
+                    headerSize: appStyle.headerFontSize;
+                    color: appStyle.textColor;
+
+                    FormItem {
+                        label: i18n("Humidity:")
+                        value: conditions.humidity
+                    }
+
+                    FormItem {
+                        label: i18n("Precipitation:")
+                        value: conditions.precip
+                    }
+
+                    FormItem {
+                        label: i18n("Feels like:")
+                        value: conditions.feelsLike
+                    }
+
+                    FormItem {
+                        label: i18n("Dew point:")
+                        value: conditions.dewPoint
+                    }
+
+                    FormItem {
+                        label: i18n("Pressure:")
+                        value: conditions.pressure
+                    }
+
+                    FormItem {
+                        label: i18n("Visibility:")
+                        value: conditions.visibility
+                    }
+
+                    FormItem {
+                        label: i18n("Cloud Cover:")
+                        value: conditions.cloudCover
+                    }
+
+                    FormItem {
+                        label: i18n("Wind:")
+                        value: conditions.wind
+                    }
+
+                    FormItem {
+                        label: i18n("Wind Gust:")
+                        value: conditions.windGust
+                    }
+                }
+            ]
+        }
 	}
 }
