@@ -87,7 +87,7 @@ Rectangle {
 			style: Text.Raised
 			styleColor: appStyle.shadowColor
 			font.pixelSize: 16
-			opacity: root.name == "" ? 0 : 1
+			opacity: weatherLocation.name == "" ? 0 : 1
 			anchors {
 				top: regularView.verticalCenter
 				right: icon.left
