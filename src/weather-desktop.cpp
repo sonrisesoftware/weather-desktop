@@ -30,6 +30,7 @@
 #include <QDeclarativeProperty>
 #include <QDeclarativeContext>
 #include <QtDeclarative>
+#include <QList>
 
 #include <KDE/KApplication>
 #include <KDE/KStandardAction>
@@ -40,8 +41,10 @@
 #include <KDE/KConfigDialog>
 #include <KDE/KHelpMenu>
 #include <KDE/KToggleFullScreenAction>
-#include <Plasma/Dialog>
-#include <KMessageBox>
+#include <KDE/KLineEdit>
+#include <KDE/KMessageBox>
+#include <KDE/KListWidget>
+#include <KDE/KPushButton>
 
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
@@ -176,6 +179,7 @@ void WeatherDesktop::loadSettings()
 		qFatal("Invalid units!");
 	}
 	
+	locations().clear();
 	// MUST BE LAST IN FUNCTION!!!
 	foreach(const QString& str, Settings::locations()) {
 		QStringList list = str.split(':');
@@ -255,6 +259,35 @@ void WeatherDesktop::showSettingsDialog()
 	dialog->setModal(true);
 	
 	QWidget *generalPage = new QWidget(dialog);	
+	
+	QFormLayout *form = new QFormLayout();
+	
+	QRadioButton *englishUnits = new QRadioButton("English", generalPage);
+	form->addRow("Units:", englishUnits);
+	QRadioButton *metricUnits = new QRadioButton("Metric", generalPage);
+	form->addRow(QString(), metricUnits);
+	
+	KLineEdit *apiKey = new KLineEdit(generalPage);
+	apiKey->setObjectName("kcfg_APIKey");
+	form->addRow("API Key:", apiKey);
+	
+	QTableWidget *locationsTable = new QTableWidget(generalPage);
+	locationsTable->setColumnCount(2);
+	locationsTable->setHorizontalHeaderLabels({
+		"Name", "Location"
+	});
+	locationsTable->setRowCount(2);
+	locationsTable->verticalHeader()->setMovable(true);
+	
+	form->addRow("Locations:", locationsTable);
+	
+	QHBoxLayout *locationsActions = new QHBoxLayout();
+	locationsActions->addWidget(new KPushButton(KIcon("list-add"), i18n("Add")));
+	locationsActions->addWidget(new KPushButton(KIcon("list-remove"), i18n("Remove")));
+	form->addRow(QString(), locationsActions);
+	
+	generalPage->setLayout(form);
+	
 	dialog->addPage(generalPage, i18n("General"), "configure", i18n("General Settings")); 
 	
 	// User edited the configuration - update your local copies of the 
@@ -264,6 +297,7 @@ void WeatherDesktop::showSettingsDialog()
 	
 	dialog->show();
 }
+
 
 void WeatherDesktop::updateConfiguration()
 {

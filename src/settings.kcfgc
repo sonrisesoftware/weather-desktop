@@ -1,4 +1,4 @@
-File=settings.kcfg 
+File=weather-desktop.kcfg 
 ClassName=Settings 
 Singleton=true
 Mutators=true

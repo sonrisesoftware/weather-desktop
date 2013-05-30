@@ -37,7 +37,7 @@ qclassgen(weather-desktop_SRCS
 
 # Process the configuration definition
 kde4_add_kcfg_files(weather-desktop_SRCS GENERATE_MOC settings.kcfgc)
-install(FILES settings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install(FILES weather-desktop.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 
 # Set the name of the application
 kde4_add_executable(weather-desktop ${weather-desktop_SRCS})
