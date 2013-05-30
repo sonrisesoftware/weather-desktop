@@ -1,57 +1,18 @@
-weather-desktop (0.2.7); urgency=low
+weather-desktop (0.3); urgency=low
 
+ * Fixed #40 - Added UI for overview of today's weather
  * Fixed #45 - Moved handling of errors and refreshing into background
- * Added some weather backgrounds
  * Fixed #20 - Added a startup animation
- 
--- Michael Spencer <spencers1993@gmail.com>  Tue, 28 May 2013 22:30:43 -0500
- 
-
-weather-desktop (0.2.6); urgency=low
-
- * Added support for weather-based backgrounds
- 
--- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 21:10:09 -0500
-
-
-weather-desktop (0.2.5); urgency=low
-
+ * Added weather-based backgrounds
  * Redesigned UI
  * Fixed bug in Forecast's data block code
- 
--- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 20:39:07 -0500
-
-
-weather-desktop (0.2.4); urgency=low
-
- * Fixed #35 - Fixed the way changing the units works so the units can be
-   changed even before weather is actually refreshed
+ * Fixed #35 - Fixed the way changing the units works
  * Fixed #32 - Weather tiles update after weather refreshes
-
--- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 17:51:29 -0500
-
-
-weather-desktop (0.2.3); urgency=low
-
  * Fixed #29 - Added mini menu and empty configuration dialog
-
--- Michael Spencer <spencers1993@gmail.com>  Mon, 27 May 2013 17:23:07 -0500
-
-
-weather-desktop (0.2.2); urgency=low
-
  * Fixed #30 - Access times are now stored in UTC
+ * Added forecasts backend in Forecast.io and UI for daily forecasts
 
--- Michael Spencer <spencers1993@gmail.com>  Sat, 25 May 2013 21:02:08 -0500
-
-
-weather-desktop (0.2.1); urgency=low
-
- * Added support for forecasts
- * Added code to create daily forecasts for Forecast.io
- * Added daily forecast UI
-
--- Michael Spencer <spencers1993@gmail.com>  Sat, 25 May 2013 20:39:59 -0500
+-- Michael Spencer <spencers93@gmail.com>  Thu, 30 May 2013 13:16:10 -0500
 
 
 weather-desktop (0.2); urgency=medium
