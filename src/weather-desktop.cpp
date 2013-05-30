@@ -95,8 +95,6 @@ void WeatherDesktop::delayedInit()
 	qDebug() << "DELAYED INIT!!!";
 	loadSettings();
 	
-	setShowWelcomeScreen(false);
-	
 	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
 		initialSetup();
 	} else if (locations().length() > 0) {
@@ -106,6 +104,8 @@ void WeatherDesktop::delayedInit()
 	} else {
 		setLocation("St. Louis, MO");
 	}
+	
+	setShowWelcomeScreen(false);
 }
 
 KAction *WeatherDesktop::createAction(QString name, QString text, KIcon icon, QObject *obj, const char *slot) {

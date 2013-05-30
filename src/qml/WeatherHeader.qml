@@ -30,7 +30,7 @@ Rectangle {
 	
 	implicitWidth: is_valid ? Math.max(400, icon.width + 80 + 2 * Math.max(
 			Math.max(location.width, name.width), 
-			Math.max(temp.width, location.width))) : Math.max(400, noneView.width)
+			Math.max(temp.width, weather.width))) : Math.max(400, noneView.width)
 	implicitHeight: 6 + Math.max(Math.max(icon.height, name.height + location.height), temp.height + weather.height)
 	
 	property variant weatherLocation

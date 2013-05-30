@@ -21,10 +21,19 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
-Item {
+Rectangle {
 	id: root
-	implicitWidth: Math.max(locations.currentItem.header.implicitWidth + 40, locations.currentItem.view.implicitWidth + 40);
-	implicitHeight: topToolBar.height + locations.currentItem.minimumHeight + bottomToolBar.height;
+	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
+	implicitHeight: topToolBar.height + Math.max(creditsText.height, infoText.height) + 5
+	+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
+	
+	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
+	
+	onBackgroundChanged: {
+		if (backgroundImage.visible) {
+			backgroundImage.source = background
+		}
+	}
 	
 	anchors {
 		left: parent.left;
@@ -33,157 +42,50 @@ Item {
 		right: parent.right;
 	}
 	
-	property string view: "today"
-	
-	property variant currentLocation: WeatherApp.currentLocation
-	
-	onCurrentLocationChanged: {
-		var index = WeatherApp.locations.indexOf(currentLocation)
-		if (index != -1) {
-			locations.currentIndex = index
+	Image {
+		id: backgroundImage
+		source: "../images/weather-clear.jpg"
+		anchors.fill: parent
+		visible: root.opacity > 0
+		
+		onVisibleChanged: {
+			if (visible) {
+				source = background
+			}
 		}
 	}
 	
-	ListView {
-		id: locations
-		anchors.fill: parent
+	/*Rectangle {
+	 *		 i d*: nightTimeShading
+	 *		 anchors.fill: parent
+	 *		 opacity: WeatherApp.currentLocation.day ? 0 : 1
+	 *		 color: Qt.rgba(0,0,0,0.7)
+	 *		 
+	 *		 Behavior on opacity {
+	 *			 NumberAnimation { duration: 500 }
+}
+}*/
+	
+	WeatherHeader {
+		id: header
+		anchors.top: infoText.bottom
+		//anchors.top: parent.top
+		anchors.horizontalCenter: parent.horizontalCenter
+		anchors.topMargin: 20
+		weatherLocation: WeatherApp.currentLocation
+	}
+	
+	WeatherView {
+		id: weatherView
 		
-		cacheBuffer: 5
-		highlightMoveSpeed: 2500
-		
-		orientation: ListView.Horizontal
-		model: WeatherApp.locations;
-		
-		snapMode: ListView.SnapOneItem
-		
-		delegate: Item {
-			id: locationView
-			width: locations.width
-			height: locations.height
-			
-			property real minimumHeight: infoText.height + weatherView.implicitHeight + weatherHeader.height + 65
-			
-			property url background: modelData.conditions.image || "../images/weather-clear.jpg"
-			property variant weatherLocation: modelData
-			property variant header: weatherHeader
-			property variant view: weatherView
-			
-			onBackgroundChanged: {
-				if (backgroundImage.visible) {
-					backgroundImage.source = background
-				}
-			}
-			
-			Image {
-				id: backgroundImage
-				source: "../images/weather-clear.jpg"
-				anchors.fill: parent
-				visible: root.opacity > 0
-				
-				onVisibleChanged: {
-					if (visible) {
-						source = background
-					}
-				}
-			}
-			
-// 			Rectangle {
-// 				id: nightTimeShading
-// 				anchors.fill: parent
-// 				opacity: WeatherApp.currentLocation.day ? 0 : 1
-// 				color: Qt.rgba(0,0,0,0.7)
-// 				 
-// 				Behavior on opacity {
-// 					 NumberAnimation { duration: 500 }
-// 				}
-// 			}
-			
-			WeatherHeader {
-				id: weatherHeader
-				
-				anchors {
-					top: infoText.bottom; 
-					horizontalCenter: parent.horizontalCenter;
-					margins: 20;
-				}
-				
-				weatherLocation: modelData
-			}
-			
-			WeatherView {
-				id: weatherView
-				
-				height: Math.max(implicitHeight, root.height - (weatherHeader.y + weatherHeader.height + 20) - (bottomToolBar.height + 20))
-				
-				anchors {
-					top: weatherHeader.bottom; margins: 20;
-					//bottom: bottomToolBar.top;
-					left: parent.left;
-					right: parent.right;
-				}
-				
-				view: root.view
-				
-				weatherLocation: modelData
-			}
-			
-			Row {
-				id: infoText
-				
-				y: topToolBar.height + 5
-				
-				anchors {
-					margins: 5
-					left: parent.left
-					right: parent.right
-				}
-				
-				PlasmaCore.IconItem {
-					id: statusIcon
-					anchors.verticalCenter: parent.verticalCenter
-					
-					width: visible ? height : 0;
-					height: 16;
-					source: "dialog-warning"
-					visible: weatherLocation.error
-					
-					MouseArea {
-						anchors.fill:parent
-						onClicked: {
-							showError(weatherLocation.location, weatherLocation.errorString)
-						}
-					}
-				}
-				
-				Text {
-					id: lastUpdatedText
-					anchors.verticalCenter: parent.verticalCenter
-					
-					text: i18nc("The time the weather was last downloaded", 
-					"Last updated at %1", Qt.formatTime(weatherLocation.lastUpdated))
-					visible: weatherLocation.valid
-					width: visible ? implicitWidth : 0;
-				}
-				
-				Item {
-					height: parent.height
-					width: parent.width - creditsText.width
-					- lastUpdatedText.width - statusIcon.width
-					- (parent.children.length - 1) * parent.spacing
-				}
-				
-				Text {
-					id: creditsText
-					anchors.verticalCenter: parent.verticalCenter
-					
-					text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
-					textFormat: Text.RichText;
-					onLinkActivated: {
-						Qt.openUrlExternally(link)
-					}
-				}
-			}
+		anchors {
+			top: header.bottom; topMargin: 20;
+			bottom: bottomToolBar.top; bottomMargin: 20;
+			left: parent.left; leftMargin: 20;
+			right: parent.right; rightMargin: 20;
 		}
+		
+		weatherLocation: WeatherApp.currentLocation
 	}
 	
 	PlasmaComponents.ToolBar {
@@ -204,9 +106,7 @@ Item {
 					text: i18n("Refresh")
 					onClicked: WeatherApp.currentLocation.refresh()
 					width: minimumWidth + 5
-					visible: WeatherApp.currentLocation != null && 
-							WeatherApp.currentLocation.needsRefresh &&
-							!WeatherApp.currentLocation.refreshing
+					visible: WeatherApp.currentLocation.needsRefresh && !WeatherApp.currentLocation.refreshing
 				}
 				
 				PlasmaWidgets.BusyWidget {
@@ -215,8 +115,7 @@ Item {
 					
 					width: height
 					height: refreshButton.height
-					visible: WeatherApp.currentLocation != null && 
-							WeatherApp.currentLocation.refreshing
+					visible: WeatherApp.currentLocation.refreshing
 					running: true
 				}
 				
@@ -237,15 +136,15 @@ Item {
 			}
 			
 			/*PlasmaComponents.ToolButton {
-				id: nowButton
-				iconSource: "arrow-down-double"
-				text: i18n("Now")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "conditions"
-				}
-				checked: weatherView.view == "conditions"
-			}*/
+			 *			id: nowButton
+			 *			iconSource: "arrow-down-double"
+			 *			text: i18n("Now")
+			 *			width: minimumWidth + 5
+			 *			onClicked: {
+			 *				weatherView.view = "conditions"
+			 }
+			 checked: weatherView.view == "conditions"
+			 }*/
 			
 			PlasmaComponents.ToolButton {
 				id: todayButton
@@ -253,9 +152,9 @@ Item {
 				text: i18n("Today")
 				width: minimumWidth + 5
 				onClicked: {
-					root.view = "today"
+					weatherView.view = "today"
 				}
-				checked: root.view == "today"
+				checked: weatherView.view == "today"
 			}
 			
 			/*PlasmaComponents.ToolButton {
@@ -274,9 +173,9 @@ Item {
 				text: i18n("Daily")
 				width: minimumWidth + 5
 				onClicked: {
-					root.view = "daily"
+					weatherView.view = "daily"
 				}
-				checked: root.view == "daily"
+				checked: weatherView.view == "daily"
 			}
 			
 			Item {
@@ -306,9 +205,64 @@ Item {
 		}
 	}
 	
+	Row {
+		id: infoText
+		
+		anchors {
+			top: topToolBar.bottom
+			margins: 5
+			left: parent.left
+			right: parent.right
+		}
+		
+		PlasmaCore.IconItem {
+			id: statusIcon
+			anchors.verticalCenter: parent.verticalCenter
+			
+			width: visible ? height : 0;
+			height: 16;
+			source: "dialog-warning"
+			visible: WeatherApp.currentLocation.error
+			
+			MouseArea {
+				anchors.fill:parent
+				onClicked: {
+					showError(WeatherApp.currentLocation.location, WeatherApp.currentLocation.errorString)
+				}
+			}
+		}
+		
+		Text {
+			id: lastUpdatedText
+			anchors.verticalCenter: parent.verticalCenter
+			
+			text: i18nc("The time the weather was last downloaded", 
+					"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+			visible: WeatherApp.currentLocation.valid
+			width: visible ? implicitWidth : 0;
+		}
+		
+		Item {
+			height: parent.height
+			width: parent.width - creditsText.width
+					- lastUpdatedText.width - statusIcon.width
+					- (parent.children.length - 1) * parent.spacing
+		}
+		
+		Text {
+			id: creditsText
+			anchors.verticalCenter: parent.verticalCenter
+			
+			text: i18nc("Credits for the weather data", "Powered by <a href=\"http://forecast.io/\">Forecast.io</a>")
+			textFormat: Text.RichText;
+			onLinkActivated: {
+				Qt.openUrlExternally(link)
+			}
+		}
+	}
+	
 	PlasmaComponents.ToolBar {
 		id: bottomToolBar
-		//width: parent.width
 		
 		anchors.bottom: parent.bottom
 		
@@ -319,20 +273,19 @@ Item {
 			
 			ListView {
 				id: list
-				clip: true
 				
 				height: 100
 				width: parent.width
-				- listActions.width - actionsSeparator.width
-				- (parent.children.length - 1) * parent.spacing
+						- listActions.width - actionsSeparator.width
+						- (parent.children.length - 1) * parent.spacing
 				
 				orientation: ListView.Horizontal
-				
+				clip: true
 				spacing: 5
+				
+				
 				model: WeatherApp.locations;
 				delegate: tileitem;
-				
-				focus: true
 			}
 			
 			PlasmaWidgets.Separator {
@@ -375,7 +328,7 @@ Item {
 			
 			WeatherTile {
 				anchors.centerIn: parent;
-				selected: WeatherApp.currentLocation != null && modelData.location == WeatherApp.currentLocation.location;
+				selected: modelData.location == WeatherApp.currentLocation.location;
 				
 				onSelectedChanged: {
 					if (selected) {
