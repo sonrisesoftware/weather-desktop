@@ -102,6 +102,9 @@ Panel {
 				font.pixelSize: appStyle.dataFontSize
 				color: appStyle.textColor
 				
+				style: Text.Raised
+				styleColor: appStyle.shadowColor
+				
 				anchors {
 					topMargin: 42
 					top: icon.bottom

@@ -128,11 +128,11 @@ QString Forecast::Forecast::wind(float speed, float dir) {
 	
 	QString from = compass[i];
 	if (Weather::Location::units().speed() == Weather::Units::MilesPerHour) {
-		return validate(speed, validate(dir, format(speed) + " mph from " + from));
+		return validate(speed, validate(dir, from + " @ " + format(speed) + " mph"));
 	} else if (Weather::Location::units().speed() == Weather::Units::KilometersPerHour) {
-		return validate(speed, validate(dir, format(1.60934 * speed) + " km/hr from " + from));
+		return validate(speed, validate(dir, from + " @ " + format(1.60934 * speed) + " km/hr"));
 	} else if (Weather::Location::units().speed() == Weather::Units::MetersPerSecond) {
-		return validate(speed, validate(dir, format(0.44704 * speed) + " m/s from " + from));
+		return validate(speed, validate(dir, from + " @ " + format(0.44704 * speed) + " m/s"));
 	} else {
 		qFatal("Unknown units!");
 		return "";

@@ -140,7 +140,7 @@ Rectangle {
 				}
 			}
 			
-			PlasmaComponents.ToolButton {
+			/*PlasmaComponents.ToolButton {
 				id: nowButton
 				iconSource: "arrow-down-double"
 				text: i18n("Now")
@@ -149,6 +149,17 @@ Rectangle {
 					weatherView.view = "conditions"
 				}
 				checked: weatherView.view == "conditions"
+			}*/
+			
+			PlasmaComponents.ToolButton {
+				id: todayButton
+				iconSource: "go-jump-today"
+				text: i18n("Today")
+				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "today"
+				}
+				checked: weatherView.view == "today"
 			}
 			
 			/*PlasmaComponents.ToolButton {
@@ -175,9 +186,9 @@ Rectangle {
 			Item {
 				height: parent.height
 				width: parent.width - refreshTools.width
-				- nowButton.width - dailyButton.width
-				- searchField.width - configureButton.width
-				- (parent.children.length - 1) * parent.spacing
+						- todayButton.width - dailyButton.width
+						- searchField.width - configureButton.width
+						- (parent.children.length - 1) * parent.spacing
 			}
 			
 			PlasmaWidgets.LineEdit {

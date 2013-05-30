@@ -27,7 +27,7 @@ Rectangle {
 	color: "#00000000" // transparent
 	//radius: 6
 	
-	property string view: "conditions"
+	property string view: "today"
 	property bool is_valid: WeatherApp.currentLocation.valid
 	property bool is_refreshing: !is_valid && WeatherApp.currentLocation.refreshing
 	property bool is_error: !is_valid && WeatherApp.currentLocation.error
@@ -91,6 +91,16 @@ Rectangle {
 		}
 	}
 	
+	WeatherToday {
+		id: today
+		anchors.centerIn: root
+		opacity: 0
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
+	}
+	
 	states: [
 		State {
 			name: "conditions"
@@ -105,6 +115,13 @@ Rectangle {
 			PropertyChanges { target: dailyForecast; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: dailyForecast.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: dailyForecast.implicitHeight; }
+		},
+		State {
+			name: "today"
+			when: is_valid && view == "today"
+			PropertyChanges { target: today; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: today.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: today.implicitHeight; }
 		},
 		State {
 			name: "refreshing"
