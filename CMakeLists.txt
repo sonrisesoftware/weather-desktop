@@ -5,6 +5,7 @@ find_package(KDeclarative REQUIRED)
 #find_package(QJson REQUIRED)
 include (KDE4Defaults)
 
+add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/qclassgen")
 include(qclassgen)
 
@@ -20,12 +21,14 @@ add_subdirectory(images)
 set(CPACK_GENERATOR "DEB" "TGZ")
 set(CPACK_PACKAGE_NAME "weather-desktop")
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
-set(CPACK_PACKAGE_VERSION_MINOR "1")
-set(CPACK_PACKAGE_VERSION_PATCH "1")
-set(CPACK_DEBIAN_ARCHITECTURE $ {CMAKE_SYSTEM_PROCESSOR})
+set(CPACK_PACKAGE_VERSION_MINOR "3")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+set(CPACK_DEBIAN_ARCHITECTURE ${CMAKE_SYSTEM_PROCESSOR})
 set(DEBIAN_PACKAGE_BUILDS_DEPENDS "")
 #set(CPACK_DEBIAN_PACKAGE_SECTION "")
-#set(CPACK_DEBIAN_PACKAGE_DEPENDS "cssrobopec,libqt4-xml,libqt4-network,libqtgui4,treeupdatablereeti")
+# autogenerate dependency information
+SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
+set (CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 set(CPACK_DEBIAN_PACKAGE_DESCRIPTION "An advanced weather app.
   Check the weather in a simple and easy-to-use manner. With no ads and a beautiful interface, it's easier and faster than checking weather websites!
   Weather Desktop provides access to multiple named locations, with previews of all available at the same time. It displays detailed current conditions, daily forecasts for the next seven days, and hourly forecasts for the next 24 hours. For people on the go, Weather Desktop can automatically determine your location using your IP address. In addition, users can easily add their own backgrounds, weather-related or not, to the application.
