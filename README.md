@@ -29,7 +29,6 @@ _**Note:** the features marked below in italics do not exist yet but are schedul
 
  * Development by Michael Spencer (@iBeliever)
  * Design by Michael Spencer (@iBeliever) and Christopher Spencer
- * Powered by World Weather Online
  * Powered by [Forecast.io](http://forecast.io/)
  * Nominatim Search Courtesy of [MapQuest](http://www.mapquest.com/) <img src="http://developer.mapquest.com/content/osm/mq_logo.png">
 
