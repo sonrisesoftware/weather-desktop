@@ -12,9 +12,9 @@ _**Note:** the features marked below in italics do not exist yet but are schedul
  * Runs on any system that supports the KDE libraries
  * Multiple named locations
  * Current weather conditions
- * _Weather forecasts for 10 days_
+ * Weather forecasts for 5 days
  * _Severe weather alerts_
- * _Background of app depicts current conditions_
+ * Background of app depicts current conditions
  * _User can add additional backgrounds (weather-related or not)_
 
 ### Requirements ###
@@ -51,7 +51,7 @@ If you are using Ubuntu, you can buy the application from the Ubuntu Software Ce
 
 When building from source, you will need an API key from World Weather Online, [Weather Underground](http://www.wunderground.com/?apiref=f7b0e81e954c09e8), or [Forecast.io](http://developer.forecast.io).
 
-Currently, if you don't want to edit any actual source code files, you must use Forecast.io, as the selection of a weather backend is hardcoded into the app.
+Currently, the only working backend is Forecast.io, as the other backends have not been updated and are disabled.
 
 Once you have an API key, create a file called `src/api_key.h` and add your API key to it:
 
