@@ -64,6 +64,12 @@ Weather::DataBlock* Forecast::Forecast::create_dailyForecast(Weather::Location* 
 	return new WeatherBlock(location, "daily");
 }
 
+Weather::DataBlock* Forecast::Forecast::create_hourlyForecast(Weather::Location* location)
+{
+	return new WeatherBlock(location, "hourly");
+}
+
+
 void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
 {
 	json_call(location, query + '/' + Weather::Service::apiKey() + '/' + internalLocation(location) + '?' + params, receiver, slot);
@@ -110,7 +116,7 @@ QString Forecast::Forecast::humidity(float value) {
 }
 
 QString Forecast::Forecast::probability(float value) {
-	return validate(value, format(value * 100, 1) + '%');
+	return validate(value, format(value * 100, 2) + '%');
 }
 
 QString Forecast::Forecast::wind(float speed, float dir) {

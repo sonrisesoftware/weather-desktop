@@ -13,6 +13,7 @@ set(weather-desktop_QML
    Style.qml
    WeatherConditions.qml
    WeatherHeader.qml
+   WeatherHourly.qml
    WeatherTile.qml
    WeatherToday.qml
    WeatherView.qml

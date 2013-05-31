@@ -93,6 +93,18 @@ Rectangle {
 		weatherLocation: root.weatherLocation
 	}
 	
+	WeatherHourly {
+		id: hourlyForecast
+		anchors.centerIn: root
+		opacity: 0
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
+		
+		weatherLocation: root.weatherLocation
+	}
+	
 	WeatherToday {
 		id: today
 		anchors.centerIn: root
@@ -117,6 +129,13 @@ Rectangle {
 			name: "daily"
 			when: is_valid && view == "daily"
 			PropertyChanges { target: dailyForecast; opacity: 1; restoreEntryValues: true; }
+			PropertyChanges { target: root; implicitWidth: dailyForecast.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: dailyForecast.implicitHeight; }
+		},
+		State {
+			name: "hourly"
+			when: is_valid && view == "hourly"
+			PropertyChanges { target: hourlyForecast; opacity: 1; restoreEntryValues: true; }
 			PropertyChanges { target: root; implicitWidth: dailyForecast.implicitWidth; }
 			PropertyChanges { target: root; implicitHeight: dailyForecast.implicitHeight; }
 		},

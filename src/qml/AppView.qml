@@ -157,15 +157,17 @@ Rectangle {
 				checked: weatherView.view == "today"
 			}
 			
-			/*PlasmaComponents.ToolButton {
-			 *		iconSource: "clock"
-			 *		text: i18n("Hourly")
-			 *		width: minimumWidth + 5
-			 *		onClicked: {
-			 *			weatherView.view = "hourly"
-			 }
-			 checked: weatherView.view == "hourly"
-			 }*/
+			PlasmaComponents.ToolButton {
+				id: hourlyButton
+				
+				iconSource: "clock"
+				text: i18n("Hourly")
+				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "hourly"
+				}
+				checked: weatherView.view == "hourly"
+			}
 			
 			PlasmaComponents.ToolButton {
 				id: dailyButton
@@ -180,8 +182,9 @@ Rectangle {
 			
 			Item {
 				height: parent.height
-				width: parent.width - refreshTools.width
-						- todayButton.width - dailyButton.width
+				width: parent.width
+						- refreshTools.width - todayButton.width 
+						- dailyButton.width - hourlyButton.width
 						- searchField.width - configureButton.width
 						- (parent.children.length - 1) * parent.spacing
 			}
