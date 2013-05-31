@@ -49,13 +49,12 @@ int main(int argc, char **argv)
 			version,										// Version number
 			ki18nc("@title", description),					// Description
 			KAboutData::License_GPL_V3,						// License
-			ki18nc("@info",									// Copyright
-				   "(C) 2013 Michael Spencer"
-			),
+			ki18n("(C) 2013 Michael Spencer"),				// Copyright
 			ki18nc("@info", credits),						// Credits
 			"https://github.com/iBeliever/weather-desktop",	// Home page
 			"spencers199@gmail.com"							// Bugs email address
 	);
+	
 	about.addAuthor(ki18nc("@info:credit", "Michael Spencer"),
 			ki18nc("@info:credit", "Maintainer, developer, and designer"),
 			"spencers1993@gmail.com", "http://ibeliever.github.io");
