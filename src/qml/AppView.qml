@@ -305,16 +305,12 @@ Rectangle {
 				
 				PlasmaComponents.ToolButton {
 					iconSource: "list-add"
-					//text: i18n("Add")
 					onClicked: WeatherApp.addCurrentLocation()
-					//width: minimumWidth + 5
 				}
 				
 				PlasmaComponents.ToolButton {
 					iconSource: "edit-delete"
-					//text: i18n("Delete")
 					onClicked: WeatherApp.removeCurrentLocation()
-					//width: minimumWidth + 5
 				}
 			}
 		}
@@ -350,7 +346,6 @@ Rectangle {
 				icon: modelData.conditions.icon;
 				weather: modelData.conditions.summary;
 				
-				//tempForecast: modelData.dailyForecast.at(0).temperatureMax;
 				iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
 				weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
 			}
