@@ -32,6 +32,10 @@ Rectangle {
 	
 	property variant weatherLocation;
 	
+	onStateChanged: {
+		console.log("Width, height: " + width + ", " + height);
+	}
+	
 	PlasmaWidgets.BusyWidget {
 		id: refreshingWidget
 		anchors.centerIn: parent
@@ -136,8 +140,8 @@ Rectangle {
 			name: "hourly"
 			when: is_valid && view == "hourly"
 			PropertyChanges { target: hourlyForecast; opacity: 1; restoreEntryValues: true; }
-			PropertyChanges { target: root; implicitWidth: dailyForecast.implicitWidth; }
-			PropertyChanges { target: root; implicitHeight: dailyForecast.implicitHeight; }
+			PropertyChanges { target: root; implicitWidth: hourlyForecast.implicitWidth; }
+			PropertyChanges { target: root; implicitHeight: hourlyForecast.implicitHeight; }
 		},
 		State {
 			name: "today"

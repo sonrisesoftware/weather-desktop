@@ -193,6 +193,7 @@ Panel {
 			rightMargin: 10;
 		}
 		
+		orientation: Qt.Horizontal
 		itemWidth: tileWidth
 		itemHeight: tileHeight
 		itemSpacing: 5
