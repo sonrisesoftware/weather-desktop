@@ -25,7 +25,7 @@ Item {
 	id: root
 	
 	width: itemWidth * itemCount + itemSpacing * (itemCount - 1)
-	height: itemHeight + scrollBar.height + 5;
+	height: itemHeight// + scrollBar.height + 5;
 	
 	property int itemWidth
 	property int itemHeight
@@ -38,8 +38,8 @@ Item {
 		id: list
 		anchors {
 			top: parent.top
-			bottom: scrollBar.top;
-			bottomMargin: 5;
+			bottom: parent.bottom;//scrollBar.top;
+			//bottomMargin: 5;
 			left: parent.left;
 			right: parent.right;
 		}
@@ -54,7 +54,13 @@ Item {
 	ScrollBar {
 		id: scrollBar
 		
-		anchors.bottom: parent.bottom		
+		anchors {
+			left: parent.left; leftMargin: 2;
+			right: parent.right; rightMargin: 2;
+			bottom: parent.bottom;
+		}
+		
+		orientation: Qt.Horizontal
 		target: list
 	}
 }

@@ -57,6 +57,7 @@ WeatherDesktop::WeatherDesktop()
 WeatherDesktop::~WeatherDesktop()
 {
 	saveSettings();
+	App->service()->stopAllJobs();
 }
 
 void WeatherDesktop::init()
@@ -270,6 +271,11 @@ void WeatherDesktop::updateConfiguration()
 	
 }
 
+/**
+ * This should be used when loading a location from configuration data. 
+ * The difference from addLocation is that the app doesn't switch to the loaded
+ * location as the current location.
+ */
 Weather::Location *WeatherDesktop::loadLocation(const QString& name, const QString& location)
 {
 	Q_ASSERT(!location.isEmpty());
@@ -379,7 +385,8 @@ void WeatherDesktop::initialSetup()
 	if (ok) {
 		App->service()->setApiKey(key);
 	} else {
-		KMessageBox::error(this, i18n("Weather Desktop will not work without an API key!"));
+		App->exit(0);
+		return;
 	}
 #endif
 	

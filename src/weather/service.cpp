@@ -99,6 +99,18 @@ void Service::stopJobs(Weather::Location *location)
 	}
 }
 
+void Service::stopAllJobs()
+{	
+	while (!m_jobs.isEmpty()) {
+		KIO::Job *job = m_jobs.keys()[0];
+		
+		job->kill();
+		job->deleteLater();
+		m_jobs[job]->deleteLater();
+		m_jobs.remove(job);
+	}
+}
+
 void Weather::Service::data_downloaded(KIO::Job* job, const QByteArray& data)
 {
 	DownloadJob *obj = m_jobs[job];

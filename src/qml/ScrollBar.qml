@@ -26,31 +26,37 @@ Item {
 	property variant target
 	
 	clip: true
-	height: 5
 	smooth: true
 	
-	anchors {
-		left: target.left
-		right: target.right
-		margins: 2
-	}
+	property variant orientation: Qt.Vertical
+	property int thickness: 5
 	
+	onOrientationChanged: {
+		if (orientation == Qt.Vertical) {
+			width = thickness
+		} else {
+			height = thickness
+		}
+	}
 	
 	Rectangle {
 		id: scrollBar
 		color: "black"//"white"
 		opacity: 0.3
-		radius: height/2
+		radius: thickness/2
 		
-		anchors {
-			top: root.top
-			bottom: root.bottom
-		}
+		width: orientation == Qt.Horizontal ? end - start : thickness
+		height: orientation == Qt.Vertical ? end - start : thickness
+		x: orientation == Qt.Horizontal ? start : 0
+		y: orientation == Qt.Vertical ? start : 0
 		
-		width: end - x
+		property int length: orientation == Qt.Vertical ? root.height : root.width;
+		property int targetLength: orientation == Qt.Vertical ? target.height : target.width;
+		property int contentStart: orientation == Qt.Vertical ? target.contentY : target.contentX;
+		property int contentLength: orientation == Qt.Vertical ? target.contentHeight : target.contentWidth;
 		
-		x: Math.max(0, root.width * target.contentX/target.contentWidth)
-		property int end: Math.min(root.width, root.width * (target.contentX + root.width)/target.contentWidth)
+		property int start: Math.max(0, length * contentStart/contentLength);
+		property int end: Math.min(length, length * (contentStart + targetLength)/contentLength)
 
 		states: [
 			State {

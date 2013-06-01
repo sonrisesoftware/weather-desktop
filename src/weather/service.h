@@ -82,6 +82,7 @@ namespace Weather
 	public slots:
 		virtual void download(Weather::Location *location) = 0;
 		void stopJobs(Weather::Location *location);
+		void stopAllJobs();
 		
 		void resetAccessCount() {
 			setAccessCount(0);
