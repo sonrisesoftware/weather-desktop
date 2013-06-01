@@ -25,7 +25,7 @@ Rectangle {
 	id: root
 	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
 	implicitHeight: topToolBar.height + Math.max(creditsText.height, infoText.height) + 5
-	+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
+			+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
 	
 	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
 	
@@ -345,9 +345,11 @@ Rectangle {
 				temp: modelData.conditions.temperature;
 				icon: modelData.conditions.icon;
 				weather: modelData.conditions.summary;
+				maxTemp: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).temperatureMax : "";
+				minTemp: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).temperatureMin : "";
 				
 				iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
-				weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
+				//weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
 			}
 		}
 	}

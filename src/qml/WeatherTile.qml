@@ -39,8 +39,9 @@ Rectangle {
 	property alias temp: temp.text;
 	property alias weather: weather.text;
 	property alias iconForecast: iconForecast.source;
-	//property alias tempForecast: tempForecast.text;
-	property alias weatherForecast: weatherForecast.text;
+	property alias maxTemp: maxTemp.text;
+	property alias minTemp: minTemp.text;
+	//property alias weatherForecast: weatherForecast.text;
 	
 	property bool alert: false;
 	property bool selected: false;
@@ -167,27 +168,58 @@ Rectangle {
 		}*/
 		
 		Text {
-			id: weatherForecast
-			
+			id: minTemp
 			anchors {
-				left: iconForecast.right;
-				leftMargin: 10;
-				right: parent.right;
-				rightMargin: 10;
-				//top: iconForecast.top;//parent.verticalCenter;
-				//bottom: iconForecast.bottom;
-				verticalCenter: iconForecast.verticalCenter;
+				verticalCenter: parent.verticalCenter
+				left: iconForecast.right
+				leftMargin: 15
 			}
 			
-			font.pixelSize: appStyle.headerFontSize - 2;
-			color: textColor;
+			font.pixelSize: appStyle.titleFontSize + 2;
+			color: "#217ecd"
+			
 			style: Text.Raised
 			styleColor: appStyle.shadowColor
-			elide: Text.ElideRight;
-			wrapMode: Text.Wrap;
-			textFormat: Text.PlainText
-			maximumLineCount: 3
 		}
+		
+		Text {
+			id: maxTemp
+			
+			anchors {
+				verticalCenter: parent.verticalCenter
+				left: minTemp.right
+				leftMargin: 12
+			}
+			
+			font.pixelSize: appStyle.titleFontSize + 7;
+			color: "#c31f1f"
+			
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
+		}
+		
+// 		Text {
+// 			id: weatherForecast
+// 			
+// 			anchors {
+// 				left: iconForecast.right;
+// 				leftMargin: 10;
+// 				right: parent.right;
+// 				rightMargin: 10;
+// 				//top: iconForecast.top;//parent.verticalCenter;
+// 				//bottom: iconForecast.bottom;
+// 				verticalCenter: iconForecast.verticalCenter;
+// 			}
+// 			
+// 			font.pixelSize: appStyle.headerFontSize - 2;
+// 			color: textColor;
+// 			style: Text.Raised
+// 			styleColor: appStyle.shadowColor
+// 			elide: Text.ElideRight;
+// 			wrapMode: Text.Wrap;
+// 			textFormat: Text.PlainText
+// 			maximumLineCount: 3
+// 		}
 	}
 	
 	Behavior on color {

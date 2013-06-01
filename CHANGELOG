@@ -1,4 +1,14 @@
-weather-desktop (0.3); urgency=low
+weather-desktop (0.3.1); urgency=low
+
+ * Added ability to enter API key on first run (if not hardcoded)
+ * Updated CPack debian packaging info
+ * Fixed #51 - Fixed display of license in the about dialog
+ * Fixed #54 - Show the high and low for the day in the location tile's forecast
+ 
+-- Michael Spencer <spencers1993@gmail.com>  Fri, 31 May 2013 21:05:29 -0500
+
+
+weather-desktop (0.3); urgency=medium
 
  * Fixed #40 - Added UI for overview of today's weather
  * Fixed #45 - Moved handling of errors and refreshing into background
@@ -12,7 +22,7 @@ weather-desktop (0.3); urgency=low
  * Fixed #30 - Access times are now stored in UTC
  * Added forecasts backend in Forecast.io and UI for daily forecasts
 
--- Michael Spencer <spencers93@gmail.com>  Thu, 30 May 2013 13:16:10 -0500
+-- Michael Spencer <spencers1993@gmail.com>  Thu, 30 May 2013 13:16:10 -0500
 
 
 weather-desktop (0.2); urgency=medium

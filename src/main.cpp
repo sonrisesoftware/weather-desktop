@@ -39,7 +39,7 @@ static const char description[] =
 static const char credits[] =
 		I18N_NOOP("Powered by <a href=\"http://forecast.io/\">Forecast.io</a>\nNominatim Search Courtesy of <a href=\"http://www.mapquest.com/\" target=\"_blank\">MapQuest</a>");
 
-static const char version[] = "0.3";
+static const char version[] = "0.3.1";
 Application *App;
 
 int main(int argc, char **argv)
@@ -49,13 +49,12 @@ int main(int argc, char **argv)
 			version,										// Version number
 			ki18nc("@title", description),					// Description
 			KAboutData::License_GPL_V3,						// License
-			ki18nc("@info",									// Copyright
-				   "(C) 2013 Michael Spencer"
-			),
+			ki18n("(C) 2013 Michael Spencer"),				// Copyright
 			ki18nc("@info", credits),						// Credits
 			"https://github.com/iBeliever/weather-desktop",	// Home page
 			"spencers199@gmail.com"							// Bugs email address
 	);
+	
 	about.addAuthor(ki18nc("@info:credit", "Michael Spencer"),
 			ki18nc("@info:credit", "Maintainer, developer, and designer"),
 			"spencers1993@gmail.com", "http://ibeliever.github.io");
