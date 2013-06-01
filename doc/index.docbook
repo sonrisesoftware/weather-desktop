@@ -1,0 +1,146 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN"
+ "dtd/kdex.dtd" [
+<!ENTITY i18n-ktouch "<application>Typewriting Trainer</application>">
+<!ENTITY weather-desktop "<application>Weather Desktop</application>">
+<!ENTITY kappname "&weather-desktop;"><!-- replace kapp here -->
+<!-- <!ENTITY package "kdeedu"> -->
+<!ENTITY % addindex "IGNORE">
+<!ENTITY % English "INCLUDE"><!-- change language only here -->
+]>
+
+<book id="weather-desktop" lang="&language;">
+
+<bookinfo>
+<title>The &kappname; Handbook</title>
+
+<authorgroup>
+	<author>
+		<firstname>Michael</firstname>
+		<surname>Spencer</surname>
+		<affiliation>
+			<address>
+				<email>spencers1993@gmail.com</email>
+			</address>
+		</affiliation>
+	</author>
+	
+	<othercredit role="developer">
+		<firstname>Christopher</firstname>
+		<surname>Spencer</surname>
+		<affiliation>
+			<address>
+				<email>spencers1993@gmail.com</email>
+			</address>
+		</affiliation>
+		<contrib>Designer</contrib>
+	</othercredit>
+	
+	<!-- TRANS:ROLES_OF_TRANSLATORS -->
+	
+</authorgroup>
+
+
+<copyright>
+<year>2013</year>
+<holder>Michael Spencer</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2013-06-01</date>
+<releaseinfo>0.3.2</releaseinfo>
+
+<abstract>
+<para>
+	Check the weather in a simple and easy-to-use manner. With no ads and
+	a beautiful interface, it's easier and faster than checking weather websites!
+</para>
+</abstract>
+
+<keywordset>
+<keyword>KDE</keyword>
+<keyword>weather</keyword>
+<keyword>forecast</keyword>
+</keywordset>
+
+</bookinfo>
+
+<chapter id="whatis">
+<title>What is &kappname;?</title>
+<para>
+	Check the weather in a simple and easy-to-use manner. With no ads and a
+	beautiful interface, it's easier and faster than checking weather websites!
+</para>
+<para>
+	&kappname; provides access to multiple named locations, with previews of
+	all available at the same time. &kappname; displays detailed current 
+	conditions, daily forecasts for the next five days, and hourly forecasts for the
+	next 24 hours. Severe alerts are coming soon!
+</para>
+
+<screenshot>
+	<screeninfo>The main screen of &kappname;</screeninfo>
+	<mediaobject>
+		<imageobject>
+			<imagedata fileref="main_screen.png" format="PNG"/>
+		</imageobject>
+		<textobject>
+			<phrase>The main screen of &kappname;</phrase>
+		</textobject>
+	</mediaobject>
+</screenshot>
+
+<para>&i18n-ktouch; is a touch typing tutor aimed mostly at personal use. You learn
+typing with all fingers, step by step, without having to look down 
+at the keyboard all the time to find the right keys which slows you down a lot.
+</para>
+</chapter>
+
+
+<chapter id="credits">
+
+<title>Credits and License</title>
+<para>&kappname;</para>
+<para>
+	Program Copyright 2013 by Michael Spencer <email>spencers1993@gmail.com</email>
+</para>
+
+<para>Contributors:</para>
+<itemizedlist>
+<listitem><simpara>Christopher Spencer - Designer of the icon, backgrounds, and some of the UI</simpara></listitem>
+</itemizedlist>
+<!--<para><emphasis>Special thanks to all the other (here not mentioned)
+contributors of backgrounds.</emphasis>
+</para>-->
+<!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+
+&underFDL;				<!-- FDL: do not remove -->
+&underGPL;			<!-- GPLv3 License -->
+
+</chapter>
+
+<appendix id="installation">
+<title>How to obtain and install &kappname;</title>
+
+&install.intro.documentation;
+ 
+<sect1 id="Compilation">
+<title>Compilation and Installation</title>
+&install.compile.documentation;
+</sect1>
+</appendix>
+
+&documentation.index;
+</book>
+<!--
+Local Variables:
+mode: sgml
+sgml-minimize-attributes:nil
+sgml-general-insert-case:lower
+sgml-indent-step:0
+sgml-indent-data:nil
+End:
+
+// vim:ts=0:sw=2:tw=78:noet
+-->
