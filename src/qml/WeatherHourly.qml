@@ -35,6 +35,60 @@ Panel {
 	
 	title: "Hourly Forecast"
 	
+	PlasmaCore.IconItem {
+		id: leftIcon
+		source: "draw-arrow-back";
+		width: 16;
+		height: 16;
+		opacity: 0;
+		
+		anchors {
+			left: root.left
+			leftMargin: 10
+			verticalCenter: view.verticalCenter
+		}
+		
+		SequentialAnimation {
+			id: leftAnimation
+			loops: 3;
+			NumberAnimation { target: leftIcon; property: "opacity"; from: 0; to: 1; duration: 1000; easing.type: Easing.InOutQuad; }
+			NumberAnimation { target: leftIcon; property: "opacity"; from: 1; to: 0; duration: 1000; easing.type: Easing.InOutQuad; }
+		}
+	}
+	
+	PlasmaCore.IconItem {
+		id: rightIcon
+		source: "draw-arrow-forward";
+		width: 16;
+		height: 16;
+		opacity: 0;
+		
+		anchors {
+			right: root.right
+			rightMargin: 10
+			verticalCenter: view.verticalCenter
+		}
+		
+		SequentialAnimation {
+			id: rightAnimation
+			loops: 3;
+			NumberAnimation { target: rightIcon; property: "opacity"; from: 0; to: 1; duration: 1000; easing.type: Easing.InOutQuad; }
+			NumberAnimation { target: rightIcon; property: "opacity"; from: 1; to: 0; duration: 1000; easing.type: Easing.InOutQuad; }			
+		}
+	}
+	
+	onOpacityChanged: {
+		if (opacity == 1) {
+			leftAnimation.stop()
+			rightAnimation.stop()
+			leftAnimation.start()
+			rightAnimation.start()
+		} else if (opacity == 0) {
+			leftAnimation.stop()
+			rightAnimation.stop()
+		}
+	}
+	
 	Component {
 		id: dayForecast
 		

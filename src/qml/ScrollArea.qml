@@ -38,8 +38,8 @@ Item {
 		id: list
 		anchors {
 			top: parent.top
-			bottom: parent.bottom;//scrollBar.top;
-			//bottomMargin: 5;
+			bottom: scrollBar.top;
+			bottomMargin: 5;
 			left: parent.left;
 			right: parent.right;
 		}
