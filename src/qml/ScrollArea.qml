@@ -43,7 +43,6 @@ Rectangle {
 	ListView {
 		id: list
 		
-		
 		height: itemHeight
 		
 		snapMode: ListView.SnapToItem

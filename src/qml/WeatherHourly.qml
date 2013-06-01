@@ -29,65 +29,11 @@ Panel {
 	
 	property int tileWidth: 500
 	property int tileHeight: 24
-	property int tileCount: 10
+	property int tileCount: 7
 	
 	property variant weatherLocation
 	
 	title: "Hourly Forecast"
-	
-// 	PlasmaCore.IconItem {
-// 		id: leftIcon
-// 		source: "draw-arrow-back";
-// 		width: 16;
-// 		height: 16;
-// 		opacity: 0;
-// 		
-// 		anchors {
-// 			left: root.left
-// 			leftMargin: 10
-// 			verticalCenter: view.verticalCenter
-// 		}
-// 		
-// 		SequentialAnimation {
-// 			id: leftAnimation
-// 			loops: 3;
-// 			NumberAnimation { target: leftIcon; property: "opacity"; from: 0; to: 1; duration: 1000; easing.type: Easing.InOutQuad; }
-// 			NumberAnimation { target: leftIcon; property: "opacity"; from: 1; to: 0; duration: 1000; easing.type: Easing.InOutQuad; }
-// 		}
-// 	}
-// 	
-// 	PlasmaCore.IconItem {
-// 		id: rightIcon
-// 		source: "draw-arrow-forward";
-// 		width: 16;
-// 		height: 16;
-// 		opacity: 0;
-// 		
-// 		anchors {
-// 			right: root.right
-// 			rightMargin: 10
-// 			verticalCenter: view.verticalCenter
-// 		}
-// 		
-// 		SequentialAnimation {
-// 			id: rightAnimation
-// 			loops: 3;
-// 			NumberAnimation { target: rightIcon; property: "opacity"; from: 0; to: 1; duration: 1000; easing.type: Easing.InOutQuad; }
-// 			NumberAnimation { target: rightIcon; property: "opacity"; from: 1; to: 0; duration: 1000; easing.type: Easing.InOutQuad; }			
-// 		}
-// 	}
-// 	
-// 	onOpacityChanged: {
-// 		if (opacity == 1) {
-// 			leftAnimation.stop()
-// 			rightAnimation.stop()
-// 			leftAnimation.start()
-// 			rightAnimation.start()
-// 		} else if (opacity == 0) {
-// 			leftAnimation.stop()
-// 			rightAnimation.stop()
-// 		}
-// 	}
 	
 	Component {
 		id: dayForecast
@@ -154,6 +100,7 @@ Panel {
 					
 					width: 30
 					text: modelData.precipProbability || "0%"
+					horizontalAlignment: Text.AlignHCenter
 					font.pixelSize: appStyle.headerFontSize
 					color: appStyle.textColor
 					
@@ -172,6 +119,7 @@ Panel {
 					
 					width: 30
 					text: modelData.temperature
+					horizontalAlignment: Text.AlignHCenter
 					font.pixelSize: appStyle.headerFontSize
 					color: appStyle.textColor
 					
@@ -237,6 +185,7 @@ Panel {
 				width: 24
 				text: "Weather"
 				font.pixelSize: appStyle.dataFontSize
+				horizontalAlignment: Text.AlignHCenter
 				color: appStyle.textColor
 				
 				style: Text.Raised
@@ -255,6 +204,7 @@ Panel {
 				
 				width: 30
 				text: "Probability"
+				horizontalAlignment: Text.AlignHCenter
 				font.pixelSize: appStyle.dataFontSize
 				color: appStyle.textColor
 				
@@ -273,6 +223,7 @@ Panel {
 				
 				width: 30
 				text: "Temp"
+				horizontalAlignment: Text.AlignHCenter
 				font.pixelSize: appStyle.dataFontSize
 				color: appStyle.textColor
 				
