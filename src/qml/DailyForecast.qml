@@ -24,12 +24,12 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Panel {
 	id: root
 	
-	// FIXME: Why doesn't the WeatherPanel version work???
-	implicitWidth: Math.max(header.width + 10, days.width + 10)
-	implicitHeight: header.height + tileHeight + 30
+	implicitWidth: Math.max(header.width + 10, view.width + 20)
+	implicitHeight: header.height + view.height + 30
 	
 	property int tileWidth: 120
 	property int tileHeight: 190
+	property int tileCount: 5
 	
 	property variant weatherLocation
 
@@ -38,27 +38,23 @@ Panel {
 	Component {
 		id: dayForecast
 		
-		//Rectangle {
 		Item {
 			id: dayItem
 			
 			property variant modelData: weatherLocation.dailyForecast.at(index)
-			property bool last: index == (repeat.model - 1)
-			//color: Qt.rgba(33/256,126/256,205/256,0.5)
+			property bool last: index == (view.model - 1)
 			width: tileWidth
 			height: tileHeight
 			
-			//PlasmaWidgets.Separator {
 			Rectangle {
 				visible: !last
 				opacity: 0.5
 				height: parent.height	
 				width: 1
 				color: appStyle.borderColor
-				//orientation: Qt.Vertical
 				anchors {
 					right: dayItem.right
-					rightMargin: days.spacing/2
+					rightMargin: -view.itemSpacing/2
 				}
 			}
 			
@@ -186,21 +182,23 @@ Panel {
 		}
 	}
 	
-	Row {
-		id: days
+	ScrollArea {
+		id: view
 		anchors {
-			top: header.bottom
-			topMargin: 15
-			horizontalCenter: parent.horizontalCenter
+			bottom: parent.bottom;
+			bottomMargin: 5;
+			left: parent.left;
+			right: parent.right;
+			leftMargin: 10;
+			rightMargin: 10;
 		}
 		
-		spacing: 5
-	
-		Repeater {
-			id: repeat
-			model: Math.min(weatherLocation.dailyForecast.length, 5)
-			delegate: dayForecast
-		}
-	
+		orientation: Qt.Horizontal
+		itemWidth: tileWidth
+		itemHeight: tileHeight
+		itemSpacing: 5
+		itemCount: 5
+		model: weatherLocation.dailyForecast.length
+		delegate: dayForecast
 	}
 }

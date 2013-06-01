@@ -52,6 +52,7 @@ namespace Weather
 		
 		Q_PROPERTY(Weather::DataPoint *conditions READ conditions NOTIFY conditionsChanged)
 		Q_PROPERTY(Weather::DataBlock *dailyForecast READ dailyForecast NOTIFY dailyForecastChanged)
+		Q_PROPERTY(Weather::DataBlock *hourlyForecast READ hourlyForecast NOTIFY hourlyForecastChanged)
 		// TODO: Add more weather types here
 		
 		Q_PROPERTY(bool needsRefresh READ needsRefresh NOTIFY needsRefreshChanged)

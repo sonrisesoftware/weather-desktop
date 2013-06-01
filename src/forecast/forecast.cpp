@@ -64,6 +64,12 @@ Weather::DataBlock* Forecast::Forecast::create_dailyForecast(Weather::Location* 
 	return new WeatherBlock(location, "daily");
 }
 
+Weather::DataBlock* Forecast::Forecast::create_hourlyForecast(Weather::Location* location)
+{
+	return new WeatherBlock(location, "hourly");
+}
+
+
 void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
 {
 	json_call(location, query + '/' + Weather::Service::apiKey() + '/' + internalLocation(location) + '?' + params, receiver, slot);
@@ -110,7 +116,7 @@ QString Forecast::Forecast::humidity(float value) {
 }
 
 QString Forecast::Forecast::probability(float value) {
-	return validate(value, format(value * 100, 1) + '%');
+	return validate(value, format(value * 100, 2) + '%');
 }
 
 QString Forecast::Forecast::wind(float speed, float dir) {
@@ -126,16 +132,39 @@ QString Forecast::Forecast::wind(float speed, float dir) {
 	if (index - i >= 0.5)
 		i++;
 	
+	QString color = "";
+	QString desc = "";
+	
+	if (speed > 25) {
+		color = "#ffec2f"; // 25-31 mph		Strong Breeze
+		desc = "Strong Breeze";
+	}
+	if (speed > 32) {
+		color = "#f98b20"; // 32-38 mph		Near Gale
+		desc = "Near Gale";
+	}
+	if (speed > 39) {
+		color = "#c31f1f"; // 39 mph		Gale
+		desc = "Gale";
+	}
+	
 	QString from = compass[i];
+	QString wind;
 	if (Weather::Location::units().speed() == Weather::Units::MilesPerHour) {
-		return validate(speed, validate(dir, from + " @ " + format(speed) + " mph"));
+		wind = validate(speed, validate(dir, from + " @ " + format(speed) + " mph"));
 	} else if (Weather::Location::units().speed() == Weather::Units::KilometersPerHour) {
-		return validate(speed, validate(dir, from + " @ " + format(1.60934 * speed) + " km/hr"));
+		wind = validate(speed, validate(dir, from + " @ " + format(1.60934 * speed) + " km/hr"));
 	} else if (Weather::Location::units().speed() == Weather::Units::MetersPerSecond) {
-		return validate(speed, validate(dir, from + " @ " + format(0.44704 * speed) + " m/s"));
+		wind = validate(speed, validate(dir, from + " @ " + format(0.44704 * speed) + " m/s"));
 	} else {
 		qFatal("Unknown units!");
 		return "";
+	}
+	
+	if (!color.isEmpty() && !wind.isEmpty()) {
+		return "<font color=\"" + color + "\">" + wind + "</font>";
+	} else {
+		return wind;
 	}
 }
 
@@ -194,7 +223,7 @@ QString Forecast::Forecast::precip(Point* data)
 	QString color = "";
 	QString weather = "Light ";
 	if (data->precipIntensity() > 0.017) { weather = ""; }
-	if (data->precipIntensity() > 0.4)  { weather = "Moderate "; }
+	if (data->precipIntensity() > 0.4)  { weather = "Moderate "; color = "#ffec2f"; }
 	if (data->precipIntensity() > 0.8) { weather = "Heavy "; color = "#c31f1f"; }
 
 	if (!data->precipType().isEmpty()) {

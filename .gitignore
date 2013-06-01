@@ -4,3 +4,4 @@ build
 qclassgen
 src/api_key.h
 code_report
+*.xcf

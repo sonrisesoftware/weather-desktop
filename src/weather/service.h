@@ -77,10 +77,12 @@ namespace Weather
 		
 		virtual Weather::DataPoint *create_conditions(Weather::Location *location) = 0;
 		virtual Weather::DataBlock *create_dailyForecast(Weather::Location *location) = 0;
+		virtual Weather::DataBlock *create_hourlyForecast(Weather::Location *location) = 0;
 		
 	public slots:
 		virtual void download(Weather::Location *location) = 0;
 		void stopJobs(Weather::Location *location);
+		void stopAllJobs();
 		
 		void resetAccessCount() {
 			setAccessCount(0);
