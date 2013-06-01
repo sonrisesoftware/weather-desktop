@@ -21,6 +21,8 @@
 #include "main.h"
 #include "application.h"
 #include "weather/service.h"
+#include "weather/location.h"
+#include "weather/datapoint.h"
 #include "cache.h"
 #include "settings.h"
 #include "api_key.h"
@@ -41,7 +43,9 @@
 #include <KDE/KHelpMenu>
 #include <KDE/KToggleFullScreenAction>
 #include <Plasma/Dialog>
-#include <KMessageBox>
+#include <KDE/KMessageBox>
+#include <KDE/KMenu>
+#include <KDE/KSelectAction>
 
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
@@ -64,7 +68,7 @@ void WeatherDesktop::init()
 {
 	setupActions();
 	
-	setupGUI();
+	setupGUI(Save | Create);
 	setupMenu();
 	
 	m_view = new QDeclarativeView(this);
@@ -87,10 +91,10 @@ void WeatherDesktop::init()
 	
 	setCentralWidget(m_view);
 	
+	//menuBar()->setHidden(false); // For TESTING ONLY!!!
 	menuBar()->setHidden(true);
 	statusBar()->setHidden(true);
 }
-
 
 void WeatherDesktop::delayedInit()
 {
@@ -123,10 +127,53 @@ KAction *WeatherDesktop::createAction(QString name, QString text, KIcon icon, QO
 void WeatherDesktop::setupActions()
 {
 	KStandardAction::quit(kapp, SLOT(quit()), actionCollection());
-	KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
+	//KStandardAction::preferences(this, SLOT(showSettingsDialog()), actionCollection());
 	KStandardAction::fullScreen(this, SLOT(setFullScreen(bool)), this, actionCollection());
 	createAction("weather-info", i18n("Weather Information..."), KIcon ("help-about"), this, SLOT(showWeatherInfo()));
+	
+	KAction *action = createAction("api-key", i18n("Change the API key..."), KIcon ("edit-rename"), this, SLOT(changeAPIKey()));
+	#ifdef FORECAST_API_KEY
+		action->setVisible(false);
+	#endif
+	
+	KSelectAction *unitsAction = new KSelectAction(i18n("Units"), this);
+	actionCollection()->addAction("units", unitsAction);
+	
+	QStringList acts; acts << i18n("English") << i18n("Metric");
+	unitsAction->setItems(acts);
+	
+	if (Weather::Location::units()->system() == Weather::Units::English) {
+		unitsAction->setCurrentItem(0);
+	} else if (Weather::Location::units()->system() == Weather::Units::Metric) {
+		unitsAction->setCurrentItem(1);
+	} else {
+		qFatal("Invalid units!");
+	}
+	
+	connect(unitsAction, SIGNAL(triggered(int)), SLOT(changeUnits(int)) );
 }
+
+void WeatherDesktop::changeAPIKey()
+{
+	bool ok;
+	QString key = KInputDialog::getText(i18n("Change the API Key"),
+			i18n("Enter your Forecast.io API key:"), 
+			App->service()->apiKey(), &ok, this);
+			
+	if (ok)
+		App->service()->setApiKey(key);
+}
+
+void WeatherDesktop::changeUnits(int index)
+{
+	qDebug() << "Units:" << index;
+	if (index == 0) {
+		Weather::Location::units()->setSystem(Weather::Units::English);
+	} else {
+		Weather::Location::units()->setSystem(Weather::Units::Metric);
+	}
+}
+
 
 void WeatherDesktop::setupMenu()
 {
@@ -136,7 +183,11 @@ void WeatherDesktop::setupMenu()
 	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::FullScreen)));
 	m_menu->addSeparator();
 	m_menu->addAction(actionCollection()->action("weather-info"));
-	m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
+	m_menu->addAction(actionCollection()->action("units"));
+	
+	m_menu->addAction(actionCollection()->action("api-key"));
+	
+	//m_menu->addAction(actionCollection()->action(KStandardAction::name(KStandardAction::Preferences)));
 	m_menu->addSeparator();
 	KHelpMenu* helpMenu = new KHelpMenu(m_menu, KCmdLineArgs::aboutData(), false, actionCollection());
 	m_menu->addMenu(helpMenu->menu());
@@ -170,9 +221,17 @@ void WeatherDesktop::loadSettings()
 	
 	// FIXME!!!! Load all the unit types
 	if (Settings::units() == Settings::EnumUnits::English) {
-		Weather::Location::setUnits(Weather::Units::English);
+		Weather::Location::units()->setSystem(Weather::Units::English);
 	} else if (Settings::units() == Settings::EnumUnits::Metric) {
-		Weather::Location::setUnits(Weather::Units::Metric);
+		Weather::Location::units()->setSystem(Weather::Units::Metric);
+	} else {
+		qFatal("Invalid units!");
+	}
+	
+	if (Weather::Location::units()->system() == Weather::Units::English) {
+		((KSelectAction *) actionCollection()->action("units"))->setCurrentItem(0);
+	} else if (Weather::Location::units()->system() == Weather::Units::Metric) {
+		((KSelectAction *) actionCollection()->action("units"))->setCurrentItem(1);
 	} else {
 		qFatal("Invalid units!");
 	}
@@ -199,9 +258,9 @@ void WeatherDesktop::saveSettings()
 	Settings::setAccessCount(QDateTime::currentDateTimeUtc().date().toString() + ':' + QString::number(App->service()->accessCount()));
 	
 	// FIXME!!!! Save all the unit types
-	if (Weather::Location::units().system() == Weather::Units::English) {
+	if (Weather::Location::units()->system() == Weather::Units::English) {
 		Settings::setUnits(Settings::EnumUnits::English);
-	} else if (Weather::Location::units().system() == Weather::Units::Metric) {
+	} else if (Weather::Location::units()->system() == Weather::Units::Metric) {
 		Settings::setUnits(Settings::EnumUnits::Metric);
 	} else {
 		qFatal("Invalid units!");
@@ -268,7 +327,7 @@ void WeatherDesktop::showSettingsDialog()
 
 void WeatherDesktop::updateConfiguration()
 {
-	
+
 }
 
 /**
@@ -408,14 +467,14 @@ void WeatherDesktop::initialSetup()
 	
 	if (ok) {
 		if (ans == "English") {
-			Weather::Location::setUnits(Weather::Units(Weather::Units::English));
+			Weather::Location::units()->setSystem(Weather::Units::English);
 		} else if (ans == "Metric") {
-			Weather::Location::setUnits(Weather::Units(Weather::Units::Metric));
+			Weather::Location::units()->setSystem(Weather::Units::Metric);
 		} else {
 			qFatal("Invalid units!");
 		}
 	} else {
-		Weather::Location::setUnits(Weather::Units(Weather::Units::English));
+		Weather::Location::units()->setSystem(Weather::Units::English);
 	}
 }
 

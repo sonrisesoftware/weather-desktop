@@ -1,3 +1,11 @@
+weather-desktop (0.3.3); urgency=low
+
+ * Fixed #52 - Removed N/A menu items from configuration menu
+ * Added units and API key configuration menu items
+ 
+-- Michael Spencer <spencers1993@gmail.com>  Sat, 01 Jun 2013 18:46:51 -0500 
+ 
+
 weather-desktop (0.3.2); urgency=low
 
  * Fixed #39 - Added hourly forecasts
@@ -44,7 +52,7 @@ weather-desktop (0.2); urgency=medium
 -- Michael Spencer <spencers1993@gmail.com>  Fri, 24 May 2013 18:29:24 -0500
 
 
-weather-desktop (0.1); urgency=low
+weather-desktop (0.1); urgency=high
 
  * Initial version
 

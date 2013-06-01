@@ -68,7 +68,7 @@ namespace Weather
 		STATIC_PROPERTY(bool, autoRefresh, autoRefresh, setAutoRefresh)
 		STATIC_PROPERTY(int, refreshTime, refreshTime, setRefreshTime)
 		STATIC_PROPERTY(Service *, defaultService, defaultService, setDefaultService)
-		STATIC_PROPERTY(Units, units, units, setUnits)
+		STATIC_PROPERTY(Units *, units, units, setUnits)
 		STATIC_PROPERTY(bool, html, html, setHtml)
 		
 	public:

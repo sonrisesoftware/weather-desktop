@@ -91,9 +91,9 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 // ##### STATIC CONVERSION METHODS #####
 
 QString Forecast::Forecast::temp(float value) {
-	if (Weather::Location::units().temp() == Weather::Units::Fahrenheit) {
+	if (Weather::Location::units()->temp() == Weather::Units::Fahrenheit) {
 		return validate(value, format(value, 2) + units(TEMP_F));
-	} else if (Weather::Location::units().temp() == Weather::Units::Celsius) {
+	} else if (Weather::Location::units()->temp() == Weather::Units::Celsius) {
 		return validate(value, format(5.0/9.0 * (value - 32), 2) + units(TEMP_C));
 	} else {
 		qFatal("Unknown units!");
@@ -150,11 +150,11 @@ QString Forecast::Forecast::wind(float speed, float dir) {
 	
 	QString from = compass[i];
 	QString wind;
-	if (Weather::Location::units().speed() == Weather::Units::MilesPerHour) {
+	if (Weather::Location::units()->speed() == Weather::Units::MilesPerHour) {
 		wind = validate(speed, validate(dir, from + " @ " + format(speed) + " mph"));
-	} else if (Weather::Location::units().speed() == Weather::Units::KilometersPerHour) {
+	} else if (Weather::Location::units()->speed() == Weather::Units::KilometersPerHour) {
 		wind = validate(speed, validate(dir, from + " @ " + format(1.60934 * speed) + " km/hr"));
-	} else if (Weather::Location::units().speed() == Weather::Units::MetersPerSecond) {
+	} else if (Weather::Location::units()->speed() == Weather::Units::MetersPerSecond) {
 		wind = validate(speed, validate(dir, from + " @ " + format(0.44704 * speed) + " m/s"));
 	} else {
 		qFatal("Unknown units!");
@@ -169,9 +169,9 @@ QString Forecast::Forecast::wind(float speed, float dir) {
 }
 
 QString Forecast::Forecast::pressure(float value) {
-	if (Weather::Location::units().pressure() == Weather::Units::InchesMercury) {
+	if (Weather::Location::units()->pressure() == Weather::Units::InchesMercury) {
 		return validate(value, format(0.02953 * value, 4) + " inHg");
-	} else if (Weather::Location::units().pressure() == Weather::Units::Millibars) {
+	} else if (Weather::Location::units()->pressure() == Weather::Units::Millibars) {
 		return validate(value, format(value, 4) + " millibars");
 	} else {
 		qFatal("Unknown units!");
@@ -180,9 +180,9 @@ QString Forecast::Forecast::pressure(float value) {
 }
 
 QString Forecast::Forecast::visibility(float value) {
-	if (Weather::Location::units().longDistance() == Weather::Units::Miles) {
+	if (Weather::Location::units()->longDistance() == Weather::Units::Miles) {
 		return validate(value, format(value) + " mi");
-	} else if (Weather::Location::units().longDistance() == Weather::Units::Kilometers) {
+	} else if (Weather::Location::units()->longDistance() == Weather::Units::Kilometers) {
 		return validate(value, format(1.60934 * value) + " km");
 	} else {
 		qFatal("Unknown units!");
