@@ -1,3 +1,10 @@
+weather-desktop (0.3.2); urgency=low
+
+ * Fixed #39 - Added hourly forecasts
+
+-- Michael Spencer <spencers1993@gmail.com>  Sat, 01 Jun 2013 14:09:38 -0500
+
+
 weather-desktop (0.3.1); urgency=low
 
  * Added ability to enter API key on first run (if not hardcoded)
