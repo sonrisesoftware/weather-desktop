@@ -76,6 +76,8 @@ void WeatherDesktop::init()
 	m_view->setStyleSheet("background-color: transparent;");
 	m_view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
 	
+	QObject::connect(this, SIGNAL(locationsChanged(QList<QObject*>)), this, SLOT(onLocationsChanged()));
+	
 	Application::setupDeclarativeBindings(m_view->engine());
 	QObject::connect(m_view->engine(), SIGNAL(quit()), kapp, SLOT(quit()));
 	
@@ -99,6 +101,9 @@ void WeatherDesktop::init()
 void WeatherDesktop::delayedInit()
 {
 	qDebug() << "DELAYED INIT!!!";
+	
+	m_unityLauncher = new UnityLauncher("weather-desktop.desktop");
+	
 	loadSettings();
 	
 	if (Settings::firstRun() || (locations().length() == 0 && Weather::Location::cache()->recent().length() == 0)) {
@@ -329,6 +334,30 @@ void WeatherDesktop::updateConfiguration()
 {
 
 }
+
+void WeatherDesktop::onHomeLocationRefreshed()
+{
+	const QString tempString = m_homeLocation->conditions()->temperature();
+	int temp = QLocale::system().toInt(QString(tempString).left(tempString.indexOf(i18n(DEG))));
+	m_unityLauncher->setCount(temp);
+}
+
+void WeatherDesktop::onLocationsChanged()
+{
+	qDebug() << "Locations changed!";
+	if (m_homeLocation != nullptr)
+		QObject::disconnect(m_homeLocation, SIGNAL(refreshed()), this, SLOT(onHomeLocationRefreshed()));
+	
+	m_homeLocation = location(0);
+	
+	if (m_homeLocation != nullptr) {
+		QObject::connect(m_homeLocation, SIGNAL(refreshed()), this, SLOT(onHomeLocationRefreshed()));
+		m_unityLauncher->showCount();
+	} else {
+		m_unityLauncher->hideCount();
+	}
+}
+
 
 /**
  * This should be used when loading a location from configuration data. 

@@ -27,6 +27,8 @@
 #include <KDE/KAction>
 #include <KDE/KIcon>
 
+#include "unitylauncher.h"
+
 /**
  * This class serves as the main window for WeatherDesktop.  It handles the
  * menus, toolbars and status bars.
@@ -81,10 +83,14 @@ private:
 	
 	QDeclarativeView *m_view = nullptr;
 	KMenu *m_menu = nullptr;
+	UnityLauncher *m_unityLauncher = nullptr;
+	Weather::Location *m_homeLocation = nullptr;
 	
 private slots:
 	void changeAPIKey();
 	void changeUnits(int index);
+	void onLocationsChanged();
+	void onHomeLocationRefreshed();
 	void onImplicitWidthChanged();
 	void onImplicitHeightChanged();
 	void loadSettings();

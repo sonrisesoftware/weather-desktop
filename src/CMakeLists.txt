@@ -12,6 +12,7 @@ qclassgen(weather-desktop_SRCS
    weather-desktop
    cache
    geocoding
+   unitylauncher
    
    weather/location
    weather/service
@@ -50,6 +51,7 @@ target_link_libraries(weather-desktop
 	${KDE4_PLASMA_LIBS}
 	${QT_QTSCRIPT_LIBRARY}
 	${QT_QTDECLARATIVE_LIBRARY}
+	${QT_QTDBUS_LIBRARY}
 	qjson
 )
 
