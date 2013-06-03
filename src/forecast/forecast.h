@@ -39,11 +39,12 @@ namespace Forecast {
 		explicit Forecast(QObject* parent = 0);
 		virtual ~Forecast();
 		
-		virtual void download(Weather::Location* location);
-		virtual Weather::DataPoint* create_conditions(Weather::Location* location);
-		virtual Weather::DataBlock* create_dailyForecast(Weather::Location* location);
-		virtual Weather::DataBlock* create_hourlyForecast(Weather::Location* location);
-		virtual void json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot);
+		virtual void download(Weather::Location *location);
+		virtual Weather::DataPoint *create_conditions(Weather::Location *location);
+		virtual Weather::DataBlock *create_dailyForecast(Weather::Location *location);
+		virtual Weather::DataBlock *create_hourlyForecast(Weather::Location *location);
+		virtual Weather::ManagedList *create_alerts(Weather::Location *location);
+		virtual void json_query(Weather::Location *location, const QString& query, const QString& params, QObject* receiver, const char* slot);
 		
 		static QString temp(float value);
 		static QString clouds(float value);

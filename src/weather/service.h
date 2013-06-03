@@ -40,6 +40,7 @@ namespace Weather
 	class Location;
 	class DataPoint;
 	class DataBlock;
+	class ManagedList;
 	
 	class DownloadJob: public QObject {
 		Q_OBJECT
@@ -78,6 +79,7 @@ namespace Weather
 		virtual Weather::DataPoint *create_conditions(Weather::Location *location) = 0;
 		virtual Weather::DataBlock *create_dailyForecast(Weather::Location *location) = 0;
 		virtual Weather::DataBlock *create_hourlyForecast(Weather::Location *location) = 0;
+		virtual Weather::ManagedList *create_alerts(Weather::Location *location) = 0;
 		
 	public slots:
 		virtual void download(Weather::Location *location) = 0;

@@ -18,6 +18,8 @@ qclassgen(weather-desktop_SRCS
    weather/datapoint
    weather/datablock
    weather/units
+   weather/managedlist
+   weather/alert
    
    #worldweather/worldweatheronline
    #worldweather/conditions

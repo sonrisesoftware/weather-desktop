@@ -69,6 +69,11 @@ Weather::DataBlock* Forecast::Forecast::create_hourlyForecast(Weather::Location*
 	return new WeatherBlock(location, "hourly");
 }
 
+Weather::ManagedList* Forecast::Forecast::create_alerts(Weather::Location* location)
+{
+	return nullptr;
+	//return new AlertsList(location);
+}
 
 void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
 {

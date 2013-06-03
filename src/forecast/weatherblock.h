@@ -35,6 +35,7 @@ namespace Forecast {
 	{
 		Q_OBJECT
 		
+		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 		Q_PROPERTY(Block *data READ data NOTIFY dataChanged)		
 
 	public:

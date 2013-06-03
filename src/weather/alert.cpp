@@ -17,47 +17,20 @@
  ***************************************************************************/
 
 
-#include "forecast/weatherblock.h"
+#include "weather/alert.h"
 
-#include "forecast/forecast.h"
-#include "forecast/weatherpoint.h"
-#include "forecast/datapoint.h"
-#include "forecast/datablock.h"
-#include "weather/datapoint.h"
 #include "weather/location.h"
 
-Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location)
-{
-	setPath(path);
-	setData(new Block(location, path));
-}
+using namespace Weather;
 
-Forecast::WeatherBlock::~WeatherBlock()
+Alert::Alert(Weather::Location *location): QObject(location)
 {
 
 }
 
-void Forecast::WeatherBlock::refresh()
+Alert::~Alert()
 {
-	if (location()->hasError()) return;
-	
-	data()->load();
-	
-	setSummary(data()->summary());
-	setIcon(Forecast::Forecast::icon(data()->icon()));
-	
-	while (data()->data().length() < items().length()) {
-		items().takeLast()->deleteLater();
-	}
-	
-	while (data()->data().length() > items().length()) {
-		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
-		dataPoint->refresh();
-		items().append(dataPoint);
-	}
-	
-	setLength(items().length());
-	emit itemsChanged(items());
+
 }
 
-#include "forecast/weatherblock.moc"
+#include "weather/alert.moc"

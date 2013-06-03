@@ -17,47 +17,46 @@
  ***************************************************************************/
 
 
-#include "forecast/weatherblock.h"
+#ifndef WEATHER_MANAGEDLIST_H
+#define WEATHER_MANAGEDLIST_H
 
-#include "forecast/forecast.h"
-#include "forecast/weatherpoint.h"
-#include "forecast/datapoint.h"
-#include "forecast/datablock.h"
-#include "weather/datapoint.h"
-#include "weather/location.h"
+#include <QObject>
 
-Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location)
-{
-	setPath(path);
-	setData(new Block(location, path));
+
+namespace Weather {
+	
+	class ManagedList : public QObject
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(QList<QObject*> items READ items NOTIFY itemsChanged);
+		Q_PROPERTY(int length READ length NOTIFY lengthChanged);
+	
+	public:
+		explicit ManagedList(QObject* parent = 0);
+		virtual ~ManagedList();
+		
+		const QObject *operator[](int index) {
+			return items()[index];
+		}
+		
+		Q_INVOKABLE QObject *at(int index) {
+			//qDebug() << "AT:" << index << m_items.length();
+			if (index >= items().length()) {
+				return nullptr;
+			}
+			return items().at(index);
+		}
+		
+	public slots:
+		virtual void refresh() = 0;
+		
+	signals:
+		void refreshed();
+
+	#include "weather/managedlist.gen"
+	};
+
 }
 
-Forecast::WeatherBlock::~WeatherBlock()
-{
-
-}
-
-void Forecast::WeatherBlock::refresh()
-{
-	if (location()->hasError()) return;
-	
-	data()->load();
-	
-	setSummary(data()->summary());
-	setIcon(Forecast::Forecast::icon(data()->icon()));
-	
-	while (data()->data().length() < items().length()) {
-		items().takeLast()->deleteLater();
-	}
-	
-	while (data()->data().length() > items().length()) {
-		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
-		dataPoint->refresh();
-		items().append(dataPoint);
-	}
-	
-	setLength(items().length());
-	emit itemsChanged(items());
-}
-
-#include "forecast/weatherblock.moc"
+#endif // WEATHER_MANAGEDLIST_H

@@ -24,11 +24,10 @@
 using namespace Weather;
 
 
-DataBlock::DataBlock(Location* location, const QString& path): QObject()
+DataBlock::DataBlock(Location* location): ManagedList(location)
 {
 	Q_ASSERT(location != nullptr);
 	setLocation(location);
-	setPath(path);
 	
 	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
 }
