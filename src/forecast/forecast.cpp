@@ -154,7 +154,7 @@ QString Forecast::Forecast::wind(float speed, float dir) {
 	}
 	QString wind;
 	if (Weather::Location::units()->speed() == Weather::Units::MilesPerHour) {
-		wind = validate(speed, dir, from + format(speed) + " mph");
+		wind = validate(speed, from + format(speed) + " mph");
 	} else if (Weather::Location::units()->speed() == Weather::Units::KilometersPerHour) {
 		wind = validate(speed, from + format(1.60934 * speed) + " km/hr");
 	} else if (Weather::Location::units()->speed() == Weather::Units::MetersPerSecond) {
