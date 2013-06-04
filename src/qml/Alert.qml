@@ -21,18 +21,40 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
-Rectangle {
+Item {
 	id: root
-	color: appStyle.errorColor
-	opacity: 0.7
 	
-	radius: appStyle.panelRadius;
-	border.color: appStyle.borderColor;
+	Rectangle {
+		color: appStyle.errorColor
+		opacity: mouseArea.containsMouse ? 1 : 0.7
+	
+		radius: appStyle.panelRadius;
+		border.color: appStyle.borderColor;
+		anchors.fill: parent;
+		
+		Behavior on opacity {
+			NumberAnimation { duration: 250; }
+		}
+	}	
 	
 	implicitWidth: 400
-	height: row.implicitHeight + 2 * row.anchors.margins
+	height: row.implicitHeight + 2 * row.anchors.margins;
 	
-	property variant alert
+	property variant alert;
+	
+	signal clicked
+	
+	MouseArea {
+		id: mouseArea
+		hoverEnabled: true
+		anchors.fill: parent
+		onClicked: parent.clicked()
+	}
+	
+	onClicked: {
+		console.log("URL: " + alert.url)
+		Qt.openUrlExternally(alert.url)
+	}
 	
 	Row {
 		id: row
@@ -49,29 +71,26 @@ Rectangle {
 			id: title
 			
 			text: alert.title
-			
+			width: parent.width - expires.width
+					- (parent.children.length - 1) * parent.spacing
 			font.pixelSize: appStyle.headerFontSize
 			color: appStyle.textColor
+			elide: Text.ElideRight
 			
 			style: Text.Raised
 			styleColor: appStyle.shadowColor
 			anchors.verticalCenter: parent.verticalCenter
 		}
 		
-		Item {
-			height: parent.height
-			width: parent.width 
-					- title.width - expires.width - url.width
-					- (parent.children.length - 1) * parent.spacing
-		}
-		
 		Text {
 			id: expires
 			
-			text: "Until " + (today ? "" : Qt.formatDateTime(alert.expires)) + Qt.formatTime(alert.expires)
+			// TODO: If within the next week, show the day instead of the date
+			text: "Until " + (today ? "" : date + " ") + Qt.formatTime(alert.expires)
 			
 			property bool today: Qt.formatDate(alert.expires) == Qt.formatDate(new Date())
-			property bool week: new Date().date + 7 <= alert.expires.date
+			property string date: week ? Qt.formatDate(alert.expires, "dddd") : Qt.formatDate(alert.expires)
+			property bool week: alert.expires.getDate() + "<=" + (new Date().getDate() + 7)
 			
 			font.pixelSize: appStyle.headerFontSize
 			//font.italic: true
@@ -80,19 +99,6 @@ Rectangle {
 			style: Text.Raised
 			styleColor: appStyle.shadowColor
 			anchors.verticalCenter: parent.verticalCenter
-		}
-		
-		PlasmaComponents.ToolButton {
-			id: url
-			anchors.verticalCenter: parent.verticalCenter
-			visible: alert.url != ""
-			
-			iconSource: "go-jump-locationbar"
-			
-			onClicked: {
-				console.log("URL: " + alert.url)
-					Qt.openUrlExternally(alert.url)
-			}
 		}
 	}
 }
