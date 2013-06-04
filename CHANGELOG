@@ -1,3 +1,11 @@
+weather-desktop (0.3.4); urgency=low
+
+ * Fixed #41 - Added severe alerts
+ * Fixed crash when missing wind direction
+ 
+-- Michael Spencer <spencers1993@gmail.com>  Tue, 04 Jun 2013 11:18:17 -0500
+
+
 weather-desktop (0.3.3); urgency=low
 
  * Fixed #52 - Removed N/A menu items from configuration menu

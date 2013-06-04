@@ -3,7 +3,7 @@ Weather Desktop - An advanced weather app
 
 Check the weather in a simple and easy-to-use manner. With no ads and a beautiful interface, it's easier and faster than checking weather websites!
 
-Weather Desktop provides access to multiple named locations, with previews of all available at the same time. It displays detailed current conditions,  daily forecasts for the next seven days, and hourly forecasts for the next 24 hours. In addition, Weather Desktop also displays severe alerts for your locations, alerting you to any dangerous weather conditions. Also users can easily add their own backgrounds, weather-related or not, to the application. 
+Weather Desktop provides access to multiple named locations, with previews of all available at the same time. It displays detailed current conditions,  daily forecasts for the next seven days, and hourly forecasts for the next 24 hours. In addition, Weather Desktop also displays severe alerts for your locations, alerting you to any dangerous weather conditions. Also users can easily add their own backgrounds, weather-related or not, to the application.
 
 ### Features ###
 
@@ -12,8 +12,9 @@ _**Note:** the features marked below in italics do not exist yet but are schedul
  * Runs on any system that supports the KDE libraries
  * Multiple named locations
  * Current weather conditions
- * Weather forecasts for 5 days
- * _Severe weather alerts_
+ * Daily forecasts for the next 7 days
+ * Hourly forecasts for the next 24 hours
+ * Severe weather alerts
  * Background of app depicts current conditions
  * _User can add additional backgrounds (weather-related or not)_
 
