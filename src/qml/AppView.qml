@@ -341,6 +341,7 @@ Rectangle {
 					WeatherApp.currentLocation = modelData
 				}
 				
+				alert: modelData.alerts.length > 0
 				title: modelData.name;
 				temp: modelData.conditions.temperature;
 				icon: modelData.conditions.icon;

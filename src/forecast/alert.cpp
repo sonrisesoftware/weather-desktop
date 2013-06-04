@@ -17,17 +17,14 @@
  ***************************************************************************/
 
 
-#include "weather/alert.h"
-
+#include "alert.h"
 #include "weather/location.h"
 
-using namespace Weather;
+using namespace Forecast;
 
-Alert::Alert(Weather::Location *location): QObject(location)
+Alert::Alert(Weather::Location* location, const QString& path): Weather::Alert(location)
 {
-	Q_ASSERT(location != nullptr);
-	
-	setLocation(location);
+	setPath(path);
 }
 
 Alert::~Alert()
@@ -35,4 +32,16 @@ Alert::~Alert()
 
 }
 
-#include "weather/alert.moc"
+void Alert::refresh()
+{
+	if (location()->hasError()) return;
+	
+	QVariantMap data = getJson(location()->data(), path()).toMap();
+	
+	setTitle(getJson(data, "title").toString());
+	setUrl(getJson(data, "url").toUrl());
+	setExpires(getJson(data, "expires").toDateTime());
+}
+
+
+#include "forecast/alert.moc"

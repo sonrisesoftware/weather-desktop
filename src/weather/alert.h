@@ -42,6 +42,12 @@ namespace Weather {
 		explicit Alert(Weather::Location *location);
 		virtual ~Alert();
 		
+	public slots:
+		virtual void refresh() = 0;
+	
+	signals:
+		void refreshed();
+		
 	#include "weather/alert.gen"
 	};
 

@@ -61,6 +61,7 @@ void Application::registerQMLTypes()
 	qmlRegisterType<Weather::Location>();
 	qmlRegisterType<Weather::Service>();
 	qmlRegisterType<Weather::DataBlock>();
+	qmlRegisterType<Weather::ManagedList>();
 	qmlRegisterType<Weather::DataPoint>();
 }
 

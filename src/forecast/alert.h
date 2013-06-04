@@ -17,22 +17,30 @@
  ***************************************************************************/
 
 
+#ifndef FORECAST_ALERT_H
+#define FORECAST_ALERT_H
+
 #include "weather/alert.h"
 
-#include "weather/location.h"
 
-using namespace Weather;
+namespace Forecast {
 
-Alert::Alert(Weather::Location *location): QObject(location)
-{
-	Q_ASSERT(location != nullptr);
-	
-	setLocation(location);
+	class Alert: public Weather::Alert
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
+
+	public:
+		explicit Alert(Weather::Location* location, const QString& path);
+		virtual ~Alert();
+		
+	public slots:
+		void refresh();
+		
+	#include "forecast/alert.gen"
+	};
+
 }
 
-Alert::~Alert()
-{
-
-}
-
-#include "weather/alert.moc"
+#endif // FORECAST_ALERT_H

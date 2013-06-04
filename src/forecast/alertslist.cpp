@@ -17,22 +17,44 @@
  ***************************************************************************/
 
 
-#include "weather/alert.h"
+#include "forecast/alertslist.h"
 
+#include "forecast/alert.h"
 #include "weather/location.h"
 
-using namespace Weather;
+using namespace Forecast;
 
-Alert::Alert(Weather::Location *location): QObject(location)
+AlertsList::AlertsList(Weather::Location *location): ManagedList(location)
 {
 	Q_ASSERT(location != nullptr);
 	
 	setLocation(location);
+	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
 }
 
-Alert::~Alert()
+AlertsList::~AlertsList()
 {
-
+	QObject::disconnect(location(), SIGNAL(refreshed()), this, SLOT(refresh()));
 }
 
-#include "weather/alert.moc"
+void AlertsList::refresh()
+{
+	if (location()->hasError()) return;
+	
+	QVariantList data = getJson(location()->data(), "alerts").toList();
+	
+	while (data.length() < items().length()) {
+		items().takeLast()->deleteLater();
+	}
+	
+	while (data.length() > items().length()) {
+		Forecast::Alert *alert = new Forecast::Alert(location(), "alerts." + QString::number(items().length()));
+		alert->refresh();
+		items().append(alert);
+	}
+	
+	setLength(items().length());
+	emit itemsChanged(items());
+}
+
+#include "forecast/alertslist.moc"

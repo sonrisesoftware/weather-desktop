@@ -17,22 +17,36 @@
  ***************************************************************************/
 
 
-#include "weather/alert.h"
+#ifndef FORECAST_ALERTSLIST_H
+#define FORECAST_ALERTSLIST_H
 
-#include "weather/location.h"
+#include <weather/managedlist.h>
 
-using namespace Weather;
-
-Alert::Alert(Weather::Location *location): QObject(location)
-{
-	Q_ASSERT(location != nullptr);
-	
-	setLocation(location);
+namespace Weather {
+	class Location;
 }
 
-Alert::~Alert()
-{
+namespace Forecast {
+
+	class AlertsList : public Weather::ManagedList
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
+
+	public:
+		explicit AlertsList(Weather::Location *location);
+		virtual ~AlertsList();
+		
+	public slots:
+		virtual void refresh();
+		
+	signals:
+		void refreshed();
+		
+	#include "forecast/alertslist.gen"
+	};
 
 }
 
-#include "weather/alert.moc"
+#endif // FORECAST_ALERTSLIST_H

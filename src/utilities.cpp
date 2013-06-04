@@ -79,7 +79,7 @@ QVariant getJson(const QVariant& data, const QString& path) {
 			qFatal("Invalid type in path: %s", qPrintable(result.type()));
 		}
 		
-		Q_ASSERT(!result.isNull());
+		//Q_ASSERT(!result.isNull());
 	}
 	
 	return result;
