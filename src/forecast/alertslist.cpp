@@ -34,7 +34,7 @@ AlertsList::AlertsList(Weather::Location *location): ManagedList(location)
 
 AlertsList::~AlertsList()
 {
-	QObject::disconnect(location(), SIGNAL(refreshed()), this, SLOT(refresh()));
+	
 }
 
 void AlertsList::refresh()

@@ -34,7 +34,7 @@ DataBlock::DataBlock(Location* location): ManagedList(location)
 
 DataBlock::~DataBlock()
 {
-	QObject::disconnect(location(), SIGNAL(refreshed()), this, SLOT(refresh()));
+	
 }
 
 

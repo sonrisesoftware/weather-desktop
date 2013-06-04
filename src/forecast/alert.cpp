@@ -39,8 +39,8 @@ void Alert::refresh()
 	QVariantMap data = getJson(location()->data(), path()).toMap();
 	
 	setTitle(getJson(data, "title").toString());
-	setUrl(getJson(data, "url").toUrl());
-	setExpires(getJson(data, "expires").toDateTime());
+	setUrl(getJson(data, "uri").toUrl());
+	setExpires(QDateTime::fromMSecsSinceEpoch(getJson(data, "expires").toLongLong() * 1000).toUTC());
 }
 
 
