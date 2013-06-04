@@ -22,6 +22,7 @@
 #define WEATHER_DATABLOCK_H
 
 #include "weather/datapoint.h"
+#include "weather/managedlist.h"
 
 #include <QObject>
 #include <QIcon>
@@ -32,39 +33,30 @@ namespace Weather {
 	
 	class Location;
 
-	class DataBlock : public QObject
+	class DataBlock : public ManagedList
 	{
 		Q_OBJECT
 		
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
-		Q_PROPERTY(QString path READ path NOTIFY pathChanged)
 		
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
 		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged);
-		Q_PROPERTY(QList<DataPoint*> items READ items NOTIFY itemsChanged);
-		Q_PROPERTY(int length READ length NOTIFY lengthChanged);
 		
 	public:
-		explicit DataBlock(Weather::Location *location, const QString& path);
+		explicit DataBlock(Weather::Location *location);
 		virtual ~DataBlock();
 		
-		const DataPoint *operator[](int index) const {
-			return m_items[index];
+		const DataPoint *operator[](int index) {
+			return (DataPoint *) items()[index];
 		}
 		
 		Q_INVOKABLE Weather::DataPoint *at(int index) {
 			//qDebug() << "AT:" << index << m_items.length();
-			if (index >= m_items.length()) {
+			if (index >= items().length()) {
 				return nullptr;
 			}
-			return m_items.at(index);
+			return (DataPoint *) items().at(index);
 		}
-		
-	public slots:
-		virtual void refresh() = 0;
-		
-	signals:
-		void refreshed();
 		
 	#include "weather/datablock.gen"
 	};

@@ -43,7 +43,7 @@ Rectangle {
 	property alias minTemp: minTemp.text;
 	//property alias weatherForecast: weatherForecast.text;
 	
-	property bool alert: false;
+	property int alerts: 0;
 	property bool selected: false;
 	property bool highlighted: selected || state == "mouse-over"
 	
@@ -63,16 +63,30 @@ Rectangle {
 		styleColor: appStyle.shadowColor
 	}
 	
-	PlasmaCore.IconItem {
-		id: alertIcon
-		source: root.alert ? "emblem-important" : ""
-		width: 16; height: 16;
+	Rectangle {
+		id: alertsObject
+		width: height
+		height: alertsText.height + 2
+		visible: root.alerts > 0
+		
+		radius: height/2
+		color: appStyle.errorColor
 		
 		anchors {
 			top: parent.top;
 			right: parent.right;
 			topMargin: 5;
 			rightMargin: 5;
+		}
+		
+		Text {
+			id: alertsText
+			anchors.centerIn: parent
+			color: "white"
+			//style: Text.Raised
+			//styleColor: appStyle.shadowColor
+			
+			text: root.alerts
 		}
 	}
 	

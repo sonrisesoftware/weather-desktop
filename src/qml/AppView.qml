@@ -23,9 +23,9 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
-	implicitWidth: Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40);
+	implicitWidth: Math.max(500, Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40));
 	implicitHeight: topToolBar.height + Math.max(creditsText.height, infoText.height) + 5
-			+ header.height + weatherView.implicitHeight + bottomToolBar.height + 60;
+			+ header.height + weatherView.implicitHeight + weatherAlerts.height + bottomToolBar.height + 80;
 	
 	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
 	
@@ -80,12 +80,36 @@ Rectangle {
 		
 		anchors {
 			top: header.bottom; topMargin: 20;
-			bottom: bottomToolBar.top; bottomMargin: 20;
+			bottom: weatherAlerts.top; bottomMargin: 20;
 			left: parent.left; leftMargin: 20;
 			right: parent.right; rightMargin: 20;
 		}
 		
 		weatherLocation: WeatherApp.currentLocation
+	}
+	
+	Column {
+		id: weatherAlerts
+		
+		anchors {
+			bottom: bottomToolBar.top; bottomMargin: 20;
+			left: parent.left; leftMargin: 20;
+			right: parent.right; rightMargin: 20;
+		}
+		
+		spacing: 3
+	
+		Repeater {
+			
+			model: WeatherApp.currentLocation.alerts.length
+			
+			delegate: Alert {
+				id: item
+				alert: WeatherApp.currentLocation.alerts.at(index)
+				anchors.horizontalCenter: parent.horizontalCenter
+				width: Math.min(Math.max(root.width - 40, item.implicitWidth), 800)
+			}
+		}
 	}
 	
 	PlasmaComponents.ToolBar {
@@ -341,6 +365,7 @@ Rectangle {
 					WeatherApp.currentLocation = modelData
 				}
 				
+				alerts: modelData.alerts.length
 				title: modelData.name;
 				temp: modelData.conditions.temperature;
 				icon: modelData.conditions.icon;

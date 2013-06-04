@@ -21,6 +21,7 @@
 #include "forecast/weatherpoint.h"
 #include "forecast/weatherblock.h"
 #include "forecast/datapoint.h"
+#include "forecast/alertslist.h"
 
 #include "weather/location.h"
 
@@ -69,6 +70,10 @@ Weather::DataBlock* Forecast::Forecast::create_hourlyForecast(Weather::Location*
 	return new WeatherBlock(location, "hourly");
 }
 
+Weather::ManagedList* Forecast::Forecast::create_alerts(Weather::Location* location)
+{
+	return new AlertsList(location);
+}
 
 void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
 {

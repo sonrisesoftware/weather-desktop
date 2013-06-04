@@ -17,47 +17,22 @@
  ***************************************************************************/
 
 
-#include "forecast/weatherblock.h"
+#include "weather/alert.h"
 
-#include "forecast/forecast.h"
-#include "forecast/weatherpoint.h"
-#include "forecast/datapoint.h"
-#include "forecast/datablock.h"
-#include "weather/datapoint.h"
 #include "weather/location.h"
 
-Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location)
+using namespace Weather;
+
+Alert::Alert(Weather::Location *location): QObject(location)
 {
-	setPath(path);
-	setData(new Block(location, path));
+	Q_ASSERT(location != nullptr);
+	
+	setLocation(location);
 }
 
-Forecast::WeatherBlock::~WeatherBlock()
+Alert::~Alert()
 {
 
 }
 
-void Forecast::WeatherBlock::refresh()
-{
-	if (location()->hasError()) return;
-	
-	data()->load();
-	
-	setSummary(data()->summary());
-	setIcon(Forecast::Forecast::icon(data()->icon()));
-	
-	while (data()->data().length() < items().length()) {
-		items().takeLast()->deleteLater();
-	}
-	
-	while (data()->data().length() > items().length()) {
-		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
-		dataPoint->refresh();
-		items().append(dataPoint);
-	}
-	
-	setLength(items().length());
-	emit itemsChanged(items());
-}
-
-#include "forecast/weatherblock.moc"
+#include "weather/alert.moc"

@@ -17,47 +17,40 @@
  ***************************************************************************/
 
 
-#include "forecast/weatherblock.h"
+#ifndef WEATHER_ALERT_H
+#define WEATHER_ALERT_H
 
-#include "forecast/forecast.h"
-#include "forecast/weatherpoint.h"
-#include "forecast/datapoint.h"
-#include "forecast/datablock.h"
-#include "weather/datapoint.h"
-#include "weather/location.h"
+#include <QObject>
+#include <QString>
+#include <QUrl>
+#include <QDateTime>
 
-Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location)
-{
-	setPath(path);
-	setData(new Block(location, path));
+namespace Weather {
+
+	class Location;
+	
+	class Alert : public QObject
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged)
+		Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+		Q_PROPERTY(QDateTime expires READ expires NOTIFY expiresChanged)
+		Q_PROPERTY(QUrl url READ url NOTIFY urlChanged)
+
+	public:
+		explicit Alert(Weather::Location *location);
+		virtual ~Alert();
+		
+	public slots:
+		virtual void refresh() = 0;
+	
+	signals:
+		void refreshed();
+		
+	#include "weather/alert.gen"
+	};
+
 }
 
-Forecast::WeatherBlock::~WeatherBlock()
-{
-
-}
-
-void Forecast::WeatherBlock::refresh()
-{
-	if (location()->hasError()) return;
-	
-	data()->load();
-	
-	setSummary(data()->summary());
-	setIcon(Forecast::Forecast::icon(data()->icon()));
-	
-	while (data()->data().length() < items().length()) {
-		items().takeLast()->deleteLater();
-	}
-	
-	while (data()->data().length() > items().length()) {
-		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
-		dataPoint->refresh();
-		items().append(dataPoint);
-	}
-	
-	setLength(items().length());
-	emit itemsChanged(items());
-}
-
-#include "forecast/weatherblock.moc"
+#endif // WEATHER_ALERT_H

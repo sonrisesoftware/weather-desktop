@@ -1,4 +1,5 @@
 set(weather-desktop_QML
+   Alert.qml
    AppView.qml
    main.qml
    DailyForecast.qml
