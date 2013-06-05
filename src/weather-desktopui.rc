@@ -7,6 +7,11 @@
                          http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd" >
  
 	<MenuBar>
+		<Menu name="settings">
+			<Action name="weather-info"/>
+			<Action name="units"/>
+			<Action name="api-key"/>
+		</Menu>
 	</MenuBar>
  
 </gui>

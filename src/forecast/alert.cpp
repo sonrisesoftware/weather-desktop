@@ -17,47 +17,31 @@
  ***************************************************************************/
 
 
-#include "forecast/weatherblock.h"
-
-#include "forecast/forecast.h"
-#include "forecast/weatherpoint.h"
-#include "forecast/datapoint.h"
-#include "forecast/datablock.h"
-#include "weather/datapoint.h"
+#include "alert.h"
 #include "weather/location.h"
 
-Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location)
+using namespace Forecast;
+
+Alert::Alert(Weather::Location* location, const QString& path): Weather::Alert(location)
 {
 	setPath(path);
-	setData(new Block(location, path));
 }
 
-Forecast::WeatherBlock::~WeatherBlock()
+Alert::~Alert()
 {
 
 }
 
-void Forecast::WeatherBlock::refresh()
+void Alert::refresh()
 {
 	if (location()->hasError()) return;
 	
-	data()->load();
+	QVariantMap data = getJson(location()->data(), path()).toMap();
 	
-	setSummary(data()->summary());
-	setIcon(Forecast::Forecast::icon(data()->icon()));
-	
-	while (data()->data().length() < items().length()) {
-		items().takeLast()->deleteLater();
-	}
-	
-	while (data()->data().length() > items().length()) {
-		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
-		dataPoint->refresh();
-		items().append(dataPoint);
-	}
-	
-	setLength(items().length());
-	emit itemsChanged(items());
+	setTitle(getJson(data, "title").toString());
+	setUrl(getJson(data, "uri").toUrl());
+	setExpires(QDateTime::fromMSecsSinceEpoch(getJson(data, "expires").toLongLong() * 1000).toUTC());
 }
 
-#include "forecast/weatherblock.moc"
+
+#include "forecast/alert.moc"

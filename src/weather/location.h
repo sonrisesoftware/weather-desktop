@@ -36,6 +36,7 @@ namespace Weather
 	class Service;
 	class DataPoint;
 	class DataBlock;
+	class ManagedList;
 
 	class Location : public QObject
 	{
@@ -53,7 +54,8 @@ namespace Weather
 		Q_PROPERTY(Weather::DataPoint *conditions READ conditions NOTIFY conditionsChanged)
 		Q_PROPERTY(Weather::DataBlock *dailyForecast READ dailyForecast NOTIFY dailyForecastChanged)
 		Q_PROPERTY(Weather::DataBlock *hourlyForecast READ hourlyForecast NOTIFY hourlyForecastChanged)
-		// TODO: Add more weather types here
+		Q_PROPERTY(Weather::ManagedList *alerts READ alerts NOTIFY alertsChanged)
+		// Add more weather types here
 		
 		Q_PROPERTY(bool needsRefresh READ needsRefresh NOTIFY needsRefreshChanged)
 		Q_PROPERTY(bool refreshing READ isRefreshing NOTIFY refreshingChanged)
@@ -68,7 +70,7 @@ namespace Weather
 		STATIC_PROPERTY(bool, autoRefresh, autoRefresh, setAutoRefresh)
 		STATIC_PROPERTY(int, refreshTime, refreshTime, setRefreshTime)
 		STATIC_PROPERTY(Service *, defaultService, defaultService, setDefaultService)
-		STATIC_PROPERTY(Units, units, units, setUnits)
+		STATIC_PROPERTY(Units *, units, units, setUnits)
 		STATIC_PROPERTY(bool, html, html, setHtml)
 		
 	public:
@@ -124,6 +126,11 @@ namespace Weather
 		 * Called when the location changed to handle refreshing.
 		 */
 		void onLocationChanged();
+		
+		/**
+		 * Called when the location refreshed. Used to update the day/night status.
+		 */
+		void onRefreshed();
 		
 	signals:
 		void refreshed();

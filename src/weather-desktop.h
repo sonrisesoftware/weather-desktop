@@ -33,7 +33,7 @@
  *
  * @short Main window class
  * @author Michael Spencer <spencers1993@gmail.com>
- * @version 0.3.2
+ * @version 0.3.4
  */
 class WeatherDesktop : public KXmlGuiWindow
 {
@@ -83,6 +83,8 @@ private:
 	KMenu *m_menu = nullptr;
 	
 private slots:
+	void changeAPIKey();
+	void changeUnits(int index);
 	void onImplicitWidthChanged();
 	void onImplicitHeightChanged();
 	void loadSettings();

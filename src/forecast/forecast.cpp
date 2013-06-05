@@ -21,6 +21,7 @@
 #include "forecast/weatherpoint.h"
 #include "forecast/weatherblock.h"
 #include "forecast/datapoint.h"
+#include "forecast/alertslist.h"
 
 #include "weather/location.h"
 
@@ -69,6 +70,10 @@ Weather::DataBlock* Forecast::Forecast::create_hourlyForecast(Weather::Location*
 	return new WeatherBlock(location, "hourly");
 }
 
+Weather::ManagedList* Forecast::Forecast::create_alerts(Weather::Location* location)
+{
+	return new AlertsList(location);
+}
 
 void Forecast::Forecast::json_query(Weather::Location* location, const QString& query, const QString& params, QObject* receiver, const char* slot)
 {
@@ -91,9 +96,9 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 // ##### STATIC CONVERSION METHODS #####
 
 QString Forecast::Forecast::temp(float value) {
-	if (Weather::Location::units().temp() == Weather::Units::Fahrenheit) {
+	if (Weather::Location::units()->temp() == Weather::Units::Fahrenheit) {
 		return validate(value, format(value, 2) + units(TEMP_F));
-	} else if (Weather::Location::units().temp() == Weather::Units::Celsius) {
+	} else if (Weather::Location::units()->temp() == Weather::Units::Celsius) {
 		return validate(value, format(5.0/9.0 * (value - 32), 2) + units(TEMP_C));
 	} else {
 		qFatal("Unknown units!");
@@ -120,42 +125,45 @@ QString Forecast::Forecast::probability(float value) {
 }
 
 QString Forecast::Forecast::wind(float speed, float dir) {
-	static QString compass[] = {
-		"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"
-	};
-	
-	/*static QString compass[] = {
-	 *	"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N"
-};*/
-	float index = dir * ((float) ((sizeof(compass)/sizeof(compass[0])) - 1))/360;
-	int i = (int) index;
-	if (index - i >= 0.5)
-		i++;
-	
+	QString from = "";
 	QString color = "";
 	QString desc = "";
 	
-	if (speed > 25) {
-		color = "#ffec2f"; // 25-31 mph		Strong Breeze
-		desc = "Strong Breeze";
+	if (dir != -99) {	
+		static QString compass[] = {
+			"N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"
+		};
+		
+		/*static QString compass[] = {
+		*	"N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N"
+	};*/
+		float index = dir * ((float) ((sizeof(compass)/sizeof(compass[0])) - 1))/360;
+		int i = (int) index;
+		if (index - i >= 0.5)
+			i++;
+		
+		if (speed > 25) {
+			color = "#ffec2f"; // 25-31 mph		Strong Breeze
+			desc = "Strong Breeze";
+		}
+		if (speed > 32) {
+			color = "#f98b20"; // 32-38 mph		Near Gale
+			desc = "Near Gale";
+		}
+		if (speed > 39) {
+			color = "#c31f1f"; // 39 mph		Gale
+			desc = "Gale";
+		}
+		
+		from = compass[i] + " @ ";
 	}
-	if (speed > 32) {
-		color = "#f98b20"; // 32-38 mph		Near Gale
-		desc = "Near Gale";
-	}
-	if (speed > 39) {
-		color = "#c31f1f"; // 39 mph		Gale
-		desc = "Gale";
-	}
-	
-	QString from = compass[i];
 	QString wind;
-	if (Weather::Location::units().speed() == Weather::Units::MilesPerHour) {
-		wind = validate(speed, validate(dir, from + " @ " + format(speed) + " mph"));
-	} else if (Weather::Location::units().speed() == Weather::Units::KilometersPerHour) {
-		wind = validate(speed, validate(dir, from + " @ " + format(1.60934 * speed) + " km/hr"));
-	} else if (Weather::Location::units().speed() == Weather::Units::MetersPerSecond) {
-		wind = validate(speed, validate(dir, from + " @ " + format(0.44704 * speed) + " m/s"));
+	if (Weather::Location::units()->speed() == Weather::Units::MilesPerHour) {
+		wind = validate(speed, from + format(speed) + " mph");
+	} else if (Weather::Location::units()->speed() == Weather::Units::KilometersPerHour) {
+		wind = validate(speed, from + format(1.60934 * speed) + " km/hr");
+	} else if (Weather::Location::units()->speed() == Weather::Units::MetersPerSecond) {
+		wind = validate(speed, from + format(0.44704 * speed) + " m/s");
 	} else {
 		qFatal("Unknown units!");
 		return "";
@@ -169,9 +177,9 @@ QString Forecast::Forecast::wind(float speed, float dir) {
 }
 
 QString Forecast::Forecast::pressure(float value) {
-	if (Weather::Location::units().pressure() == Weather::Units::InchesMercury) {
+	if (Weather::Location::units()->pressure() == Weather::Units::InchesMercury) {
 		return validate(value, format(0.02953 * value, 4) + " inHg");
-	} else if (Weather::Location::units().pressure() == Weather::Units::Millibars) {
+	} else if (Weather::Location::units()->pressure() == Weather::Units::Millibars) {
 		return validate(value, format(value, 4) + " millibars");
 	} else {
 		qFatal("Unknown units!");
@@ -180,9 +188,9 @@ QString Forecast::Forecast::pressure(float value) {
 }
 
 QString Forecast::Forecast::visibility(float value) {
-	if (Weather::Location::units().longDistance() == Weather::Units::Miles) {
+	if (Weather::Location::units()->longDistance() == Weather::Units::Miles) {
 		return validate(value, format(value) + " mi");
-	} else if (Weather::Location::units().longDistance() == Weather::Units::Kilometers) {
+	} else if (Weather::Location::units()->longDistance() == Weather::Units::Kilometers) {
 		return validate(value, format(1.60934 * value) + " km");
 	} else {
 		qFatal("Unknown units!");

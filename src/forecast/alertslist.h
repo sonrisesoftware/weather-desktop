@@ -17,47 +17,36 @@
  ***************************************************************************/
 
 
-#include "forecast/weatherblock.h"
+#ifndef FORECAST_ALERTSLIST_H
+#define FORECAST_ALERTSLIST_H
 
-#include "forecast/forecast.h"
-#include "forecast/weatherpoint.h"
-#include "forecast/datapoint.h"
-#include "forecast/datablock.h"
-#include "weather/datapoint.h"
-#include "weather/location.h"
+#include <weather/managedlist.h>
 
-Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location)
-{
-	setPath(path);
-	setData(new Block(location, path));
+namespace Weather {
+	class Location;
 }
 
-Forecast::WeatherBlock::~WeatherBlock()
-{
+namespace Forecast {
+
+	class AlertsList : public Weather::ManagedList
+	{
+		Q_OBJECT
+		
+		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
+
+	public:
+		explicit AlertsList(Weather::Location *location);
+		virtual ~AlertsList();
+		
+	public slots:
+		virtual void refresh();
+		
+	signals:
+		void refreshed();
+		
+	#include "forecast/alertslist.gen"
+	};
 
 }
 
-void Forecast::WeatherBlock::refresh()
-{
-	if (location()->hasError()) return;
-	
-	data()->load();
-	
-	setSummary(data()->summary());
-	setIcon(Forecast::Forecast::icon(data()->icon()));
-	
-	while (data()->data().length() < items().length()) {
-		items().takeLast()->deleteLater();
-	}
-	
-	while (data()->data().length() > items().length()) {
-		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
-		dataPoint->refresh();
-		items().append(dataPoint);
-	}
-	
-	setLength(items().length());
-	emit itemsChanged(items());
-}
-
-#include "forecast/weatherblock.moc"
+#endif // FORECAST_ALERTSLIST_H

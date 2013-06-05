@@ -19,6 +19,8 @@
 
 #include "weather/location.h"
 #include "weather/service.h"
+#include "weather/datapoint.h"
+#include "weather/datablock.h"
 
 #include <QDateTime>
 #include <QTimer>
@@ -27,7 +29,7 @@ bool Weather::Location::s_autoRefresh = false;
 int Weather::Location::s_refreshTime = 60 * 60 * 1000; // 1 hour
 Cache *Weather::Location::s_cache = nullptr;
 Weather::Service *Weather::Location::s_defaultService = nullptr;
-Weather::Units Weather::Location::s_units(Weather::Units::English);
+Weather::Units *Weather::Location::s_units = new Weather::Units(Weather::Units::English);
 bool Weather::Location::s_html = false;
 
 Weather::Location::Location(const QString& name, const QString& location, Weather::Service *service, QObject* parent)
@@ -50,6 +52,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(setLocation(QString)));
 	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(run()));
 	QObject::connect(coder(), SIGNAL(coordinatesChanged(QString)), this, SLOT(setCoordinates(QString)));
+	QObject::connect(this, SIGNAL(refreshed()), this, SLOT(onRefreshed()));
 	coder()->run();
 	
 	// Set the service
@@ -58,6 +61,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	setConditions(this->service()->create_conditions(this));
 	setDailyForecast(this->service()->create_dailyForecast(this));
 	setHourlyForecast(this->service()->create_hourlyForecast(this));
+	setAlerts(this->service()->create_alerts(this));
 	// Needs an refresh
 	setNeedsRefresh(true);
 	setValid(false);
@@ -65,7 +69,9 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	refresh();
 	// Connect slots
 	QObject::connect(this, SIGNAL(locationChanged(QString)), SLOT(onLocationChanged()));
-	QObject::connect(&s_units, SIGNAL(unitsChanged()), this, SLOT(refresh()));
+	QObject::connect(s_units, SIGNAL(unitsChanged()), this, SLOT(refresh()));
+	
+	units()->setObjectName("Initial units object");
 	// TODO: Add to global list (if there is one)
 }
 
@@ -76,12 +82,13 @@ Weather::Location::~Location()
 
 void Weather::Location::refresh()
 {
+	qDebug() << "Refresh called!";
 	if (isRefreshing()) return;
 	
 	if (location().isEmpty())
 		setDisplay(i18nc("@label", "Auto IP"));
 	else
-		setDisplay(location());
+		setDisplay(coder()->name());
 	
 	if (coordinates().isEmpty()) {
 		setError(true);
@@ -201,6 +208,19 @@ void Weather::Location::onLocationChanged()
 	
 	if (!autoRefresh()) {
 		refresh();
+	}
+}
+
+void Weather::Location::onRefreshed()
+{
+	if (hasError()) return;
+	
+	if (dailyForecast()->length() > 0) {
+		QDateTime now = QDateTime::currentDateTimeUtc();
+		DataPoint *today = dailyForecast()->at(0);
+		
+		qDebug() << "CALCULATING DAY..." << now << today->sunrise() << today->sunset();
+		setDay(now >= today->sunrise() && now <= today->sunset());
 	}
 }
 

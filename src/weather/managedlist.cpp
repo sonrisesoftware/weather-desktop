@@ -17,47 +17,18 @@
  ***************************************************************************/
 
 
-#include "forecast/weatherblock.h"
+#include "weather/managedlist.h"
 
-#include "forecast/forecast.h"
-#include "forecast/weatherpoint.h"
-#include "forecast/datapoint.h"
-#include "forecast/datablock.h"
-#include "weather/datapoint.h"
-#include "weather/location.h"
-
-Forecast::WeatherBlock::WeatherBlock(Weather::Location* location, const QString& path): DataBlock(location)
-{
-	setPath(path);
-	setData(new Block(location, path));
-}
-
-Forecast::WeatherBlock::~WeatherBlock()
+Weather::ManagedList::ManagedList(QObject* parent): QObject(parent)
 {
 
 }
 
-void Forecast::WeatherBlock::refresh()
+Weather::ManagedList::~ManagedList()
 {
-	if (location()->hasError()) return;
-	
-	data()->load();
-	
-	setSummary(data()->summary());
-	setIcon(Forecast::Forecast::icon(data()->icon()));
-	
-	while (data()->data().length() < items().length()) {
-		items().takeLast()->deleteLater();
-	}
-	
-	while (data()->data().length() > items().length()) {
-		WeatherPoint *dataPoint = new WeatherPoint(location(), data()->data()[items().length()]);
-		dataPoint->refresh();
-		items().append(dataPoint);
-	}
-	
-	setLength(items().length());
-	emit itemsChanged(items());
+
 }
 
-#include "forecast/weatherblock.moc"
+
+#include "weather/managedlist.moc"
+
