@@ -58,6 +58,10 @@ Once you have an API key, create a file called `src/api_key.h` and add your API 
     #define WWO_API_KEY "<your-key-here>" // For World Weather Online
     #define WUNDER_API_KEY "<your-key-here>" // For Wunderground
     #define FORECAST_API_KEY "<your-key-here>" // For Forecast.io
+    
+If you want to enter the API key using the GUI per-user, simply create an empty `src/api_key.h` file:
+
+    $ touch src/api_key.h
 
 **Class Generator**
 
@@ -65,13 +69,13 @@ Weather Desktop uses Class Generator to build some files, so use Code Units to p
 
     $ code use qclassgen
     
-Or, you can manually [download it](https://github.com/iBeliever/qclassgen/archive/master.zip) and extract it to a directory called `classgen`.
+Or, you can manually [download it](https://github.com/iBeliever/qclassgen/archive/master.zip) and extract it to a directory called `qclassgen`.
 
 **Dependencies under Debian/Ubuntu**
 
 Under Debian, Ubuntu, or any of their derivatives, you can easily install the necessary dependencies as follows:
 
-    $ sudo apt-get install build-essential cmake kdelibs5-dev libqjson-dev
+    $ sudo apt-get install build-essential cmake kdelibs5-dev libkdeclarative5 libqjson-dev
 
 **From the command line under Unix/Linux:**
 
@@ -83,6 +87,10 @@ Under Debian, Ubuntu, or any of their derivatives, you can easily install the ne
     $ make install # or 'sudo make install' if installing in a root directory
     
 If you do not specify an installation prefix, Weather Desktop will be installed in `/usr/local`.
+
+If you want to install it with debugging enabled to `/usr`, you can simply run the signal command:
+
+    $ ./build.sh
 
 **From the command line under Windows:**
 

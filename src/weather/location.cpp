@@ -52,7 +52,6 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(setLocation(QString)));
 	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(run()));
 	QObject::connect(coder(), SIGNAL(coordinatesChanged(QString)), this, SLOT(setCoordinates(QString)));
-	QObject::connect(this, SIGNAL(refreshed()), this, SLOT(onRefreshed()));
 	coder()->run();
 	
 	// Set the service
@@ -62,6 +61,9 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	setDailyForecast(this->service()->create_dailyForecast(this));
 	setHourlyForecast(this->service()->create_hourlyForecast(this));
 	setAlerts(this->service()->create_alerts(this));
+	
+	QObject::connect(this, SIGNAL(refreshed()), this, SLOT(onRefreshed()));
+	
 	// Needs an refresh
 	setNeedsRefresh(true);
 	setValid(false);
@@ -127,7 +129,6 @@ void Weather::Location::refresh()
 			qDebug() << "Needs refresh in" << time/(1000 * 60) << "minutes";
 			QTimer::singleShot(time, this, SLOT(timeToRefresh()));
 			
-			emit refreshed();
 			return;
 		} else {	
 			//if (!error.startsWith(NO_DATA) && !error.startsWith(OUTDATED_DATA)) {

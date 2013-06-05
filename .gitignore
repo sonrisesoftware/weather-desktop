@@ -1,6 +1,7 @@
 # Files ignored by git
 *~
 build
+pbuild
 qclassgen
 src/api_key.h
 code_report
