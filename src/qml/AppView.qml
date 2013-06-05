@@ -55,16 +55,16 @@ Rectangle {
 		}
 	}
 	
-	/*Rectangle {
-	 *		 i d*: nightTimeShading
-	 *		 anchors.fill: parent
-	 *		 opacity: WeatherApp.currentLocation.day ? 0 : 1
-	 *		 color: Qt.rgba(0,0,0,0.7)
-	 *		 
-	 *		 Behavior on opacity {
-	 *			 NumberAnimation { duration: 500 }
-}
-}*/
+	Rectangle {
+		id: nightTimeShading
+		anchors.fill: parent
+		opacity: WeatherApp.currentLocation.day ? 0 : 1
+		color: Qt.rgba(0,0,0,0.6)
+	
+		Behavior on opacity {
+			NumberAnimation { duration: 500 }
+		}
+	}
 	
 	WeatherHeader {
 		id: header
@@ -92,7 +92,7 @@ Rectangle {
 		id: weatherAlerts
 		
 		anchors {
-			bottom: bottomToolBar.top; bottomMargin: 20;
+			bottom: locationInfoText.top; bottomMargin: 20;
 			left: parent.left; leftMargin: 20;
 			right: parent.right; rightMargin: 20;
 		}
@@ -285,6 +285,24 @@ Rectangle {
 			onLinkActivated: {
 				Qt.openUrlExternally(link)
 			}
+		}
+	}
+	
+	Row {
+		id: locationInfoText
+		
+		anchors {
+			bottom: bottomToolBar.top
+			margins: 5
+			left: parent.left
+			right: parent.right
+		}
+		
+		Text {
+			id: locationText
+			anchors.verticalCenter: parent.verticalCenter
+			
+			text: WeatherApp.currentLocation.display
 		}
 	}
 	

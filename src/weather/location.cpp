@@ -19,6 +19,8 @@
 
 #include "weather/location.h"
 #include "weather/service.h"
+#include "weather/datapoint.h"
+#include "weather/datablock.h"
 
 #include <QDateTime>
 #include <QTimer>
@@ -50,6 +52,7 @@ Weather::Location::Location(const QString& name, const QString& location, Weathe
 	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(setLocation(QString)));
 	QObject::connect(this, SIGNAL(locationChanged(QString)), coder(), SLOT(run()));
 	QObject::connect(coder(), SIGNAL(coordinatesChanged(QString)), this, SLOT(setCoordinates(QString)));
+	QObject::connect(this, SIGNAL(refreshed()), this, SLOT(onRefreshed()));
 	coder()->run();
 	
 	// Set the service
@@ -85,7 +88,7 @@ void Weather::Location::refresh()
 	if (location().isEmpty())
 		setDisplay(i18nc("@label", "Auto IP"));
 	else
-		setDisplay(location());
+		setDisplay(coder()->name());
 	
 	if (coordinates().isEmpty()) {
 		setError(true);
@@ -205,6 +208,19 @@ void Weather::Location::onLocationChanged()
 	
 	if (!autoRefresh()) {
 		refresh();
+	}
+}
+
+void Weather::Location::onRefreshed()
+{
+	if (hasError()) return;
+	
+	if (dailyForecast()->length() > 0) {
+		QDateTime now = QDateTime::currentDateTimeUtc();
+		DataPoint *today = dailyForecast()->at(0);
+		
+		qDebug() << "CALCULATING DAY..." << now << today->sunrise() << today->sunset();
+		setDay(now >= today->sunrise() && now <= today->sunset());
 	}
 }
 

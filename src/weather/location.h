@@ -127,6 +127,11 @@ namespace Weather
 		 */
 		void onLocationChanged();
 		
+		/**
+		 * Called when the location refreshed. Used to update the day/night status.
+		 */
+		void onRefreshed();
+		
 	signals:
 		void refreshed();
 

@@ -66,9 +66,9 @@ void Forecast::WeatherPoint::refresh()
 	
 	updateColor(data()->temperature());
 	
-// 	Q_PROPERTY(QDateTime sunrise READ sunrise WRITE setSunrise NOTIFY sunriseChanged);
-// 	Q_PROPERTY(QDateTime sunset READ sunset WRITE setSunset NOTIFY sunsetChanged);
-// 	
+	setSunrise(data()->sunriseTime());		// UTC Time
+	setSunset(data()->sunsetTime());		// UTC Time
+	
 // 	Q_PROPERTY(QString precipAccumulation READ precipAccumulation WRITE setPrecipAccumulation NOTIFY precipAccumulationChanged);
 // 	
 // 	Q_PROPERTY(QString feelsLike READ feelsLike NOTIFY feelsLikeChanged)

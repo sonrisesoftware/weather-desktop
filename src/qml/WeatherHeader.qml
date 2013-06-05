@@ -22,10 +22,7 @@ import org.kde.plasma.components 0.1 as PlasmaComponents
 
 Rectangle {
 	id: root
-	color: appStyle.panelColor;
-	border.color: appStyle.borderColor;
-	radius: appStyle.panelRadius;
-	
+		
 	property bool is_valid: weatherLocation.valid
 	
 	implicitWidth: is_valid ? Math.max(400, icon.width + 80 + 2 * Math.max(
@@ -34,6 +31,10 @@ Rectangle {
 	implicitHeight: 6 + Math.max(Math.max(icon.height, name.height + location.height), temp.height + weather.height)
 	
 	property variant weatherLocation
+	
+	color: appStyle.panelColor;
+	border.color: appStyle.borderColor;
+	radius: appStyle.panelRadius;
 	
 //  	BorderImage {
 //  		id: background
