@@ -72,6 +72,18 @@
 	Check the weather in a simple and easy-to-use manner. With no ads and a
 	beautiful interface, it's easier and faster than checking weather websites!
 </para>
+
+<para>Features include:</para>
+<itemizedlist>
+	<listitem><simpara>Multiple named locations</simpara></listitem>
+	<listitem><simpara>An overview of today's weather</simpara></listitem>
+	<listitem><simpara>Detailed current conditions</simpara></listitem>
+	<listitem><simpara>Hourly forecasts for the next 24 hours</simpara></listitem>
+	<listitem><simpara>Daily forecasts for the next 7 days</simpara></listitem>
+	<listitem><simpara>Severe alerts</simpara></listitem>
+	<listitem><simpara>Weather backgrounds change to reflect the current conditions</simpara></listitem>
+</itemizedlist>
+
 <para>
 	&kappname; provides access to multiple named locations, with previews of
 	all available at the same time. &kappname; displays detailed current 
@@ -116,7 +128,7 @@ contributors of backgrounds.</emphasis>
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 
 &underFDL;				<!-- FDL: do not remove -->
-&underGPL;			<!-- GPLv3 License -->
+&underGPL;				<!-- GPLv3 License -->
 
 </chapter>
 

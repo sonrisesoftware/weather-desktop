@@ -1,0 +1,33 @@
+Chapter 1. Introduction
+
+Check the weather in a simple and easy-to-use manner. With no ads and a beautiful interface, it's easier and faster than checking weather websites!
+
+Features include:
+
+ * Multiple named locations
+ * An overview of today's weather
+ * Detailed current conditions
+ * Hourly forecasts for the next 24 hours
+ * Daily forecasts for the next 7 days
+ * Severe alerts
+ * Weather backgrounds change to reflect the current conditions
+ 
+The Weather Desktop website is http://ibeliever.github.io/weather-desktop, with the project hosted at http://github.com/iBeliever/weather-desktop.
+
+If you want to report a bug, suggest an improvement, or ask a question, see https://github.com/iBeliever/weather-desktop/issues.
+
+
+
+Chapter 2. Using Weather Desktop
+
+2.1 - Setup
+
+When you first run Weather Desktop, a first-run wizard will run that guides you through setting up the application. 
+
+If the application was compiled without an API key built in, the first screen will prompt you to enter an API key to access the Forecast.io weather service. To obtain an API key, go to http://developer.forecast.io and sign up for a free key (the only thing required is an email address).
+
+The next screen will prompt you to enter your home location, which will be named "Home". After that, you can select either English or Metric as your prefered units.
+
+2.2 - Overview
+
+When the app first starts, you will be presented with 
