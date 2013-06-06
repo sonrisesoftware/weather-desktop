@@ -41,6 +41,8 @@ void Alert::refresh()
 	setTitle(getJson(data, "title").toString());
 	setUrl(getJson(data, "uri").toUrl());
 	setExpires(QDateTime::fromMSecsSinceEpoch(getJson(data, "expires").toLongLong() * 1000).toUTC());
+	
+	emit refreshed();
 }
 
 

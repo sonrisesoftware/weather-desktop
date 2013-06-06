@@ -20,6 +20,7 @@
 #include "weather/alert.h"
 
 #include "weather/location.h"
+#include "weather-desktop.h"
 
 using namespace Weather;
 
@@ -28,11 +29,19 @@ Alert::Alert(Weather::Location *location): QObject(location)
 	Q_ASSERT(location != nullptr);
 	
 	setLocation(location);
+	
+	QObject::connect(this, SIGNAL(refreshed()), this, SLOT(onRefreshed()));
 }
 
 Alert::~Alert()
 {
 
 }
+
+void Weather::Alert::onRefreshed()
+{
+	WeatherDesktop::showAlert(location(), this);
+}
+
 
 #include "weather/alert.moc"

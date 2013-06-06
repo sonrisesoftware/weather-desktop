@@ -20,6 +20,8 @@
 #define WEATHER-DESKTOP_H
 
 #include "weather/location.h"
+#include "weather/managedlist.h"
+#include "weather/alert.h"
 
 #include <QDeclarativeView>
 #include <KDE/KXmlGuiWindow>
@@ -61,6 +63,8 @@ public:
 	Q_INVOKABLE Weather::Location* location(int index);
 	
 	Q_INVOKABLE void initialSetup();
+	
+	static void showAlert(Weather::Location *location, Weather::Alert *alert);
 	
 public slots:
 	Weather::Location *addLocation(const QString& name, const QString &location);

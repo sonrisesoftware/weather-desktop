@@ -41,7 +41,6 @@ qclassgen(weather-desktop_SRCS
 
 # Process the configuration definition
 kde4_add_kcfg_files(weather-desktop_SRCS GENERATE_MOC settings.kcfgc)
-install(FILES settings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
 
 # Set the name of the application
 kde4_add_executable(weather-desktop ${weather-desktop_SRCS})
@@ -60,8 +59,14 @@ target_link_libraries(weather-desktop
 # Tell cmake to install the application binary
 install(TARGETS weather-desktop ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+install(FILES settings.kcfg
+        DESTINATION ${KCFG_INSTALL_DIR})
+
 install(FILES weather-desktopui.rc 
         DESTINATION  ${DATA_INSTALL_DIR}/weather-desktop)
+        
+install(FILES weather-desktop.notifyrc
+        DESTINATION ${DATA_INSTALL_DIR}/weather-desktop)
 
 # Install the .desktop file
 install(PROGRAMS weather-desktop.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

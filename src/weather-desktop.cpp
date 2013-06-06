@@ -46,6 +46,7 @@
 #include <KDE/KMessageBox>
 #include <KDE/KMenu>
 #include <KDE/KSelectAction>
+#include <KDE/KNotification>
 
 WeatherDesktop::WeatherDesktop()
 	: KXmlGuiWindow()
@@ -123,6 +124,24 @@ KAction *WeatherDesktop::createAction(QString name, QString text, KIcon icon, QO
 			obj, slot);
 	return action;
 }
+
+void WeatherDesktop::showAlert(Weather::Location* location, Weather::Alert* alert)
+{
+	KNotification *notification = new KNotification("severeAlert", KNotification::Persistent);
+	notification->setTitle("Severe Weather Alert");
+	notification->setPixmap(KIcon("weather-storm").pixmap(64,64));
+    notification->setText(i18n("A <b>%1</b> has been issued for <b>%2</b> (%3)",
+							   alert->title(), location->name(),
+							   location->location()
+  							));
+    notification->setActions(QStringList(i18n("View")));
+	
+	notification->addContext("location" , location->name());
+	QObject::connect(notification, SIGNAL(action1Activated()), notification, SLOT(deleteLater()));
+    
+    notification->sendEvent();
+}
+
 
 void WeatherDesktop::setupActions()
 {

@@ -1,0 +1,14 @@
+[Global]
+IconName=weather-desktop
+Comment=Weather Desktop
+
+[Context/location]
+Name=Location
+Comment=The location for the alert
+	
+[Event/severeAlert]
+Name=Severe Weather Alert
+Comment=A severe weather alert has been issued
+Contexts=location
+Sound=/usr/share/sounds/KDE-Sys-App-Error-Serious-Very.ogg
+Action=Sound|Popup

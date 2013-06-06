@@ -42,8 +42,20 @@ namespace Weather {
 		explicit Alert(Weather::Location *location);
 		virtual ~Alert();
 		
+		void setHandler(QObject *reciever, const char *slot) {
+			s_reciever = reciever;
+			s_slot = slot;
+		}
+		
+	private:
+		QObject *s_reciever;
+		const char *s_slot;
+		
 	public slots:
 		virtual void refresh() = 0;
+		
+	private slots:
+		void onRefreshed();
 	
 	signals:
 		void refreshed();
