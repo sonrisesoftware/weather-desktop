@@ -111,6 +111,7 @@ namespace Weather
 		
 	private:
 		static Cache *s_cache;
+		bool m_day = true;
 		
 	public slots:
 		void refresh();
