@@ -3,7 +3,7 @@
 # Build script to build all of Weather Desktop
 
 # Dependencies, qclassgen, and the API Key
-sudo apt-get install build-essential cmake kdelibs5-dev libkdeclarative5 libqjson-dev
+sudo apt-get install build-essential cmake kde-runtime kdelibs5-dev libkdeclarative5 libqjson-dev
 git clone https://github.com/iBeliever/qclassgen.git
 touch src/api_key.h
 

@@ -75,7 +75,7 @@ Or, you can manually [download it](https://github.com/iBeliever/qclassgen/archiv
 
 Under Debian, Ubuntu, or any of their derivatives, you can easily install the necessary dependencies as follows:
 
-    $ sudo apt-get install build-essential cmake kdelibs5-dev libkdeclarative5 libqjson-dev
+    $ sudo apt-get install build-essential cmake kde-runtime kdelibs5-dev libkdeclarative5 libqjson-dev
 
 **From the command line under Unix/Linux:**
 
