@@ -28,9 +28,9 @@
 #include <KDE/KAboutData>
 #include <KDE/KMainWindow>
 
-#define DEG	"°"
-#define TEMP_F i18n(" °F")
-#define TEMP_C i18n(" °C")
+#define DEG	i18n("°")
+#define TEMP_F i18n("°F")
+#define TEMP_C i18n("°C")
 
 #define RESOURCE(file) QUrl::fromLocalFile(KStandardDirs::locate("appdata", file))
 #define RESOURCE_FILE(file) KStandardDirs::locate("appdata", file)

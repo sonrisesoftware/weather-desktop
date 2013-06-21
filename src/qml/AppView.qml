@@ -23,9 +23,12 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
-	implicitWidth: Math.max(500, Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40));
-	implicitHeight: topToolBar.height + Math.max(creditsText.height, infoText.height) + 5
-			+ header.height + weatherView.implicitHeight + weatherAlerts.height + bottomToolBar.height + 80;
+// 	implicitWidth: Math.max(500, Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40));
+// 	implicitHeight: topToolBar.height + Math.max(creditsText.height, infoText.height) + 5
+// 			+ header.height + weatherView.implicitHeight + weatherAlerts.height + bottomToolBar.height + 80;
+
+	implicitHeight: 400
+	implicitWidth: 600
 	
 	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
 	
@@ -35,12 +38,9 @@ Rectangle {
 		}
 	}
 	
-	anchors {
-		left: parent.left;
-		top: parent.top;
-		bottom: parent.bottom;
-		right: parent.right;
-	}
+	property bool dropDownOpen: false
+	
+	anchors.fill: parent
 	
 	Image {
 		id: backgroundImage
@@ -55,170 +55,65 @@ Rectangle {
 		}
 	}
 	
-	Rectangle {
-		id: nightTimeShading
-		anchors.fill: parent
-		opacity: WeatherApp.currentLocation.day ? 0 : 1
-		color: Qt.rgba(0,0,0,0.6)
-	
-		Behavior on opacity {
-			NumberAnimation { duration: 500 }
-		}
-	}
-	
-	WeatherHeader {
-		id: header
-		anchors.top: infoText.bottom
-		//anchors.top: parent.top
-		anchors.horizontalCenter: parent.horizontalCenter
-		anchors.topMargin: 20
-		weatherLocation: WeatherApp.currentLocation
-	}
-	
-	WeatherView {
-		id: weatherView
-		
-		anchors {
-			top: header.bottom; topMargin: 20;
-			bottom: weatherAlerts.top; bottomMargin: 20;
-			left: parent.left; leftMargin: 20;
-			right: parent.right; rightMargin: 20;
-		}
-		
-		weatherLocation: WeatherApp.currentLocation
-	}
-	
-	Column {
-		id: weatherAlerts
-		
-		anchors {
-			bottom: locationInfoText.top; bottomMargin: 20;
-			left: parent.left; leftMargin: 20;
-			right: parent.right; rightMargin: 20;
-		}
-		
-		spacing: 3
-	
-		Repeater {
-			
-			model: WeatherApp.currentLocation.alerts.length
-			
-			delegate: Alert {
-				id: item
-				alert: WeatherApp.currentLocation.alerts.at(index)
-				anchors.horizontalCenter: parent.horizontalCenter
-				width: Math.min(Math.max(root.width - 40, item.implicitWidth), 800)
-			}
-		}
-	}
-	
 	PlasmaComponents.ToolBar {
 		id: topToolBar
 		
 		tools: Row {
-			//anchors.leftMargin: 3
-			//anchors.rightMargin: 3
 			spacing: 5
 			
-			Row {
-				id: refreshTools
-				spacing: 5
+			Item {
+				id: dropDownHeader
+				anchors.verticalCenter: parent.verticalCenter
+				width: childrenRect.width
+				height: childrenRect.height
 				
-				PlasmaComponents.ToolButton {
-					id: refreshButton
-					iconSource: "view-refresh"
-					text: i18n("Refresh")
-					onClicked: WeatherApp.currentLocation.refresh()
-					width: minimumWidth + 5
-					visible: WeatherApp.currentLocation.needsRefresh && !WeatherApp.currentLocation.refreshing
-				}
-				
-				PlasmaWidgets.BusyWidget {
-					id: refreshingWidget
-					anchors.verticalCenter: parent.verticalCenter
+				Row {
+					id: dropDownHeaderRow
+					spacing: 5
 					
-					width: height
-					height: refreshButton.height
-					visible: WeatherApp.currentLocation.refreshing
-					running: true
-				}
-				
-				Text {
-					id: refreshingLabel
-					anchors.verticalCenter: parent.verticalCenter
+					PlasmaCore.IconItem {
+						id: dropDownIcon
+						anchors.verticalCenter: parent.verticalCenter
+						
+						width: 16; height: 16;
+						source: "arrow-right";
+						rotation: dropDownOpen ? 90 : 0
+						
+						Behavior on rotation {
+							NumberAnimation { duration: 250 }
+						}	
+					}
 					
-					text: "Refreshing"
-					visible: refreshingWidget.visible
+					Text {
+						id: locationTitle
+						anchors.verticalCenter: parent.verticalCenter
+						
+						text: WeatherApp.currentLocation.name + " (" + WeatherApp.currentLocation.location + ")"
+						
+						//style: Text.Raised
+						//styleColor: "white"
+						
+						font.pixelSize: 16
+						//font.bold: true
+					}
 				}
 				
-				PlasmaWidgets.Separator {
-					id: refreshSeparator
-					height: parent.height
-					orientation: Qt.Vertical
-					visible: refreshingWidget.visible || refreshButton.visible
+				MouseArea {
+					id: mouseArea
+					hoverEnabled: true
+					anchors.fill: parent
+					
+					onClicked: {
+						dropDownOpen = !dropDownOpen
+					}
 				}
-			}
-			
-			/*PlasmaComponents.ToolButton {
-			 *			id: nowButton
-			 *			iconSource: "arrow-down-double"
-			 *			text: i18n("Now")
-			 *			width: minimumWidth + 5
-			 *			onClicked: {
-			 *				weatherView.view = "conditions"
-			 }
-			 checked: weatherView.view == "conditions"
-			 }*/
-			
-			PlasmaComponents.ToolButton {
-				id: todayButton
-				iconSource: "go-jump-today"
-				text: i18n("Today")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "today"
-				}
-				checked: weatherView.view == "today"
-			}
-			
-			PlasmaComponents.ToolButton {
-				id: hourlyButton
-				
-				iconSource: "clock"
-				text: i18n("Hourly")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "hourly"
-				}
-				checked: weatherView.view == "hourly"
-			}
-			
-			PlasmaComponents.ToolButton {
-				id: dailyButton
-				iconSource: "view-calendar-day"
-				text: i18n("Daily")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "daily"
-				}
-				checked: weatherView.view == "daily"
 			}
 			
 			Item {
 				height: parent.height
 				width: parent.width
-						- refreshTools.width - todayButton.width 
-						- dailyButton.width - hourlyButton.width
-						- searchField.width - configureButton.width
+						- dropDownHeader.width - configureButton.width
 						- (parent.children.length - 1) * parent.spacing
-			}
-			
-			PlasmaWidgets.LineEdit {
-				id: searchField;
-				
-				clickMessage: i18n("Search...")
-				clearButtonShown: true
-				onReturnPressed: WeatherApp.setLocation(text)
 			}
 			
 			PlasmaComponents.ToolButton {
@@ -264,16 +159,16 @@ Rectangle {
 			anchors.verticalCenter: parent.verticalCenter
 			
 			text: i18nc("The time the weather was last downloaded", 
-					"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
-			visible: WeatherApp.currentLocation.valid
-			width: visible ? implicitWidth : 0;
+						"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+						visible: WeatherApp.currentLocation.valid
+						width: visible ? implicitWidth : 0;
 		}
 		
 		Item {
 			height: parent.height
 			width: parent.width - creditsText.width
-					- lastUpdatedText.width - statusIcon.width
-					- (parent.children.length - 1) * parent.spacing
+			- lastUpdatedText.width - statusIcon.width
+			- (parent.children.length - 1) * parent.spacing
 		}
 		
 		Text {
@@ -288,111 +183,146 @@ Rectangle {
 		}
 	}
 	
-	Row {
-		id: locationInfoText
-		
-		anchors {
-			bottom: bottomToolBar.top
-			margins: 5
-			left: parent.left
-			right: parent.right
-		}
-		
-		Text {
-			id: locationText
-			anchors.verticalCenter: parent.verticalCenter
-			
-			text: WeatherApp.currentLocation.display
-		}
-	}
-	
 	PlasmaComponents.ToolBar {
 		id: bottomToolBar
 		
-		anchors.bottom: parent.bottom
+		anchors {
+			bottom: parent.bottom
+		}
 		
 		tools: Row {
-			anchors.leftMargin: 3
-			anchors.rightMargin: 3
 			spacing: 5
 			
-			ListView {
-				id: list
-				
-				height: 100
-				width: parent.width
-						- listActions.width - actionsSeparator.width
-						- (parent.children.length - 1) * parent.spacing
-				
-				orientation: ListView.Horizontal
-				clip: true
-				spacing: 5
-				
-				
-				model: WeatherApp.locations;
-				delegate: tileitem;
-			}
-			
-			PlasmaWidgets.Separator {
-				id: actionsSeparator
-				height: parent.height
-				orientation: Qt.Vertical
-			}
-			
-			Column {
-				id: listActions
-				anchors.verticalCenter: parent.verticalCenter
-				
-				spacing: 20
-				
-				PlasmaComponents.ToolButton {
-					iconSource: "list-add"
-					onClicked: WeatherApp.addCurrentLocation()
+			PlasmaComponents.ToolButton {
+				id: nowButton
+				iconSource: "arrow-down-double"
+				text: i18n("Now")
+				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "conditions"
 				}
+				checked: weatherView.view == "conditions"
+			}
+			
+			PlasmaComponents.ToolButton {
+				id: todayButton
+				iconSource: "go-jump-today"
+				text: i18n("Today")
+				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "today"
+				}
+				checked: weatherView.view == "today"
+			}
+			
+			PlasmaComponents.ToolButton {
+				id: hourlyButton
 				
-				PlasmaComponents.ToolButton {
-					iconSource: "edit-delete"
-					onClicked: WeatherApp.removeCurrentLocation()
+				iconSource: "clock"
+				text: i18n("Hourly")
+				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "hourly"
+				}
+				checked: weatherView.view == "hourly"
+			}
+			
+			PlasmaComponents.ToolButton {
+				id: dailyButton
+				iconSource: "view-calendar-day"
+				text: i18n("Daily")
+				width: minimumWidth + 5
+				onClicked: {
+					weatherView.view = "daily"
+				}
+				checked: weatherView.view == "daily"
+			}
+			
+			Item {
+				height: parent.height
+				width: parent.width - nowButton.width
+					- todayButton.width - dailyButton.width
+					- hourlyButton.width - infoButton.width
+					- (parent.children.length - 1) * parent.spacing
+			}
+			
+			PlasmaComponents.ToolButton {
+				id: infoButton
+				iconSource: "help-about"
+				onClicked: {
+					//var position = mapToItem(null, 0, height)
+					//WeatherApp.showMenu(position.x, position.y)
 				}
 			}
 		}
 	}
 	
-	Component  {
-		id: tileitem
+	Row {
+		id: todayView
+		spacing: 5
 		
-		Item {
-			id: wrapper
+		anchors {
+			left: parent.left
+			bottom: bottomToolBar.top
+			margins: 10
+		}
+		
+		Text {
+			id: weatherTemp
+			text: WeatherApp.currentLocation.conditions.temperature
+			font.pixelSize: 50
+			color: "white"
+			style: Text.Raised
+			styleColor: appStyle.shadowColor
+		}
+		
+		Column {
 			
-			width: 200
-			height: 100
-			
-			WeatherTile {
-				anchors.centerIn: parent;
-				selected: modelData.location == WeatherApp.currentLocation.location;
+			Text {
+				id: weatherSummary
 				
-				onSelectedChanged: {
-					if (selected) {
-						wrapper.ListView.view.currentIndex = index
-					} else {
-						wrapper.ListView.view.currentIndex = -1
-					}
+				text: WeatherApp.currentLocation.conditions.summary
+				font.pixelSize: 20
+				color: "white"
+				style: Text.Raised
+				styleColor: appStyle.shadowColor
+			}
+			
+			Grid {
+				columns: 2
+				spacing: 5
+			
+				Text {
+					text: "Precipitation: " + WeatherApp.currentLocation.conditions.precip
+					//font.pixelSize: 11
+					color: "white"
+					style: Text.Raised
+					styleColor: appStyle.shadowColor
 				}
 				
-				onClicked: {
-					WeatherApp.currentLocation = modelData
+				Text {
+					text: "Wind: " + WeatherApp.currentLocation.conditions.wind
+					//font.pixelSize: 11
+					color: "white"
+					style: Text.Raised
+					styleColor: appStyle.shadowColor
 				}
 				
-				alerts: modelData.alerts.length
-				title: modelData.name;
-				temp: modelData.conditions.temperature;
-				icon: modelData.conditions.icon;
-				weather: modelData.conditions.summary;
-				maxTemp: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).temperatureMax : "";
-				minTemp: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).temperatureMin : "";
+				Text {
+					text: "Pressure: " + WeatherApp.currentLocation.conditions.pressure
+					//font.pixelSize: 11
+					color: "white"
+					style: Text.Raised
+					styleColor: appStyle.shadowColor
+				}
 				
-				iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
-				//weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
+				Text {
+					text: "Humidity: " + WeatherApp.currentLocation.conditions.humidity
+					//font.pixelSize: 11
+					color: "white"
+					style: Text.Raised
+					styleColor: appStyle.shadowColor
+				}
 			}
 		}
 	}

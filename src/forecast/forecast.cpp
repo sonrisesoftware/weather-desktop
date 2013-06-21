@@ -97,9 +97,9 @@ void Forecast::Forecast::onWeatherDownloaded(Weather::Location* location, QStrin
 
 QString Forecast::Forecast::temp(float value) {
 	if (Weather::Location::units()->temp() == Weather::Units::Fahrenheit) {
-		return validate(value, format(value, 2) + units(TEMP_F));
+		return validate(value, format(value, 2) + units(DEG));
 	} else if (Weather::Location::units()->temp() == Weather::Units::Celsius) {
-		return validate(value, format(5.0/9.0 * (value - 32), 2) + units(TEMP_C));
+		return validate(value, format(5.0/9.0 * (value - 32), 2) + units(DEG));
 	} else {
 		qFatal("Unknown units!");
 		return "";
