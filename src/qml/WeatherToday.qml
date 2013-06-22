@@ -19,191 +19,115 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
-import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
-Panel {
+Item {
 	id: root
-	
-	title: i18n("Today")
-	implicitWidth: Math.max(header.width + 10, contents.width + 20)
-	implicitHeight: header.height + contents.height + 30
-	
+	property variant weather: weatherLocation.dailyForecast.at(0);
 	property variant weatherLocation
-	property variant today: weatherLocation.dailyForecast.length > 0 ?
-			weatherLocation.dailyForecast.at(0) : null
-	
 	property variant conditions: weatherLocation.conditions;
-
+	
+	PlasmaCore.IconItem {
+		id: icon
+		anchors.centerIn: parent
+		
+		width: 128; height: width;
+		source: weather.icon;
+	}
+	
 	Column {
-		id: contents
+		spacing: 5
 		
 		anchors {
 			left: parent.left
-			leftMargin: 10
-			top: header.bottom
-			topMargin: 15
+			bottom: parent.bottom
 		}
 		
-		spacing: 3
-	
+		Text {
+			color: viewColor
+			text: "Today"
+		}
+		
 		Row {
-			id: topRow
-			
-			spacing: 25
-			
-			PlasmaCore.IconItem {
-				id: icon
-				anchors.verticalCenter: parent.verticalCenter
-				
-				width: 64; height: 64;
-				source: today.icon;
-			}
+			spacing: 5
 			
 			Text {
-				id: temp
+				id: weatherTemp
 				anchors.verticalCenter: parent.verticalCenter
-				
 				text: conditions.temperature
-				font.pixelSize: appStyle.titleFontSize + 10;
-				color: appStyle.textColor
-				
-				style: Text.Raised
-				styleColor: appStyle.shadowColor
+				font.pixelSize: 60
+				color: viewColor
 			}
 			
-			Text {
-				id: minTemp
+			Column {
+				anchors.verticalCenter: parent.verticalCenter	
+				spacing: 5
+				
+				Text {
+					text: weather.temperatureMax
+					font.pixelSize: 27
+					color: "#c31f1f"
+				}
+				
+				Text {
+					text: weather.temperatureMin
+					font.pixelSize: 27
+					color: "#217ecd"
+				}
+			}
+			
+			Column {
+				spacing: 5
 				anchors.verticalCenter: parent.verticalCenter
 				
-				text: today.temperatureMin
-				font.pixelSize: appStyle.titleFontSize + 2;
-				color: "#217ecd"
+				Text {
+					id: weatherSummary
+					
+					text: weather.summary
+					font.pixelSize: 20
+					color: viewColor
+				}
 				
-				style: Text.Raised
-				styleColor: appStyle.shadowColor
+				Grid {
+					columns: 3
+					spacing: 5
+					
+					Text {
+						text: "Precipitation: " + conditions.precip
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: i18n("Cloud Cover: %1", conditions.cloudCover)
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: "Wind: " + conditions.wind
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: "Pressure: " + conditions.pressure
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: "Humidity: " + conditions.humidity
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: i18n("Visibility: %1", conditions.visibility)
+						width: implicitWidth + 10
+						color: viewColor
+					}
+				}
 			}
-			
-			Text {
-				id: maxTemp
-				anchors.verticalCenter: parent.verticalCenter
-				
-				text: today.temperatureMax
-				font.pixelSize: appStyle.titleFontSize + 7;
-				color: "#c31f1f"
-				
-				style: Text.Raised
-				styleColor: appStyle.shadowColor
-			}
 		}
-		
-		Text {
-			id: precip
-			anchors.horizontalCenter: parent.horizontalCenter
-			
-			visible: text != "" && text != "None"
-			text: today.precip
-			font.pixelSize: appStyle.titleFontSize - 2;
-			font.italic: true
-			color: appStyle.textColor
-			
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
-		
-		Item {
-			height: 10
-			width: parent.width
-			visible: precip.visible
-		}
-		
-		Text {
-			id: summary
-			width: parent.width
-			
-			text: today.summary
-			wrapMode: Text.Wrap
-			font.pixelSize: appStyle.headerFontSize;
-			color: appStyle.textColor
-			
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
-		
-		Item {
-			width: parent.width
-			height: 5
-		}
-		
-		PlasmaWidgets.Separator {
-			width: parent.width
-		}
-
-        DropDown {
-            id: conditionsDropDown
-
-            width: Math.max(parent.width, implicitWidth)
-
-            title: i18n("Conditions")
-            font.pixelSize: appStyle.headerFontSize;
-            titleColor: appStyle.textColor
-
-            style: Text.Raised
-            styleColor: appStyle.shadowColor
-            highlightColor: Qt.rgba(0.5,0.5,0.6,0.2)
-
-            contents: [
-                Form {
-                    id: left
-                    fontSize: appStyle.dataFontSize;
-                    headerSize: appStyle.headerFontSize;
-                    color: appStyle.textColor;
-
-                    FormItem {
-                        label: i18n("Humidity:")
-                        value: conditions.humidity
-                    }
-
-                    FormItem {
-                        label: i18n("Precipitation:")
-                        value: conditions.precip
-                    }
-
-                    FormItem {
-                        label: i18n("Feels like:")
-                        value: conditions.feelsLike
-                    }
-
-                    FormItem {
-                        label: i18n("Dew point:")
-                        value: conditions.dewPoint
-                    }
-
-                    FormItem {
-                        label: i18n("Pressure:")
-                        value: conditions.pressure
-                    }
-
-                    FormItem {
-                        label: i18n("Visibility:")
-                        value: conditions.visibility
-                    }
-
-                    FormItem {
-                        label: i18n("Cloud Cover:")
-                        value: conditions.cloudCover
-                    }
-
-                    FormItem {
-                        label: i18n("Wind:")
-                        value: conditions.wind
-                    }
-
-                    FormItem {
-                        label: i18n("Wind Gust:")
-                        value: conditions.windGust
-                    }
-                }
-            ]
-        }
 	}
 }

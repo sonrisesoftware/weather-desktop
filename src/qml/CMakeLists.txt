@@ -14,7 +14,6 @@ set(weather-desktop_QML
    Style.qml
    ScrollBar.qml
    ScrollArea.qml 
-   WeatherConditions.qml
    WeatherHeader.qml
    WeatherHourly.qml
    WeatherTile.qml

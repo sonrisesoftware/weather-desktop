@@ -21,9 +21,8 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
-Rectangle {
+Item {
 	id: root
-	color: "#00000000" // transparent
 	
 	property string view: "today"
 	property bool is_valid: weatherLocation.valid
@@ -31,10 +30,6 @@ Rectangle {
 	property bool is_error: !is_valid && weatherLocation.error;
 	
 	property variant weatherLocation;
-	
-	onStateChanged: {
-		console.log("Width, height: " + width + ", " + height);
-	}
 	
 	PlasmaWidgets.BusyWidget {
 		id: refreshingWidget
@@ -49,24 +44,13 @@ Rectangle {
 			NumberAnimation { duration: 500 }
 		}
 	}
-	
-	WeatherConditions {
-		id: conditions
-		anchors.centerIn: root
+	WeatherToday {
+		id: today
+		weatherLocation: root.weatherLocation;
+		
+		anchors.fill: parent
+		
 		opacity: 0
-		
-		windchill: weatherLocation.conditions.feelsLike;
-		dewpoint:  weatherLocation.conditions.dewPoint;
-		
-		pressure: weatherLocation.conditions.pressure;
-		visibility: weatherLocation.conditions.visibility;
-		clouds: weatherLocation.conditions.cloudCover;
-		
-		wind: weatherLocation.conditions.wind;
-		windgust: weatherLocation.conditions.windGust;
-		
-		humidity: weatherLocation.conditions.humidity;
-		precip: weatherLocation.conditions.precip;
 		
 		Behavior on opacity {
 			NumberAnimation { duration: 500 }
@@ -87,7 +71,7 @@ Rectangle {
 	
 	DailyForecast {
 		id: dailyForecast
-		anchors.centerIn: root
+		anchors.centerIn: parent
 		opacity: 0
 				
 		Behavior on opacity {
@@ -99,19 +83,7 @@ Rectangle {
 	
 	WeatherHourly {
 		id: hourlyForecast
-		anchors.centerIn: root
-		opacity: 0
-		
-		Behavior on opacity {
-			NumberAnimation { duration: 500 }
-		}
-		
-		weatherLocation: root.weatherLocation
-	}
-	
-	WeatherToday {
-		id: today
-		anchors.centerIn: root
+		anchors.centerIn: parent
 		opacity: 0
 		
 		Behavior on opacity {
@@ -122,13 +94,6 @@ Rectangle {
 	}
 	
 	states: [
-		State {
-			name: "conditions"
-			when: is_valid && view == "conditions"
-			PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
-			PropertyChanges { target: root; implicitWidth: conditions.implicitWidth; }
-			PropertyChanges { target: root; implicitHeight: conditions.implicitHeight; }
-		},
 		State {
 			name: "daily"
 			when: is_valid && view == "daily"

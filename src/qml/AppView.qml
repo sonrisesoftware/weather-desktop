@@ -30,21 +30,14 @@ Rectangle {
 	implicitHeight: 400
 	implicitWidth: 600
 	
-	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
-	
-	onBackgroundChanged: {
-		if (backgroundImage.visible) {
-			backgroundImage.source = background
-		}
-	}
-	
 	property bool dropDownOpen: false
 	
 	anchors.fill: parent
 	
 	Image {
 		id: backgroundImage
-		source: "../images/weather-clear.jpg"
+		source: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
+		asynchronous: true
 		anchors.fill: parent
 		visible: root.opacity > 0
 		
@@ -194,17 +187,6 @@ Rectangle {
 			spacing: 5
 			
 			PlasmaComponents.ToolButton {
-				id: nowButton
-				iconSource: "arrow-down-double"
-				text: i18n("Now")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "conditions"
-				}
-				checked: weatherView.view == "conditions"
-			}
-			
-			PlasmaComponents.ToolButton {
 				id: todayButton
 				iconSource: "go-jump-today"
 				text: i18n("Today")
@@ -240,7 +222,7 @@ Rectangle {
 			
 			Item {
 				height: parent.height
-				width: parent.width - nowButton.width
+				width: parent.width
 					- todayButton.width - dailyButton.width
 					- hourlyButton.width - infoButton.width
 					- (parent.children.length - 1) * parent.spacing
@@ -257,73 +239,17 @@ Rectangle {
 		}
 	}
 	
-	Row {
-		id: todayView
-		spacing: 5
-		
+	property color viewColor: "black"
+	
+	WeatherView {
+		id: weatherView
+		weatherLocation: WeatherApp.currentLocation
 		anchors {
+			top: topToolBar.bottom
 			left: parent.left
+			right: parent.right
 			bottom: bottomToolBar.top
 			margins: 10
-		}
-		
-		Text {
-			id: weatherTemp
-			text: WeatherApp.currentLocation.conditions.temperature
-			font.pixelSize: 50
-			color: "white"
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
-		
-		Column {
-			
-			Text {
-				id: weatherSummary
-				
-				text: WeatherApp.currentLocation.conditions.summary
-				font.pixelSize: 20
-				color: "white"
-				style: Text.Raised
-				styleColor: appStyle.shadowColor
-			}
-			
-			Grid {
-				columns: 2
-				spacing: 5
-			
-				Text {
-					text: "Precipitation: " + WeatherApp.currentLocation.conditions.precip
-					//font.pixelSize: 11
-					color: "white"
-					style: Text.Raised
-					styleColor: appStyle.shadowColor
-				}
-				
-				Text {
-					text: "Wind: " + WeatherApp.currentLocation.conditions.wind
-					//font.pixelSize: 11
-					color: "white"
-					style: Text.Raised
-					styleColor: appStyle.shadowColor
-				}
-				
-				Text {
-					text: "Pressure: " + WeatherApp.currentLocation.conditions.pressure
-					//font.pixelSize: 11
-					color: "white"
-					style: Text.Raised
-					styleColor: appStyle.shadowColor
-				}
-				
-				Text {
-					text: "Humidity: " + WeatherApp.currentLocation.conditions.humidity
-					//font.pixelSize: 11
-					color: "white"
-					style: Text.Raised
-					styleColor: appStyle.shadowColor
-				}
-			}
 		}
 	}
 }

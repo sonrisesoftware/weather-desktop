@@ -20,119 +20,92 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 
-Panel {
+Item {
 	id: root
 	
-	// FIXME: Why doesn't the WeatherPanel version work???
- 	implicitWidth: Math.max(header.width + 10, left.width + right.width + 90)
- 	implicitHeight: header.height + Math.max(left.height, right.height) + 40
-	
-	property string windchill;
-	property string dewpoint;
-	
-	property string pressure;
-	property string visibility;
-	property string clouds;
-	
-	property string wind;
-	property string windgust;
-	
-	property string humidity;
-	property string precip;
-	
-	title: i18n("Current Conditions")
+	PlasmaCore.IconItem {
+		id: icon
+		anchors.centerIn: parent
 		
-	Form {
-		id: left
-		fontSize: appStyle.dataFontSize
-		headerSize: appStyle.headerFontSize
-		color: appStyle.textColor
-		
-		anchors {
-			top: header.bottom
-			topMargin: 20
-			left: root.left
-			leftMargin: 20
-		}
-		
-		FormHeader {
-			text: i18n("Temperature")
-		}
-		
-		FormItem {
-			label: i18n("Feels like:")
-			value: root.windchill
-		}
-		
-		FormItem {
-			label: i18n("Dew point:")
-			value: root.dewpoint
-		}
-		
-		FormItem {}
-		
-		FormHeader {
-			text: i18n("Conditions")
-		}
-		
-		FormItem {
-			label: i18n("Pressure:")
-			value: root.pressure
-		}
-				
-		FormItem {
-			label: i18n("Visibility:")
-			value: root.visibility
-		}
-		
-		FormItem {
-			label: i18n("Cloud Cover:")
-			value: root.clouds
-		}
-		
+		width: 128; height: width;
+		source: WeatherApp.currentLocation.conditions.icon;
 	}
 	
-	Form { // Right column of data
-		id: right
-		fontSize: appStyle.dataFontSize
-		headerSize: appStyle.headerFontSize
-		color: appStyle.textColor
+	Column {
+		spacing: 5
 		
 		anchors {
-			top: header.bottom
-			topMargin: 20
-			left: left.right
-			leftMargin: 40
+			left: parent.left
+			bottom: parent.bottom
 		}
 		
-		FormHeader {
-			text: i18n("Wind")
+		Text {
+			color: viewColor
+			text: "Now"
 		}
+		
+		Row {
+			spacing: 5
+			
+			Text {
+				id: weatherTemp
+				text: WeatherApp.currentLocation.conditions.temperature
+				font.pixelSize: 60
+				color: viewColor
+			}
+			
+			Column {
+				spacing: 5
 				
-		FormItem {
-			label: i18n("Speed/Dir:")
-			value: root.wind
-		}
-		
-		FormItem {
-			label: i18n("Wind Gust:")
-			value: root.windgust
-		}
-		
-		FormItem {}
-		
-		FormHeader {
-			text: i18n("Moisture")
-		}
-		
-		FormItem {
-			label: i18n("Humidity:")
-			value: root.humidity
-		}
-		
-		FormItem {
-			label: i18n("Precipitation:")
-			value: root.precip
+				Text {
+					id: weatherSummary
+					
+					text: WeatherApp.currentLocation.conditions.summary
+					font.pixelSize: 20
+					color: viewColor
+				}
+				
+				Grid {
+					columns: 3
+					spacing: 5
+					
+					Text {
+						text: "Precipitation: " + WeatherApp.currentLocation.conditions.precip
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: i18n("Cloud Cover: %1", WeatherApp.currentLocation.conditions.cloudCover)
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: "Wind: " + WeatherApp.currentLocation.conditions.wind
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: "Pressure: " + WeatherApp.currentLocation.conditions.pressure
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: "Humidity: " + WeatherApp.currentLocation.conditions.humidity
+						width: implicitWidth + 10
+						color: viewColor
+					}
+					
+					Text {
+						text: i18n("Visibility: %1", WeatherApp.currentLocation.conditions.visibility)
+						width: implicitWidth + 10
+						color: viewColor
+					}
+				}
+			}
 		}
 	}
 }
