@@ -213,6 +213,7 @@ KIcon Forecast::Forecast::icon(QString name) {
 		code = "weather-freezing-rain";
 	} else if (name == "wind") {
 		//TODO: Add missing icon!
+		code = "weather-clear";
 	} else if (name == "fog") {
 		code = "weather-mist";
 	} else if (name == "cloudy") {
