@@ -40,12 +40,6 @@ Rectangle {
 		asynchronous: true
 		anchors.fill: parent
 		visible: root.opacity > 0
-		
-		onVisibleChanged: {
-			if (visible) {
-				source = background
-			}
-		}
 	}
 	
 	PlasmaComponents.ToolBar {
@@ -183,57 +177,71 @@ Rectangle {
 			bottom: parent.bottom
 		}
 		
-		tools: Row {
+		tools: Column {
 			spacing: 5
 			
-			PlasmaComponents.ToolButton {
-				id: todayButton
-				iconSource: "go-jump-today"
-				text: i18n("Today")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "today"
-				}
-				checked: weatherView.view == "today"
+			Row {
+				children: weatherView.toolBarItems
 			}
 			
-			PlasmaComponents.ToolButton {
-				id: hourlyButton
+			PlasmaWidgets.Separator {
+				//anchors.horizontalCenter: parent.horizontalCenter
+				width: parent.width - 6
+				orientation: Qt.Horizontal
+			}
+			
+			Row {
+				spacing: 5
 				
-				iconSource: "clock"
-				text: i18n("Hourly")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "hourly"
+				PlasmaComponents.ToolButton {
+					id: todayButton
+					iconSource: "go-jump-today"
+					text: i18n("Today")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "today"
+					}
+					checked: weatherView.view == "today"
 				}
-				checked: weatherView.view == "hourly"
-			}
-			
-			PlasmaComponents.ToolButton {
-				id: dailyButton
-				iconSource: "view-calendar-day"
-				text: i18n("Daily")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "daily"
+				
+				PlasmaComponents.ToolButton {
+					id: hourlyButton
+					
+					iconSource: "clock"
+					text: i18n("Hourly")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "hourly"
+					}
+					checked: weatherView.view == "hourly"
 				}
-				checked: weatherView.view == "daily"
-			}
-			
-			Item {
-				height: parent.height
-				width: parent.width
-					- todayButton.width - dailyButton.width
-					- hourlyButton.width - infoButton.width
-					- (parent.children.length - 1) * parent.spacing
-			}
-			
-			PlasmaComponents.ToolButton {
-				id: infoButton
-				iconSource: "help-about"
-				onClicked: {
-					//var position = mapToItem(null, 0, height)
-					//WeatherApp.showMenu(position.x, position.y)
+				
+				PlasmaComponents.ToolButton {
+					id: dailyButton
+					iconSource: "view-calendar-day"
+					text: i18n("Daily")
+					width: minimumWidth + 5
+					onClicked: {
+						weatherView.view = "daily"
+					}
+					checked: weatherView.view == "daily"
+				}
+				
+				Item {
+					height: parent.height
+					width: parent.width
+						- todayButton.width - dailyButton.width
+						- hourlyButton.width - infoButton.width
+						- (parent.children.length - 1) * parent.spacing
+				}
+				
+				PlasmaComponents.ToolButton {
+					id: infoButton
+					iconSource: "help-about"
+					onClicked: {
+						//var position = mapToItem(null, 0, height)
+						//WeatherApp.showMenu(position.x, position.y)
+					}
 				}
 			}
 		}

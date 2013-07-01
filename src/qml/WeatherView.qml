@@ -24,6 +24,12 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Item {
 	id: root
 	
+	property list<Item> toolBarItems: [
+		PlasmaComponents.ToolButton {
+			text: i18n("Monday")
+		}
+	]
+	
 	property string view: "today"
 	property bool is_valid: weatherLocation.valid
 	property bool is_refreshing: !is_valid && weatherLocation.refreshing;
