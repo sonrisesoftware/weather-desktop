@@ -28,7 +28,7 @@ Panel {
 	implicitHeight: header.height + view.height + 30
 	
 	property int tileWidth: 120
-	property int tileHeight: 190
+	property int tileHeight: 170
 	property int tileCount: 5
 	
 	property variant weatherLocation
@@ -92,28 +92,28 @@ Panel {
 				}
 			}
 			
-			Text {
-				id: probability
-				//width: parent.width - 10
-				
-				text: modelData.precipProbability
-				font.pixelSize: appStyle.dataFontSize
-				color: appStyle.textColor
-				
-				style: Text.Raised
-				styleColor: appStyle.shadowColor
-				
-				anchors {
-					topMargin: 42
-					top: icon.bottom
-					horizontalCenter: parent.horizontalCenter
-				}
-			}
+// 			Text {
+// 				id: probability
+// 				//width: parent.width - 10
+// 				
+// 				text: modelData.precipProbability
+// 				font.pixelSize: appStyle.dataFontSize
+// 				color: appStyle.textColor
+// 				
+// 				style: Text.Raised
+// 				styleColor: appStyle.shadowColor
+// 				
+// 				anchors {
+// 					topMargin: 42
+// 					top: icon.bottom
+// 					horizontalCenter: parent.horizontalCenter
+// 				}
+// 			}
 			
 			Item {
+				height: 30
+				
 				anchors {
-					topMargin: 10
-					top: probability.bottom
 					bottomMargin: 5
 					bottom: summary.top
 					left: parent.left
@@ -136,9 +136,9 @@ Panel {
 			}
 			
 			Item {
+				height: 30
+				
 				anchors {
-					topMargin: 10
-					top: probability.bottom
 					bottom: summary.top
 					bottomMargin: 5
 					left: parent.horizontalCenter
