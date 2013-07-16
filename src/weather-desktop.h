@@ -33,7 +33,7 @@
  *
  * @short Main window class
  * @author Michael Spencer <spencers1993@gmail.com>
- * @version 0.3.4
+ * @version 1.0.0
  */
 class WeatherDesktop : public KXmlGuiWindow
 {
