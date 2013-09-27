@@ -11,6 +11,7 @@ set(weather-desktop_QML
    Line.qml
    List.qml
    Panel.qml
+   SheetDialog.qml
    Style.qml
    ScrollBar.qml
    ScrollArea.qml 

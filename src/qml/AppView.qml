@@ -66,27 +66,27 @@ Rectangle {
 // 		}
 // 	}
 	
-	WeatherHeader {
-		id: header
-		anchors.top: infoText.bottom
-		//anchors.top: parent.top
-		anchors.horizontalCenter: parent.horizontalCenter
-		anchors.topMargin: 20
-		weatherLocation: WeatherApp.currentLocation
-	}
+    WeatherHeader {
+        id: header
+        anchors.top: infoText.bottom
+        //anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.topMargin: 20
+        weatherLocation: WeatherApp.currentLocation
+    }
 	
-	WeatherView {
-		id: weatherView
+    WeatherView {
+        id: weatherView
 		
-		anchors {
-			top: header.bottom; topMargin: 20;
-			bottom: weatherAlerts.top; bottomMargin: 20;
-			left: parent.left; leftMargin: 20;
-			right: parent.right; rightMargin: 20;
-		}
+        anchors {
+            top: header.bottom; topMargin: 20;
+            bottom: weatherAlerts.top; bottomMargin: 20;
+            left: parent.left; leftMargin: 20;
+            right: parent.right; rightMargin: 20;
+        }
 		
-		weatherLocation: WeatherApp.currentLocation
-	}
+        weatherLocation: WeatherApp.currentLocation
+    }
 	
 	Column {
 		id: weatherAlerts
@@ -120,106 +120,28 @@ Rectangle {
 			//anchors.rightMargin: 3
 			spacing: 5
 			
-			Row {
-				id: refreshTools
-				spacing: 5
-				
-				PlasmaComponents.ToolButton {
-					id: refreshButton
-					iconSource: "view-refresh"
-					text: i18n("Refresh")
-					onClicked: WeatherApp.currentLocation.refresh()
-					width: minimumWidth + 5
-					visible: WeatherApp.currentLocation.needsRefresh && !WeatherApp.currentLocation.refreshing
-				}
-				
-				PlasmaWidgets.BusyWidget {
-					id: refreshingWidget
-					anchors.verticalCenter: parent.verticalCenter
-					
-					width: height
-					height: refreshButton.height
-					visible: WeatherApp.currentLocation.refreshing
-					running: true
-				}
-				
-				Text {
-					id: refreshingLabel
-					anchors.verticalCenter: parent.verticalCenter
-					
-					text: "Refreshing"
-					visible: refreshingWidget.visible
-				}
-				
-				PlasmaWidgets.Separator {
-					id: refreshSeparator
-					height: parent.height
-					orientation: Qt.Vertical
-					visible: refreshingWidget.visible || refreshButton.visible
-				}
-			}
+            PlasmaComponents.ToolButton {
+                id: locationButton
+                text: WeatherApp.currentLocation.name !== ""
+                      ? WeatherApp.currentLocation.name + " (" + WeatherApp.currentLocation.location + ")"
+                      : WeatherApp.currentLocation.location
+                width: minimumWidth// + 5
+                onClicked: {
+                    if (locationsSheet.show) {
+                        locationsSheet.close()
+                    } else {
+                        locationsSheet.open()
+                    }
+                }
+                checked: locationsSheet.show
+            }
 			
-			/*PlasmaComponents.ToolButton {
-			 *			id: nowButton
-			 *			iconSource: "arrow-down-double"
-			 *			text: i18n("Now")
-			 *			width: minimumWidth + 5
-			 *			onClicked: {
-			 *				weatherView.view = "conditions"
-			 }
-			 checked: weatherView.view == "conditions"
-			 }*/
-			
-			PlasmaComponents.ToolButton {
-				id: todayButton
-				iconSource: "go-jump-today"
-				text: i18n("Today")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "today"
-				}
-				checked: weatherView.view == "today"
-			}
-			
-			PlasmaComponents.ToolButton {
-				id: hourlyButton
-				
-				iconSource: "clock"
-				text: i18n("Hourly")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "hourly"
-				}
-				checked: weatherView.view == "hourly"
-			}
-			
-			PlasmaComponents.ToolButton {
-				id: dailyButton
-				iconSource: "view-calendar-day"
-				text: i18n("Daily")
-				width: minimumWidth + 5
-				onClicked: {
-					weatherView.view = "daily"
-				}
-				checked: weatherView.view == "daily"
-			}
-			
-			Item {
-				height: parent.height
-				width: parent.width
-						- refreshTools.width - todayButton.width 
-						- dailyButton.width - hourlyButton.width
-						- searchField.width - configureButton.width
-						- (parent.children.length - 1) * parent.spacing
-			}
-			
-			PlasmaWidgets.LineEdit {
-				id: searchField;
-				
-				clickMessage: i18n("Search...")
-				clearButtonShown: true
-				onReturnPressed: WeatherApp.setLocation(text)
-			}
+            Item {
+                height: parent.height
+                width: parent.width
+                        - locationButton.width - configureButton.width
+                        - (parent.children.length - 1) * parent.spacing
+            }
 			
 			PlasmaComponents.ToolButton {
 				id: configureButton
@@ -263,9 +185,9 @@ Rectangle {
 			id: lastUpdatedText
 			anchors.verticalCenter: parent.verticalCenter
 			
-			text: i18nc("The time the weather was last downloaded", 
-					"Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
-			visible: WeatherApp.currentLocation.valid
+            text: i18nc("The time the weather was last downloaded",
+                    "Last updated at %1", Qt.formatTime(WeatherApp.currentLocation.lastUpdated))
+            visible: WeatherApp.currentLocation.valid
 			width: visible ? implicitWidth : 0;
 		}
 		
@@ -305,58 +227,141 @@ Rectangle {
 			text: WeatherApp.currentLocation.display
 		}
 	}
-	
-	PlasmaComponents.ToolBar {
+
+    PlasmaComponents.ToolBar {
 		id: bottomToolBar
 		
 		anchors.bottom: parent.bottom
 		
 		tools: Row {
-			anchors.leftMargin: 3
-			anchors.rightMargin: 3
-			spacing: 5
+//			anchors.leftMargin: 3
+//			anchors.rightMargin: 3
+            spacing: 5
+
+            PlasmaComponents.ToolButton {
+                id: todayButton
+                iconSource: "go-jump-today"
+                text: i18n("Today")
+                width: minimumWidth// + 5
+                onClicked: {
+                    weatherView.view = "today"
+                }
+                checked: weatherView.view == "today"
+            }
+
+            PlasmaComponents.ToolButton {
+                id: hourlyButton
+
+                iconSource: "clock"
+                text: i18n("Hourly")
+                width: minimumWidth// + 5
+                onClicked: {
+                    weatherView.view = "hourly"
+                }
+                checked: weatherView.view == "hourly"
+            }
+
+            PlasmaComponents.ToolButton {
+                id: dailyButton
+                iconSource: "view-calendar-day"
+                text: i18n("Daily")
+                width: minimumWidth// + 5
+                onClicked: {
+                    weatherView.view = "daily"
+                }
+                checked: weatherView.view == "daily"
+            }
+
+            Item {
+                height: parent.height
+                width: parent.width
+                        - refreshTools.width - todayButton.width
+                        - dailyButton.width - hourlyButton.width
+                        - (parent.children.length - 1) * parent.spacing
+            }
+
+            Row {
+                id: refreshTools
+                spacing: 5
+
+                PlasmaComponents.ToolButton {
+                    id: refreshButton
+                    iconSource: "view-refresh"
+                    text: i18n("Refresh")
+                    onClicked: WeatherApp.currentLocation.refresh()
+                    width: minimumWidth + 5
+                    visible: WeatherApp.currentLocation.needsRefresh && !WeatherApp.currentLocation.refreshing
+                }
+
+                PlasmaWidgets.BusyWidget {
+                    id: refreshingWidget
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    width: height
+                    height: refreshButton.height
+                    visible: WeatherApp.currentLocation.refreshing
+                    running: true
+                }
+
+                Text {
+                    id: refreshingLabel
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    text: "Refreshing"
+                    visible: refreshingWidget.visible
+                }
+
+                PlasmaWidgets.Separator {
+                    id: refreshSeparator
+                    height: parent.height
+                    orientation: Qt.Vertical
+                    visible: refreshingWidget.visible || refreshButton.visible
+                }
+            }
 			
-			ListView {
-				id: list
+//			ListView {
+//				id: list
 				
-				height: 100
-				width: parent.width
-						- listActions.width - actionsSeparator.width
-						- (parent.children.length - 1) * parent.spacing
+//				height: 100
+//				width: parent.width
+//						- listActions.width - actionsSeparator.width
+//						- (parent.children.length - 1) * parent.spacing
 				
-				orientation: ListView.Horizontal
-				clip: true
-				spacing: 5
+//				orientation: ListView.Horizontal
+//				clip: true
+//				spacing: 5
 				
 				
-				model: WeatherApp.locations;
-				delegate: tileitem;
-			}
+//				model: WeatherApp.locations;
+//				delegate: tileitem;
+//			}
 			
-			PlasmaWidgets.Separator {
-				id: actionsSeparator
-				height: parent.height
-				orientation: Qt.Vertical
-			}
+//			PlasmaWidgets.Separator {
+//				id: actionsSeparator
+//				height: parent.height
+//				orientation: Qt.Vertical
+//			}
 			
-			Column {
-				id: listActions
-				anchors.verticalCenter: parent.verticalCenter
+//			Column {
+//				id: listActions
+//				anchors.verticalCenter: parent.verticalCenter
 				
-				spacing: 20
+//				spacing: 20
 				
-				PlasmaComponents.ToolButton {
-					iconSource: "list-add"
-					onClicked: WeatherApp.addCurrentLocation()
-				}
+//				PlasmaComponents.ToolButton {
+//					iconSource: "list-add"
+//					onClicked: WeatherApp.addCurrentLocation()
+//				}
 				
-				PlasmaComponents.ToolButton {
-					iconSource: "edit-delete"
-					onClicked: WeatherApp.removeCurrentLocation()
-				}
-			}
+//				PlasmaComponents.ToolButton {
+//					iconSource: "edit-delete"
+//					onClicked: WeatherApp.removeCurrentLocation()
+//				}
+//			}
 		}
 	}
+
+
 	
 	Component  {
 		id: tileitem
@@ -381,6 +386,7 @@ Rectangle {
 				
 				onClicked: {
 					WeatherApp.currentLocation = modelData
+                    locationsSheet.close()
 				}
 				
 				alerts: modelData.alerts.length
@@ -395,5 +401,96 @@ Rectangle {
 				//weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
 			}
 		}
-	}
+    }
+
+    SheetDialog {
+        id: locationsSheet
+
+        anchors {
+            top: topToolBar.bottom
+            left: parent.left
+            margins: 5
+        }
+
+        width: 300
+        height: Math.min(400, searchField.height + list.count * 105 + 16)
+
+        PlasmaWidgets.LineEdit {
+            id: searchField;
+
+            clickMessage: i18n("Search...")
+            clearButtonShown: true
+            onReturnPressed: {
+                locationsSheet.close()
+                WeatherApp.setLocation(text)
+            }
+
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: addButton.left
+                rightMargin: 5
+                margins: 2
+            }
+        }
+
+        PlasmaComponents.ToolButton {
+            id: addButton
+            anchors {
+                top: parent.top
+                right: parent.right
+                margins: 2
+            }
+
+            iconSource: "list-add"
+            onClicked: WeatherApp.addCurrentLocation()
+            enabled: WeatherApp.currentLocation === null || WeatherApp.location(WeatherApp.currentLocation.location) === null
+        }
+
+        ListView {
+            id: list
+
+            anchors {
+                top: searchField.bottom
+                topMargin: 5
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+                margins: 2
+            }
+
+            interactive: searchField.height + list.count * 105 + 16 < locationsSheet.height
+
+            //orientation: ListView.Horizontal
+            clip: true
+            spacing: 5
+
+
+            model: WeatherApp.locations;
+            delegate: tileitem;
+        }
+
+//        PlasmaWidgets.Separator {
+//            id: actionsSeparator
+//            height: parent.height
+//            orientation: Qt.Vertical
+//        }
+
+//        Column {
+//            id: listActions
+//            anchors.verticalCenter: parent.verticalCenter
+
+//            spacing: 20
+
+//            PlasmaComponents.ToolButton {
+//                iconSource: "list-add"
+//                onClicked: WeatherApp.addCurrentLocation()
+//            }
+
+//            PlasmaComponents.ToolButton {
+//                iconSource: "edit-delete"
+//                onClicked: WeatherApp.removeCurrentLocation()
+//            }
+//        }
+    }
 }

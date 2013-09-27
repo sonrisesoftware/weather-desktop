@@ -29,8 +29,9 @@ Rectangle {
 	property color textColor: appStyle.textColor;
 	
 	smooth: true
-	width: 200
+    width: 200
 	height: 100
+    radius: 2
 	
 	signal clicked
 	

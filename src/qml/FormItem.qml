@@ -39,6 +39,7 @@ Item {
 		style: Text.Raised
 		styleColor: appStyle.shadowColor
 		font.pixelSize: root.parent.fontSize;
+        smooth: true
 	}
 	
 	Text {
@@ -49,5 +50,6 @@ Item {
 		style: Text.Raised
 		styleColor: appStyle.shadowColor
 		font.pixelSize: root.parent.fontSize;
+        smooth: true
 	}
 }
