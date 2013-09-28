@@ -16,6 +16,7 @@
  */
 
 import QtQuick 1.1
+import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 Item {
@@ -27,6 +28,8 @@ Item {
     signal closed
 
     property bool show: false
+
+    property string direction: "down"
 
     function open() {
         show = true
@@ -42,7 +45,7 @@ Item {
         return root.state == "open"
     }
 
-    clip: true
+    //clip: true
 
     /* swallow all mouse events */
 //    MouseArea {
@@ -57,6 +60,11 @@ Item {
         height: show ? parent.height : 0//parent.height/2
         //anchors.centerIn: parent
 
+        anchors {
+            top: direction === "down" ? parent.top : undefined
+            bottom: direction === "up" ? parent.bottom : undefined
+        }
+
         Behavior on height {
             NumberAnimation { duration: 250 }
         }
@@ -68,27 +76,20 @@ Item {
         }
 
         PlasmaCore.FrameSvgItem  {
+            anchors.fill: frame
+
+            imagePath: "widgets/frame"
+            prefix: "raised"
+        }
+
+        PlasmaCore.FrameSvgItem  {
             id: frame
             anchors {
                 fill: parent
-//                leftMargin: 10
-//                rightMargin: 10
-//                bottomMargin: 10
             }
             imagePath: "widgets/frame"
             prefix: "raised"
 
-//        }
-
-//        PlasmaCore.FrameSvgItem {
-//            anchors {
-//                fill: parent
-//                leftMargin: 10
-//                rightMargin: 10
-//                bottomMargin: 10
-//            }
-//            imagePath: "dialogs/background"
-//            enabledBorders: PlasmaCore.FrameSvg.LeftBorder + PlasmaCore.FrameSvg.RightBorder + PlasmaCore.FrameSvg.BottomBorder + PlasmaCore.FrameSvg.TopBorder
 
             Item {
                 id: contentArea
