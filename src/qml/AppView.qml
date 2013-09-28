@@ -23,9 +23,9 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Rectangle {
 	id: root
-	implicitWidth: Math.max(500, Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40));
-	implicitHeight: topToolBar.height + Math.max(creditsText.height, infoText.height) + 5
-			+ header.height + weatherView.implicitHeight + weatherAlerts.height + bottomToolBar.height + 80;
+    implicitWidth: Math.max(680, Math.max(header.implicitWidth + 40, weatherView.implicitWidth + 40))
+    implicitHeight: Math.max(505, topToolBar.height
+            + header.height + weatherView.implicitHeight + weatherAlerts.height + bottomToolBar.height + 60);
 	
 	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
 	
@@ -47,6 +47,7 @@ Rectangle {
 		source: "../images/weather-clear.jpg"
 		anchors.fill: parent
 		visible: root.opacity > 0
+
 		
 		onVisibleChanged: {
 			if (visible) {
@@ -80,7 +81,8 @@ Rectangle {
 		
         anchors {
             top: header.bottom; topMargin: 20;
-            bottom: weatherAlerts.top; bottomMargin: 20;
+            bottom: WeatherApp.currentLocation.alerts.length > 0 ? weatherweatherAlerts.top : bottomToolBar.top;
+            bottomMargin: 20;
             left: parent.left; leftMargin: 20;
             right: parent.right; rightMargin: 20;
         }
@@ -92,7 +94,7 @@ Rectangle {
 		id: weatherAlerts
 		
 		anchors {
-			bottom: locationInfoText.top; bottomMargin: 20;
+            bottom: bottomToolBar.top; bottomMargin: 20;
 			left: parent.left; leftMargin: 20;
 			right: parent.right; rightMargin: 20;
 		}
@@ -154,23 +156,23 @@ Rectangle {
 		}
 	}
 	
-    Row {
-		id: locationInfoText
+//    Row {
+//		id: locationInfoText
 		
-		anchors {
-			bottom: bottomToolBar.top
-			margins: 5
-			left: parent.left
-			right: parent.right
-		}
+//		anchors {
+//			bottom: bottomToolBar.top
+//			margins: 5
+//			left: parent.left
+//			right: parent.right
+//		}
 		
-		Text {
-			id: locationText
-			anchors.verticalCenter: parent.verticalCenter
+//		Text {
+//			id: locationText
+//			anchors.verticalCenter: parent.verticalCenter
 			
-			text: WeatherApp.currentLocation.display
-		}
-	}
+//			text: WeatherApp.currentLocation.display
+//		}
+//	}
 
     PlasmaComponents.ToolBar {
 		id: bottomToolBar
@@ -431,7 +433,11 @@ Rectangle {
 
         property int tileHeight: 72
         width: 200
-        height: Math.min(330, searchField.height + list.count * (tileHeight + list.spacing) + 18)
+        implicitHeight: searchField.height + listTools.height +
+                        Math.max(list.count * (tileHeight + list.spacing) + 20, 50)
+        property int maximumHeight: 350/*searchField.height + listTools.height +
+                                    3 * (tileHeight + list.spacing) + 20*/
+        height: Math.min(maximumHeight, implicitHeight)
 
         PlasmaWidgets.LineEdit {
             id: searchField;
@@ -446,23 +452,9 @@ Rectangle {
             anchors {
                 top: parent.top
                 left: parent.left
-                right: addButton.left
-                rightMargin: 5
-                margins: 2
-            }
-        }
-
-        PlasmaComponents.ToolButton {
-            id: addButton
-            anchors {
-                top: parent.top
                 right: parent.right
                 margins: 2
             }
-
-            iconSource: "list-add"
-            onClicked: WeatherApp.addCurrentLocation()
-            enabled: WeatherApp.currentLocation === null || WeatherApp.location(WeatherApp.currentLocation.location) === null
         }
 
         PlasmaWidgets.Separator {
@@ -483,48 +475,68 @@ Rectangle {
                 //topMargin: 5
                 left: parent.left
                 right: parent.right
-                bottom: parent.bottom
+                bottom: listTools.top
                 margins: 2
             }
 
-            interactive: (searchField.height + list.count * (tileHeight + list.spacing) + 18) > locationsSheet.height
+            interactive: locationsSheet.implicitHeight > locationsSheet.height
 
-            //orientation: ListView.Horizontal
             clip: true
             spacing: 5
-
-//            highlight: PlasmaComponents.Highlight {
-//                Behavior on y {
-//                    NumberAnimation {duration: 50 }
-//                }
-//            }
-
 
             model: WeatherApp.locations;
             delegate: tileitem;
         }
 
-//        PlasmaWidgets.Separator {
-//            id: actionsSeparator
-//            height: parent.height
-//            orientation: Qt.Vertical
-//        }
+        Text {
+            id: noLocationsText
 
-//        Column {
-//            id: listActions
-//            anchors.verticalCenter: parent.verticalCenter
+            anchors.centerIn: list
 
-//            spacing: 20
+            opacity: 0.5
+            font.italic: true
+            text: i18n("No saved locations")
+            visible: list.count === 0
+        }
 
-//            PlasmaComponents.ToolButton {
-//                iconSource: "list-add"
-//                onClicked: WeatherApp.addCurrentLocation()
-//            }
+        Column {
+            id: listTools
+            anchors {
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+                margins: 2
+            }
 
-//            PlasmaComponents.ToolButton {
-//                iconSource: "edit-delete"
-//                onClicked: WeatherApp.removeCurrentLocation()
-//            }
-//        }
+            PlasmaWidgets.Separator {
+                id: actionsSeparator
+                width: parent.width - 5
+                anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+            Row {
+                id: listActions
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                spacing: 10
+
+                PlasmaComponents.ToolButton {
+                    iconSource: "list-add"
+                    onClicked: {
+                        locationsSheet.close()
+                        WeatherApp.addCurrentLocation()
+                    }
+                    enabled: WeatherApp.currentLocation === null || WeatherApp.location(WeatherApp.currentLocation.location) === null
+                }
+
+                PlasmaComponents.ToolButton {
+                    iconSource: "edit-delete"
+                    onClicked: {
+                        locationsSheet.close()
+                        WeatherApp.removeCurrentLocation()
+                    }
+                }
+            }
+        }
     }
 }
