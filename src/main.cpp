@@ -39,7 +39,7 @@ static const char description[] =
 static const char credits[] =
 		I18N_NOOP("Powered by <a href=\"http://forecast.io/\">Forecast.io</a>\nNominatim Search Courtesy of <a href=\"http://www.mapquest.com/\" target=\"_blank\">MapQuest</a>");
 
-static const char version[] = "1.0.0";
+static const char version[] = "1.1.0";
 Application *App;
 
 int main(int argc, char **argv)

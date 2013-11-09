@@ -197,6 +197,8 @@ Rectangle {
                 id: configureButton
                 iconSource: "configure"
                 onClicked: {
+                    //settingsSheet.open()
+
                     var position = mapToItem(null, 0, height)
                     WeatherApp.showMenu(position.x, position.y)
                 }

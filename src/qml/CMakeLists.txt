@@ -21,10 +21,7 @@ set(weather-desktop_QML
    WeatherTile.qml
    WeatherToday.qml
    WeatherView.qml
-   WeatherIcon.qml
-   WeatherMap.qml
-   ColorizedImage.qml
-   map.html
+   SettingsSheet.qml
  )
 
 install(FILES ${weather-desktop_QML}  DESTINATION  ${DATA_INSTALL_DIR}/weather-desktop/qml/)

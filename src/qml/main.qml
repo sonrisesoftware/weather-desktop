@@ -86,4 +86,9 @@ Rectangle {
 			NumberAnimation { duration: 1500 }
 		}
 	}
+
+    SettingsSheet {
+        id: settingsSheet
+        anchors.fill: parent
+    }
 }
