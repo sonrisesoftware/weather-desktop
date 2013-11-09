@@ -27,29 +27,31 @@ Rectangle {
 	implicitWidth: childrenRect.width + 50
 	implicitHeight: childrenRect.height + 20
 	
-//    color: "transparent"
-    color: appStyle.panelColor;
-    radius: appStyle.panelRadius;
+    color: "transparent"
+    //color: appStyle.panelColor;
+    ///radius: appStyle.panelRadius;
 	
-    border.color: appStyle.borderColor;
+    //border.color: appStyle.borderColor;
 	
-	property alias title: header.text
-	property alias header: header
+    //property string title
+
+    property alias title: header.text
+    property alias header: header
 	//property Style style;
 	
-	Text {
-		id: header
-		color: appStyle.textColor;
+    Text {
+        id: header
+        color: appStyle.textColor;
         font.pixelSize: appStyle.titleFontSize * 1.2
 		
-		style: Text.Raised
-		styleColor: appStyle.shadowColor
+        style: Text.Raised
+        styleColor: appStyle.shadowColor
 		
-		anchors { horizontalCenter: root.horizontalCenter; top: root.top; topMargin: 5 }
-	}
-	
-    PlasmaWidgets.Separator {
-        width: header.width * 3/4
-        anchors { horizontalCenter: root.horizontalCenter; top: header.bottom; topMargin: 5 }
+        anchors { horizontalCenter: root.horizontalCenter; top: root.top; topMargin: 5 }
     }
+	
+//    PlasmaWidgets.Separator {
+//        width: header.width * 3/4
+//        anchors { horizontalCenter: root.horizontalCenter; top: header.bottom; topMargin: 5 }
+//    }
 }

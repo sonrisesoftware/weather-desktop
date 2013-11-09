@@ -40,7 +40,7 @@ namespace Weather {
 		Q_PROPERTY(Weather::Location *location READ location NOTIFY locationChanged);
 		
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
-		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged);
+        Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
 		
 	public:
 		explicit DataBlock(Weather::Location *location);

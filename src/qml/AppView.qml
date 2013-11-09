@@ -27,107 +27,155 @@ Rectangle {
     implicitHeight: Math.max(505, topToolBar.height
             + header.height + weatherView.implicitHeight + weatherAlerts.height + bottomToolBar.height + 60);
 	
-	property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
+    property url background: WeatherApp.currentLocation.conditions.image || "../images/weather-clear.jpg"
 	
-	onBackgroundChanged: {
-		if (backgroundImage.visible) {
-			backgroundImage.source = background
-		}
-	}
+    onBackgroundChanged: {
+        if (backgroundImage.visible) {
+            backgroundImage.source = background
+        }
+    }
 
     anchors {
-		left: parent.left;
-		top: parent.top;
-		bottom: parent.bottom;
-		right: parent.right;
-	}
+        left: parent.left;
+        top: parent.top;
+        bottom: parent.bottom;
+        right: parent.right;
+    }
 	
-	Image {
-		id: backgroundImage
-		source: "../images/weather-clear.jpg"
-		anchors.fill: parent
-		visible: root.opacity > 0
+    Image {
+        id: backgroundImage
+        source: "../images/weather-clear.jpg"
+        anchors.fill: parent
+        visible: root.opacity > 0
 
+
+        fillMode: Image.PreserveAspectCrop
 		
-		onVisibleChanged: {
-			if (visible) {
-				source = background
-			}
-		}
-	}
+        onVisibleChanged: {
+            if (visible) {
+                source = background
+            }
+        }
+    }
 	
-// 	Rectangle {
-// 		id: nightTimeShading
-// 		anchors.fill: parent
-// 		opacity: WeatherApp.currentLocation.day ? 0 : 1
-// 		color: Qt.rgba(0,0,0,0.6)
-// 	
-// 		Behavior on opacity {
-// 			NumberAnimation { duration: 500 }
-// 		}
-// 	}
+//// 	Rectangle {
+//// 		id: nightTimeShading
+//// 		anchors.fill: parent
+//// 		opacity: WeatherApp.currentLocation.day ? 0 : 1
+//// 		color: Qt.rgba(0,0,0,0.6)
+////
+//// 		Behavior on opacity {
+//// 			NumberAnimation { duration: 500 }
+//// 		}
+//// 	}
 	
-    WeatherHeader {
+////    WeatherHeader {
+////        id: header
+////        anchors.top: topToolBar.bottom
+////        //anchors.top: parent.top
+////        anchors.horizontalCenter: parent.horizontalCenter
+////        anchors.topMargin: 20
+////        weatherLocation: WeatherApp.currentLocation
+////    }
+
+    Text {
         id: header
-        anchors.top: topToolBar.bottom
-        //anchors.top: parent.top
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 20
-        weatherLocation: WeatherApp.currentLocation
+        anchors {
+            top: topToolBar.bottom
+            margins: 10
+            left: parent.left
+        }
+
+        smooth: true
+
+        text: WeatherApp.currentLocation.location//weatherView.title
+        font.pixelSize: 24
+        color: "white"
+
+        style: Text.Raised
+        styleColor: appStyle.shadowColor
+    }
+
+    Text {
+        id: timeHeader
+
+        anchors {
+            top: topToolBar.bottom
+            margins: 10
+            right: parent.right
+        }
+
+        font.pixelSize: 24
+        color: "white"
+
+        style: Text.Raised
+        styleColor: appStyle.shadowColor
+
+        text: Qt.formatTime(currentTime)
+        property date currentTime: new Date()
+
+        Timer {
+            running: true
+            repeat: true
+            interval: 10 * 1000 // 1 min
+            onTriggered: {
+                currentTime = new Date()
+            }
+        }
     }
 	
     WeatherView {
         id: weatherView
 		
         anchors {
-            top: header.bottom; topMargin: 20;
-            bottom: WeatherApp.currentLocation.alerts.length > 0 ? weatherweatherAlerts.top : bottomToolBar.top;
-            bottomMargin: 20;
-            left: parent.left; leftMargin: 20;
-            right: parent.right; rightMargin: 20;
+            top: header.bottom
+            bottom: weatherAlerts.top;
+            margins: 20
+            left: parent.left;
+            right: parent.right
         }
 		
         weatherLocation: WeatherApp.currentLocation
     }
 	
-	Column {
-		id: weatherAlerts
+    Column {
+        id: weatherAlerts
 		
-		anchors {
+        anchors {
             bottom: bottomToolBar.top; bottomMargin: 20;
-			left: parent.left; leftMargin: 20;
-			right: parent.right; rightMargin: 20;
-		}
+            left: parent.left; leftMargin: 20;
+            right: parent.right; rightMargin: 20;
+        }
 		
-		spacing: 3
+        spacing: 3
 	
-		Repeater {
+        Repeater {
 			
-			model: WeatherApp.currentLocation.alerts.length
+            model: WeatherApp.currentLocation.alerts.length
 			
-			delegate: Alert {
-				id: item
-				alert: WeatherApp.currentLocation.alerts.at(index)
-				anchors.horizontalCenter: parent.horizontalCenter
-				width: Math.min(Math.max(root.width - 40, item.implicitWidth), 800)
-			}
-		}
-	}
+            delegate: Alert {
+                id: item
+                alert: WeatherApp.currentLocation.alerts.at(index)
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: Math.min(Math.max(root.width - 40, item.implicitWidth), 800)
+            }
+        }
+    }
 	
-	PlasmaComponents.ToolBar {
-		id: topToolBar
+    PlasmaComponents.ToolBar {
+        id: topToolBar
 		
-		tools: Row {
-			//anchors.leftMargin: 3
-			//anchors.rightMargin: 3
-			spacing: 5
+        tools: Row {
+            //anchors.leftMargin: 3
+            //anchors.rightMargin: 3
+            spacing: 5
 			
             PlasmaComponents.ToolButton {
                 id: locationButton
                 text: WeatherApp.currentLocation.name !== ""
                       ? WeatherApp.currentLocation.name + " (" + WeatherApp.currentLocation.location + ")"
                       : WeatherApp.currentLocation.location
-                width: minimumWidth// + 5
+                width: minimumWidth+ 5
                 onClicked: {
                     if (locationsSheet.show) {
                         locationsSheet.close()
@@ -145,16 +193,16 @@ Rectangle {
                         - (parent.children.length - 1) * parent.spacing
             }
 			
-			PlasmaComponents.ToolButton {
-				id: configureButton
-				iconSource: "configure"
-				onClicked: {
-					var position = mapToItem(null, 0, height)
-					WeatherApp.showMenu(position.x, position.y)
-				}
-			}
-		}
-	}
+            PlasmaComponents.ToolButton {
+                id: configureButton
+                iconSource: "configure"
+                onClicked: {
+                    var position = mapToItem(null, 0, height)
+                    WeatherApp.showMenu(position.x, position.y)
+                }
+            }
+        }
+    }
 	
 //    Row {
 //		id: locationInfoText
@@ -175,20 +223,31 @@ Rectangle {
 //	}
 
     PlasmaComponents.ToolBar {
-		id: bottomToolBar
+        id: bottomToolBar
 		
-		anchors.bottom: parent.bottom
+        anchors.bottom: parent.bottom
 		
-		tools: Row {
+        tools: Row {
 //			anchors.leftMargin: 3
 //			anchors.rightMargin: 3
             spacing: 5
 
             PlasmaComponents.ToolButton {
+                id: nowButton
+                iconSource: "download"
+                text: i18n("Now")
+                width: minimumWidth+ 5
+                onClicked: {
+                    weatherView.view = "conditions"
+                }
+                checked: weatherView.view == "conditions"
+            }
+
+            PlasmaComponents.ToolButton {
                 id: todayButton
                 iconSource: "go-jump-today"
                 text: i18n("Today")
-                width: minimumWidth// + 5
+                width: minimumWidth+ 5
                 onClicked: {
                     weatherView.view = "today"
                 }
@@ -200,7 +259,7 @@ Rectangle {
 
                 iconSource: "clock"
                 text: i18n("Hourly")
-                width: minimumWidth// + 5
+                width: minimumWidth+ 5
                 onClicked: {
                     weatherView.view = "hourly"
                 }
@@ -211,7 +270,7 @@ Rectangle {
                 id: dailyButton
                 iconSource: "view-calendar-day"
                 text: i18n("Daily")
-                width: minimumWidth// + 5
+                width: minimumWidth+ 5
                 onClicked: {
                     weatherView.view = "daily"
                 }
@@ -224,6 +283,7 @@ Rectangle {
                         - refreshTools.width - todayButton.width
                         - dailyButton.width - hourlyButton.width
                         - statusButton.width - infoButton.width
+                        - nowButton.width + 5
                         - (parent.children.length - 1) * parent.spacing
             }
 
@@ -293,90 +353,50 @@ Rectangle {
                 //width: minimumWidth + 5
                 //visible: WeatherApp.currentLocation.needsRefresh && !WeatherApp.currentLocation.refreshing
             }
-			
-//			ListView {
-//				id: list
-				
-//				height: 100
-//				width: parent.width
-//						- listActions.width - actionsSeparator.width
-//						- (parent.children.length - 1) * parent.spacing
-				
-//				orientation: ListView.Horizontal
-//				clip: true
-//				spacing: 5
-				
-				
-//				model: WeatherApp.locations;
-//				delegate: tileitem;
-//			}
-			
-//			PlasmaWidgets.Separator {
-//				id: actionsSeparator
-//				height: parent.height
-//				orientation: Qt.Vertical
-//			}
-			
-//			Column {
-//				id: listActions
-//				anchors.verticalCenter: parent.verticalCenter
-				
-//				spacing: 20
-				
-//				PlasmaComponents.ToolButton {
-//					iconSource: "list-add"
-//					onClicked: WeatherApp.addCurrentLocation()
-//				}
-				
-//				PlasmaComponents.ToolButton {
-//					iconSource: "edit-delete"
-//					onClicked: WeatherApp.removeCurrentLocation()
-//				}
-//			}
-		}
-	}
+        }
+    }
 
 
 	
-	Component  {
-		id: tileitem
+    Component  {
+        id: tileitem
 		
-		Item {
-			id: wrapper
+        Item {
+            id: wrapper
 			
             width: locationsSheet.width - 15
             height: locationsSheet.tileHeight
 			
-			WeatherTile {
+            WeatherTile {
                 id: tile
                 anchors.fill: parent
                 selected: modelData.location === WeatherApp.currentLocation.location;
 				
-				onSelectedChanged: {
-					if (selected) {
-						wrapper.ListView.view.currentIndex = index
-					} else {
-						wrapper.ListView.view.currentIndex = -1
-					}
-				}
+                onSelectedChanged: {
+                    if (selected) {
+                        wrapper.ListView.view.currentIndex = index
+                    } else {
+                        wrapper.ListView.view.currentIndex = -1
+                    }
+                }
 				
-				onClicked: {
-					WeatherApp.currentLocation = modelData
+                onClicked: {
+                    WeatherApp.currentLocation = modelData
                     locationsSheet.close()
-				}
+                }
 				
-				alerts: modelData.alerts.length
-				title: modelData.name;
-				temp: modelData.conditions.temperature;
-				icon: modelData.conditions.icon;
-				weather: modelData.conditions.summary;
+                alerts: modelData.alerts.length
+                title: modelData.name;
+                temp: modelData.conditions.temperature;
+                icon: modelData.conditions.icon;
+                weather: modelData.conditions.summary;
 //				maxTemp: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).temperatureMax : "";
 //				minTemp: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).temperatureMin : "";
 				
                 //iconForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).icon : "weather-desktop";
-				//weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
-			}
-		}
+                //weatherForecast: modelData.dailyForecast.length > 0 ? modelData.dailyForecast.at(0).summary : "No forecast available";
+            }
+        }
     }
 
     SheetDialog {
@@ -538,5 +558,38 @@ Rectangle {
                 }
             }
         }
+    }
+
+    function getIcon(name, size) {
+        var path = ""
+        //print(name)
+
+        if (size === undefined) size = 128
+
+        if (name === "weather-clear")
+            path = "Sun"
+        else if (name === "weather-clear-night")
+            path = "Moon"
+        else if (name === "weather-clouds")
+            path = "Cloud-Sun"
+        else if (name === "weather-clouds-night")
+            path = "Cloud-Moon"
+        else if (name === "weather-many-clouds")
+            path = "Cloud"
+        else if (name === "weather-showers")
+            path = "Cloud-Rain"
+        else if (name === "weather-snow")
+            path = "Cloud-Snow"
+        else if (name === "weather-freezing-rain")
+            path = "Cloud-Hail-Alt"
+        else if (name === "weather-wind")
+            path = "Wind"
+        else if (name === "weather-mist")
+            path = "Cloud-Fog"
+
+        var filename = Qt.resolvedUrl("../icons/" + size + "/" + path + ".png")
+
+        //console.log(">>>>>>>>>>>>>>>>" + filename)
+        return filename
     }
 }

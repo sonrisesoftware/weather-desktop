@@ -81,11 +81,12 @@ Panel {
 					elide: Text.ElideRight
 				}
 				
-				PlasmaCore.IconItem {
+                Image {
 					id: weatherIcon
-					source: modelData.icon;
+                    source: getIcon(modelData.icon, 24);
 					width: 24;
 					height: 24;
+                    smooth: true
 					
 					anchors.verticalCenter: parent.verticalCenter;
 				}

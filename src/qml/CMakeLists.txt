@@ -21,6 +21,13 @@ set(weather-desktop_QML
    WeatherTile.qml
    WeatherToday.qml
    WeatherView.qml
+   WeatherIcon.qml
+   WeatherMap.qml
+   ColorizedImage.qml
+   map.html
  )
 
 install(FILES ${weather-desktop_QML}  DESTINATION  ${DATA_INSTALL_DIR}/weather-desktop/qml/)
+install(DIRECTORY ../../icons/128 DESTINATION ${DATA_INSTALL_DIR}/weather-desktop/icons)
+install(DIRECTORY ../../icons/64 DESTINATION ${DATA_INSTALL_DIR}/weather-desktop/icons)
+install(DIRECTORY ../../icons/24 DESTINATION ${DATA_INSTALL_DIR}/weather-desktop/icons)

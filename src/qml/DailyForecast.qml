@@ -79,9 +79,9 @@ Panel {
 				}
 			}
 			
-			PlasmaCore.IconItem {
+            Image {
 				id: icon
-				source: modelData.icon
+                source: getIcon(modelData.icon, 64)
 				width: 64;
 				height: 64;
 				

@@ -1,0 +1,21 @@
+#! /bin/bash
+
+NAME=$1
+
+mkdir icons/$SIZE
+
+IN=icons/climacons/$NAME.svg
+OUT=icons/128/$NAME.png
+
+echo $OUT
+
+#inkscape --export-png=$OUT --export-width=500 --export-height=500 --export-background-opacity=0 --without-gui $IN
+inkscape --export-png=$OUT --export-width=190 --export-height=190 --export-background-opacity=0 --without-gui $IN
+
+convert $OUT -antialias -fuzz '95%' -fill white -opaque black $OUT
+convert $OUT \( +clone  -background black  -shadow 80x3+2+2 \) \
+    +swap -background none -layers merge +repage $OUT
+convert $OUT -crop 128x128+37+37 +repage $OUT
+#convert $OUT -trim $OUT
+#convert $OUT +repage -gravity Center -size 128x128+0+0 +repage $OUT
+##convert -size 128x128 xc:transparent -gravity Center $OUT -geometry +0+0 -composite $OUT

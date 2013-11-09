@@ -33,6 +33,10 @@ Rectangle {
     radius: 3
     color: mouseArea.containsMouse ? highlightColor : "transparent"
 
+    Behavior on color {
+        ColorAnimation { duration: 200 }
+    }
+
 
     height: opener.height + 2 + dropDown.height
     width: implicitWidth

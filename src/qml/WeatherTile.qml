@@ -36,7 +36,7 @@ Rectangle {
 	
 	signal clicked
 	
-	property alias icon: icon.source;
+    property string icon
 	property alias title: title.text;
 	property alias temp: temp.text;
 	property alias weather: weather.text;
@@ -107,9 +107,10 @@ Rectangle {
         }
     }
 
-    PlasmaCore.IconItem {
+    Image {
         id: icon
         width: 64; height: 64;
+        source: getIcon(root.icon, 64)
 
         anchors {
             right: parent.right;

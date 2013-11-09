@@ -198,7 +198,7 @@ QString Forecast::Forecast::visibility(float value) {
 	}
 }
 
-KIcon Forecast::Forecast::icon(QString name) {
+QString Forecast::Forecast::icon(QString name) {
 	QString code = "weather-desktop";
 	
 	if (name == "clear-day") {
@@ -212,8 +212,7 @@ KIcon Forecast::Forecast::icon(QString name) {
 	} else if (name == "sleet") {
 		code = "weather-freezing-rain";
 	} else if (name == "wind") {
-		//TODO: Add missing icon!
-		code = "weather-clear";
+        code = "weather-wind";
 	} else if (name == "fog") {
 		code = "weather-mist";
 	} else if (name == "cloudy") {
@@ -224,7 +223,7 @@ KIcon Forecast::Forecast::icon(QString name) {
 		code = "weather-clouds-night";
 	}
 	
-	return KIcon(code);
+    return code;
 }
 
 QString Forecast::Forecast::precip(Point* data)

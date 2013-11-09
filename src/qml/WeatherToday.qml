@@ -37,6 +37,8 @@ Panel {
 	Column {
 		id: contents
 		
+        width: topRow.width
+
 		anchors {
 			left: parent.left
 			leftMargin: 10
@@ -51,159 +53,151 @@ Panel {
 			
 			spacing: 25
 			
-			PlasmaCore.IconItem {
+            Image {
 				id: icon
 				anchors.verticalCenter: parent.verticalCenter
 				
-				width: 64; height: 64;
-				source: today.icon;
+                width: 128; height: 128;
+                source: getIcon(today.icon);
 			}
-			
-			Text {
-				id: temp
-				anchors.verticalCenter: parent.verticalCenter
-				
-				text: conditions.temperature
-				font.pixelSize: appStyle.titleFontSize + 10;
-				color: appStyle.textColor
-				
-				style: Text.Raised
-				styleColor: appStyle.shadowColor
-			}
-			
-			Text {
-				id: minTemp
-				anchors.verticalCenter: parent.verticalCenter
-				
-				text: today.temperatureMin
-				font.pixelSize: appStyle.titleFontSize + 2;
-				color: "#217ecd"
-				
-				style: Text.Raised
-				styleColor: appStyle.shadowColor
-			}
-			
-			Text {
-				id: maxTemp
-				anchors.verticalCenter: parent.verticalCenter
-				
-				text: today.temperatureMax
-				font.pixelSize: appStyle.titleFontSize + 7;
-				color: "#c31f1f"
-				
-				style: Text.Raised
-				styleColor: appStyle.shadowColor
-			}
-		}
-		
-		Text {
-			id: precip
-			anchors.horizontalCenter: parent.horizontalCenter
-			
-			visible: text != "" && text != "None"
-			text: today.precip
-			font.pixelSize: appStyle.titleFontSize - 2;
-			font.italic: true
-			color: appStyle.textColor
-			
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
-		
-		Item {
-			height: 10
-			width: parent.width
-			visible: precip.visible
-		}
-		
-		Text {
-			id: summary
-			width: parent.width
-			
-			text: today.summary
-			wrapMode: Text.Wrap
-			font.pixelSize: appStyle.headerFontSize;
-			color: appStyle.textColor
-			
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
-		
-		Item {
-			width: parent.width
-			height: 5
-		}
-		
-		PlasmaWidgets.Separator {
-			width: parent.width
+
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+
+                Text {
+                    id: maxTemp
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    text: today.temperatureMax
+                    font.pixelSize: appStyle.titleFontSize * 2;
+                    color: "#c31f1f"
+
+                    style: Text.Raised
+                    styleColor: appStyle.shadowColor
+                }
+
+                Text {
+                    id: minTemp
+                    anchors.horizontalCenter: parent.horizontalCenter
+
+                    text: today.temperatureMin
+                    font.pixelSize: appStyle.titleFontSize * 2;
+                    color: "#217ecd"
+
+                    style: Text.Raised
+                    styleColor: appStyle.shadowColor
+                }
+            }
 		}
 
-        DropDown {
-            id: conditionsDropDown
+        Text {
+            id: summary
+            width: topRow.width
 
-            width: Math.max(parent.width, implicitWidth)
-
-            title: i18n("Conditions")
-            font.pixelSize: appStyle.headerFontSize;
-            titleColor: appStyle.textColor
+            text: today.summary
+            wrapMode: Text.Wrap
+            font.pixelSize: 1.2 * appStyle.headerFontSize;
+            color: appStyle.textColor
 
             style: Text.Raised
             styleColor: appStyle.shadowColor
-            highlightColor: Qt.rgba(0.5,0.5,0.6,0.2)
-
-            contents: [
-                Form {
-                    id: left
-                    fontSize: appStyle.dataFontSize;
-                    headerSize: appStyle.headerFontSize;
-                    color: appStyle.textColor;
-
-                    FormItem {
-                        label: i18n("Humidity:")
-                        value: conditions.humidity
-                    }
-
-                    FormItem {
-                        label: i18n("Precipitation:")
-                        value: conditions.precip
-                    }
-
-                    FormItem {
-                        label: i18n("Feels like:")
-                        value: conditions.feelsLike
-                    }
-
-                    FormItem {
-                        label: i18n("Dew point:")
-                        value: conditions.dewPoint
-                    }
-
-                    FormItem {
-                        label: i18n("Pressure:")
-                        value: conditions.pressure
-                    }
-
-                    FormItem {
-                        label: i18n("Visibility:")
-                        value: conditions.visibility
-                    }
-
-                    FormItem {
-                        label: i18n("Cloud Cover:")
-                        value: conditions.cloudCover
-                    }
-
-                    FormItem {
-                        label: i18n("Wind:")
-                        value: conditions.wind
-                    }
-
-                    FormItem {
-                        label: i18n("Wind Gust:")
-                        value: conditions.windGust
-                    }
-                }
-            ]
         }
+		
+//		Text {
+//			id: precip
+//			anchors.horizontalCenter: parent.horizontalCenter
+			
+//			visible: text != "" && text != "None"
+//			text: today.precip
+//			font.pixelSize: appStyle.titleFontSize - 2;
+//			font.italic: true
+//			color: appStyle.textColor
+			
+//			style: Text.Raised
+//			styleColor: appStyle.shadowColor
+//		}
+		
+//		Item {
+//			height: 10
+//			width: parent.width
+//			visible: precip.visible
+//        }
+		
+//		Item {
+//			width: parent.width
+//			height: 5
+//		}
+		
+//		PlasmaWidgets.Separator {
+//			width: parent.width
+//		}
+
+//        DropDown {
+//            id: conditionsDropDown
+
+//            width: Math.max(parent.width, implicitWidth)
+
+//            title: i18n("Conditions")
+//            font.pixelSize: appStyle.headerFontSize;
+//            titleColor: appStyle.textColor
+
+//            style: Text.Raised
+//            styleColor: appStyle.shadowColor
+//            highlightColor: Qt.rgba(0.5,0.5,0.6,0.2)
+
+//            contents: [
+//                Form {
+//                    id: left
+//                    fontSize: appStyle.dataFontSize;
+//                    headerSize: appStyle.headerFontSize;
+//                    color: appStyle.textColor;
+
+//                    FormItem {
+//                        label: i18n("Humidity:")
+//                        value: conditions.humidity
+//                    }
+
+//                    FormItem {
+//                        label: i18n("Precipitation:")
+//                        value: conditions.precip
+//                    }
+
+//                    FormItem {
+//                        label: i18n("Feels like:")
+//                        value: conditions.feelsLike
+//                    }
+
+//                    FormItem {
+//                        label: i18n("Dew point:")
+//                        value: conditions.dewPoint
+//                    }
+
+//                    FormItem {
+//                        label: i18n("Pressure:")
+//                        value: conditions.pressure
+//                    }
+
+//                    FormItem {
+//                        label: i18n("Visibility:")
+//                        value: conditions.visibility
+//                    }
+
+//                    FormItem {
+//                        label: i18n("Cloud Cover:")
+//                        value: conditions.cloudCover
+//                    }
+
+//                    FormItem {
+//                        label: i18n("Wind:")
+//                        value: conditions.wind
+//                    }
+
+//                    FormItem {
+//                        label: i18n("Wind Gust:")
+//                        value: conditions.windGust
+//                    }
+//                }
+//            ]
+//        }
 	}
 }
