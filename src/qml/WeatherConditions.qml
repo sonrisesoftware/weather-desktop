@@ -19,120 +19,148 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
+import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 
 Panel {
-	id: root
-	
-	// FIXME: Why doesn't the WeatherPanel version work???
- 	implicitWidth: Math.max(header.width + 10, left.width + right.width + 90)
- 	implicitHeight: header.height + Math.max(left.height, right.height) + 40
-	
-	property string windchill;
-	property string dewpoint;
-	
-	property string pressure;
-	property string visibility;
-	property string clouds;
-	
-	property string wind;
-	property string windgust;
-	
-	property string humidity;
-	property string precip;
-	
-	title: i18n("Current Conditions")
-		
-	Form {
-		id: left
-		fontSize: appStyle.dataFontSize
-		headerSize: appStyle.headerFontSize
-		color: appStyle.textColor
-		
-		anchors {
-			top: header.bottom
-			topMargin: 20
-			left: root.left
-			leftMargin: 20
-		}
-		
-		FormHeader {
-			text: i18n("Temperature")
-		}
-		
-		FormItem {
-			label: i18n("Feels like:")
-			value: root.windchill
-		}
-		
-		FormItem {
-			label: i18n("Dew point:")
-			value: root.dewpoint
-		}
-		
-		FormItem {}
-		
-		FormHeader {
-			text: i18n("Conditions")
-		}
-		
-		FormItem {
-			label: i18n("Pressure:")
-			value: root.pressure
-		}
-				
-		FormItem {
-			label: i18n("Visibility:")
-			value: root.visibility
-		}
-		
-		FormItem {
-			label: i18n("Cloud Cover:")
-			value: root.clouds
-		}
-		
-	}
-	
-	Form { // Right column of data
-		id: right
-		fontSize: appStyle.dataFontSize
-		headerSize: appStyle.headerFontSize
-		color: appStyle.textColor
-		
-		anchors {
-			top: header.bottom
-			topMargin: 20
-			left: left.right
-			leftMargin: 40
-		}
-		
-		FormHeader {
-			text: i18n("Wind")
-		}
-				
-		FormItem {
-			label: i18n("Speed/Dir:")
-			value: root.wind
-		}
-		
-		FormItem {
-			label: i18n("Wind Gust:")
-			value: root.windgust
-		}
-		
-		FormItem {}
-		
-		FormHeader {
-			text: i18n("Moisture")
-		}
-		
-		FormItem {
-			label: i18n("Humidity:")
-			value: root.humidity
-		}
-		
-		FormItem {
-			label: i18n("Precipitation:")
-			value: root.precip
-		}
-	}
+    id: root
+
+    title: i18n("Currently")
+    implicitWidth: Math.max(header.width + 10, contents.width + 20)
+    implicitHeight: header.height + contents.height + 30
+
+    property variant weatherLocation
+
+    property variant conditions: weatherLocation.conditions;
+
+    Column {
+        id: contents
+
+        width: topRow.width
+
+        anchors {
+            left: parent.left
+            leftMargin: 10
+            top: header.bottom
+            topMargin: 15
+        }
+
+        spacing: 3
+
+        Row {
+            id: topRow
+
+            spacing: 25
+
+            Image {
+                id: icon
+                anchors.verticalCenter: parent.verticalCenter
+
+                width: 128; height: 128;
+                source: getIcon(conditions.icon);
+
+//                Rectangle {
+//                    color: "transparent"
+//                    border.color: "white"
+//                    anchors.fill: icon
+//                }
+            }
+
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+
+                Text {
+                    id: temp
+
+                    text: conditions.temperature
+                    font.pixelSize: appStyle.titleFontSize * 3;
+                    smooth: true
+                    color: appStyle.textColor
+
+                    style: Text.Raised
+                    styleColor: appStyle.shadowColor
+                }
+
+                Text {
+                    id: summary
+                    width: 150
+
+                    text: conditions.summary
+                    wrapMode: Text.Wrap
+                    font.pixelSize: 1.2 * appStyle.headerFontSize;
+                    color: appStyle.textColor
+
+                    style: Text.Raised
+                    styleColor: appStyle.shadowColor
+                }
+            }
+        }
+
+        DropDown {
+            id: conditionsDropDown
+
+            width: Math.max(parent.width, implicitWidth)
+
+            title: i18n("Conditions")
+            font.pixelSize: appStyle.headerFontSize;
+            titleColor: appStyle.textColor
+
+            style: Text.Raised
+            styleColor: appStyle.shadowColor
+            highlightColor: Qt.rgba(0.3,0.3,0.3,0.6)
+
+            contents: [
+                Form {
+                    id: left
+                    fontSize: appStyle.dataFontSize;
+                    headerSize: appStyle.headerFontSize;
+                    color: appStyle.textColor;
+
+                    FormItem {
+                        label: i18n("Humidity:")
+                        value: conditions.humidity
+                    }
+
+                    FormItem {
+                        label: i18n("Precipitation:")
+                        value: conditions.precip
+                    }
+
+                    FormItem {
+                        label: i18n("Feels like:")
+                        value: conditions.feelsLike
+                    }
+
+                    FormItem {
+                        label: i18n("Dew point:")
+                        value: conditions.dewPoint
+                    }
+
+                    FormItem {
+                        label: i18n("Pressure:")
+                        value: conditions.pressure
+                    }
+
+                    FormItem {
+                        label: i18n("Visibility:")
+                        value: conditions.visibility
+                    }
+
+                    FormItem {
+                        label: i18n("Cloud Cover:")
+                        value: conditions.cloudCover
+                    }
+
+                    FormItem {
+                        label: i18n("Wind:")
+                        value: conditions.wind
+                    }
+
+                    FormItem {
+                        label: i18n("Wind Gust:")
+                        value: conditions.windGust
+                    }
+                }
+            ]
+        }
+    }
 }

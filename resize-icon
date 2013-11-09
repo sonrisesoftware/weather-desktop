@@ -1,0 +1,9 @@
+#! /bin/bash
+
+NAME=$1
+
+IN=icons/128/$NAME.png
+
+convert $IN -resize 64x64 icons/64/$NAME.png
+convert $IN -resize 24x24 icons/24/$NAME.png
+

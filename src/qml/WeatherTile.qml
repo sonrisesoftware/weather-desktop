@@ -24,44 +24,100 @@ import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 Rectangle {
 	id: root;
 	
-	color: highlighted ? Qt.darker(appStyle.panelColor,5) : appStyle.panelColor
-	border.color: appStyle.internalBorderColor;
-	property color textColor: appStyle.textColor;
+    //color: "transparent"
+    color: highlighted ? Qt.darker(appStyle.panelColor,5) : appStyle.panelColor
+    border.color: appStyle.internalBorderColor;
+    property color textColor: appStyle.textColor;
 	
 	smooth: true
-	width: 200
-	height: 100
+    width: 200
+    height: 72
+    radius: 2
 	
 	signal clicked
 	
-	property alias icon: icon.source;
+    property string icon
 	property alias title: title.text;
 	property alias temp: temp.text;
 	property alias weather: weather.text;
-	property alias iconForecast: iconForecast.source;
-	property alias maxTemp: maxTemp.text;
-	property alias minTemp: minTemp.text;
+//	property alias iconForecast: iconForecast.source;
+//	property alias maxTemp: maxTemp.text;
+//	property alias minTemp: minTemp.text;
 	//property alias weatherForecast: weatherForecast.text;
 	
 	property int alerts: 0;
 	property bool selected: false;
 	property bool highlighted: selected || state == "mouse-over"
 	
-	Text {
-		id: title
-		
-		anchors {
-			top: root.top;
-			left: root.left;
-			leftMargin: 5;
-			topMargin: 2;
-		}
-		
-		font.pixelSize: appStyle.titleFontSize;
-		color: textColor;
-		style: Text.Raised
-		styleColor: appStyle.shadowColor
-	}
+
+//    PlasmaComponents.Highlight {
+//        anchors.fill: parent
+//    }
+
+    Column {
+        spacing: 2
+
+        anchors {
+            left: parent.left
+            right: icon.left;
+            margins: 10;
+            verticalCenter: parent.verticalCenter;
+        }
+
+        Text {
+            id: title
+
+            width: parent.width
+
+            font.pixelSize: appStyle.titleFontSize * 1;
+            color: textColor;
+            style: Text.Raised
+            styleColor: appStyle.shadowColor
+        }
+
+        Text {
+            id: temp
+
+            anchors {
+                left: parent.left
+                leftMargin: 5
+                right: parent.right
+            }
+
+            font.pixelSize: appStyle.headerFontSize - 2;
+            color: textColor;
+            style: Text.Raised
+            styleColor: appStyle.shadowColor
+        }
+
+        Text {
+            id: weather
+
+            anchors {
+                left: parent.left
+                leftMargin: 5
+                right: parent.right
+            }
+
+            font.pixelSize: appStyle.headerFontSize - 2;
+            elide: Text.ElideRight;
+            color: textColor;
+            style: Text.Raised
+            styleColor: appStyle.shadowColor
+        }
+    }
+
+    Image {
+        id: icon
+        width: 64; height: 64;
+        source: getIcon(root.icon, 64)
+
+        anchors {
+            right: parent.right;
+            rightMargin: 10;
+            verticalCenter: parent.verticalCenter;
+        }
+    }
 	
 	Rectangle {
 		id: alertsObject
@@ -90,151 +146,111 @@ Rectangle {
 		}
 	}
 	
-	Item {
-		id: conditions
-		opacity: 0
+//	Item {
+//		id: conditions
+//		opacity: 0
 		
-		anchors {
-			top: title.bottom;
-			bottom: root.bottom;
-			left: root.left;
-			right: root.right;
-		}
+//		anchors {
+//			top: title.bottom;
+//			bottom: root.bottom;
+//			left: root.left;
+//			right: root.right;
+//		}
 	
-		PlasmaCore.IconItem {
-			id: icon
-			width: 64; height: 64;
-			
-			anchors {
-				left: parent.left;
-				leftMargin: 10;
-				verticalCenter: parent.verticalCenter;
-			}
-		}
+
 		
-		Text {
-			id: temp
-			
-			anchors {
-				left: icon.right;
-				leftMargin: 10;
-				bottom: parent.verticalCenter;
-			}
-			
-			font.pixelSize: appStyle.titleFontSize;
-			color: textColor;
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
-		
-		Text {
-			id: weather
-			
-			anchors {
-				left: icon.right;
-				leftMargin: 10;
-				top: parent.verticalCenter;
-				right: parent.right;
-				rightMargin: 10;
-			}
-			
-			font.pixelSize: appStyle.headerFontSize - 2;
-			elide: Text.ElideRight;
-			color: textColor;
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
-	}
+
+//	}
 	
-	Item {
-		id: forecast
-		opacity: 0
+//	Item {
+//		id: forecast
+//		opacity: 0
 		
-		anchors {
-			top: title.bottom;
-			bottom: root.bottom;
-			left: root.left;
-			right: root.right;
-		}
+//		anchors {
+//			top: title.bottom;
+//			bottom: root.bottom;
+//			left: root.left;
+//			right: root.right;
+//		}
 		
-		PlasmaCore.IconItem {
-			id: iconForecast
-			width: 64; height: 64;
+//		PlasmaCore.IconItem {
+//			id: iconForecast
+//			width: 64; height: 64;
 			
-			anchors {
-				left: parent.left;
-				leftMargin: 10;
-				verticalCenter: parent.verticalCenter;
-			}
-		}
+//			anchors {
+//				left: parent.left;
+//				leftMargin: 10;
+//				verticalCenter: parent.verticalCenter;
+//			}
+//		}
 		
-		/*Text {
-			id: tempForecast
+//		/*Text {
+//			id: tempForecast
 			
-			anchors {
-				left: iconForecast.right;
-				leftMargin: 10;
-				bottom: parent.verticalCenter;
-			}
+//			anchors {
+//				left: iconForecast.right;
+//				leftMargin: 10;
+//				bottom: parent.verticalCenter;
+//			}
 			
-			font.pixelSize: appStyle.titleFontSize;
-			color: textColor;
-		}*/
+//			font.pixelSize: appStyle.titleFontSize;
+//			color: textColor;
+//		}*/
 		
-		Text {
-			id: minTemp
-			anchors {
-				verticalCenter: parent.verticalCenter
-				left: iconForecast.right
-				leftMargin: 15
-			}
+//		Text {
+//			id: minTemp
+//			anchors {
+//				verticalCenter: parent.verticalCenter
+//				left: iconForecast.right
+//				leftMargin: 15
+//			}
 			
-			font.pixelSize: appStyle.titleFontSize + 2;
-			color: "#217ecd"
+//			font.pixelSize: appStyle.titleFontSize + 2;
+//			color: "#217ecd"
 			
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
+//			style: Text.Raised
+//			styleColor: appStyle.shadowColor
+//		}
 		
-		Text {
-			id: maxTemp
+//		Text {
+//			id: maxTemp
 			
-			anchors {
-				verticalCenter: parent.verticalCenter
-				left: minTemp.right
-				leftMargin: 12
-			}
+//			anchors {
+//				verticalCenter: parent.verticalCenter
+//				left: minTemp.right
+//				leftMargin: 12
+//			}
 			
-			font.pixelSize: appStyle.titleFontSize + 7;
-			color: "#c31f1f"
+//			font.pixelSize: appStyle.titleFontSize + 7;
+//			color: "#c31f1f"
 			
-			style: Text.Raised
-			styleColor: appStyle.shadowColor
-		}
+//			style: Text.Raised
+//			styleColor: appStyle.shadowColor
+//		}
 		
-// 		Text {
-// 			id: weatherForecast
-// 			
-// 			anchors {
-// 				left: iconForecast.right;
-// 				leftMargin: 10;
-// 				right: parent.right;
-// 				rightMargin: 10;
-// 				//top: iconForecast.top;//parent.verticalCenter;
-// 				//bottom: iconForecast.bottom;
-// 				verticalCenter: iconForecast.verticalCenter;
-// 			}
-// 			
-// 			font.pixelSize: appStyle.headerFontSize - 2;
-// 			color: textColor;
-// 			style: Text.Raised
-// 			styleColor: appStyle.shadowColor
-// 			elide: Text.ElideRight;
-// 			wrapMode: Text.Wrap;
-// 			textFormat: Text.PlainText
-// 			maximumLineCount: 3
-// 		}
-	}
+//// 		Text {
+//// 			id: weatherForecast
+////
+//// 			anchors {
+//// 				left: iconForecast.right;
+//// 				leftMargin: 10;
+//// 				right: parent.right;
+//// 				rightMargin: 10;
+//// 				//top: iconForecast.top;//parent.verticalCenter;
+//// 				//bottom: iconForecast.bottom;
+//// 				verticalCenter: iconForecast.verticalCenter;
+//// 			}
+////
+//// 			font.pixelSize: appStyle.headerFontSize - 2;
+//// 			color: textColor;
+//// 			style: Text.Raised
+//// 			styleColor: appStyle.shadowColor
+//// 			elide: Text.ElideRight;
+//// 			wrapMode: Text.Wrap;
+//// 			textFormat: Text.PlainText
+//// 			maximumLineCount: 3
+//// 		}
+//	}
 	
 	Behavior on color {
 		ColorAnimation { duration: 300 }
@@ -247,23 +263,23 @@ Rectangle {
 		onClicked: root.clicked()
 	}
 	
-	states: [
-		State {
-			name: "default"
-			when: !mouseArea.containsMouse
-			PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
-		},	
-		State {
-			name: "mouse-over"
-			when: mouseArea.containsMouse
-			PropertyChanges { target: forecast; opacity: 1; restoreEntryValues: true; }
-		}
-	]
+    states: [
+        State {
+            name: "default"
+            when: !mouseArea.containsMouse
+            //PropertyChanges { target: conditions; opacity: 1; restoreEntryValues: true; }
+        },
+        State {
+            name: "mouse-over"
+            when: mouseArea.containsMouse
+            //PropertyChanges { target: forecast; opacity: 1; restoreEntryValues: true; }
+        }
+    ]
 	
-	transitions: [
-		Transition {
-			to:	"*"
-			NumberAnimation { property: "opacity"; duration: 300 }
-		}
-	]
+//	transitions: [
+//		Transition {
+//			to:	"*"
+//			NumberAnimation { property: "opacity"; duration: 300 }
+//		}
+//	]
 }

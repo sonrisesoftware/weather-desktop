@@ -11,6 +11,7 @@ set(weather-desktop_QML
    Line.qml
    List.qml
    Panel.qml
+   SheetDialog.qml
    Style.qml
    ScrollBar.qml
    ScrollArea.qml 
@@ -20,6 +21,10 @@ set(weather-desktop_QML
    WeatherTile.qml
    WeatherToday.qml
    WeatherView.qml
+   SettingsSheet.qml
  )
 
 install(FILES ${weather-desktop_QML}  DESTINATION  ${DATA_INSTALL_DIR}/weather-desktop/qml/)
+install(DIRECTORY ../../icons/128 DESTINATION ${DATA_INSTALL_DIR}/weather-desktop/icons)
+install(DIRECTORY ../../icons/64 DESTINATION ${DATA_INSTALL_DIR}/weather-desktop/icons)
+install(DIRECTORY ../../icons/24 DESTINATION ${DATA_INSTALL_DIR}/weather-desktop/icons)

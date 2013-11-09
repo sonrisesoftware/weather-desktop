@@ -25,12 +25,22 @@ Rectangle {
 	id: root
 	color: "#00000000" // transparent
 	
-	property string view: "today"
+    property string view: "conditions"
 	property bool is_valid: weatherLocation.valid
 	property bool is_refreshing: !is_valid && weatherLocation.refreshing;
 	property bool is_error: !is_valid && weatherLocation.error;
 	
 	property variant weatherLocation;
+
+    property string title: view === "today"
+                           ? today.title
+                           : view === "conditions"
+                             ? conditions.title
+                             : view === "hourly"
+                               ? hourlyForecast.title
+                               : view === "daily"
+                                 ? dailyForecast.title
+                                 : i18n.tr("Unknown")
 	
 	onStateChanged: {
 		console.log("Width, height: " + width + ", " + height);
@@ -54,21 +64,10 @@ Rectangle {
 		id: conditions
 		anchors.centerIn: root
 		opacity: 0
+
+        weatherLocation: root.weatherLocation
 		
-		windchill: weatherLocation.conditions.feelsLike;
-		dewpoint:  weatherLocation.conditions.dewPoint;
-		
-		pressure: weatherLocation.conditions.pressure;
-		visibility: weatherLocation.conditions.visibility;
-		clouds: weatherLocation.conditions.cloudCover;
-		
-		wind: weatherLocation.conditions.wind;
-		windgust: weatherLocation.conditions.windGust;
-		
-		humidity: weatherLocation.conditions.humidity;
-		precip: weatherLocation.conditions.precip;
-		
-		Behavior on opacity {
+        Behavior on opacity {
 			NumberAnimation { duration: 500 }
 		}
 	}
@@ -119,7 +118,7 @@ Rectangle {
 		}
 		
 		weatherLocation: root.weatherLocation
-	}
+    }
 	
 	states: [
 		State {

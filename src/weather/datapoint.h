@@ -42,7 +42,7 @@ namespace Weather {
 		
 		Q_PROPERTY(QDateTime time READ time WRITE setTime NOTIFY timeChanged);
 		Q_PROPERTY(QString summary READ summary WRITE setSummary NOTIFY summaryChanged);
-		Q_PROPERTY(QIcon icon READ icon WRITE setIcon NOTIFY iconChanged);
+        Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged);
 		Q_PROPERTY(QString image READ image WRITE setImage NOTIFY imageChanged);
 		Q_PROPERTY(QColor color READ color NOTIFY colorChanged)
 
@@ -80,7 +80,7 @@ namespace Weather {
 		virtual void refresh() = 0;
 	
 	private slots:
-		void onIconChanged(const QIcon& icon);
+        void onIconChanged(const QString& icon);
 		
 	signals:
 		void refreshed();

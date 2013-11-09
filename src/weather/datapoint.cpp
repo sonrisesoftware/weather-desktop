@@ -32,7 +32,7 @@ DataPoint::DataPoint(Weather::Location *location, const QString& path): QObject(
 	setPath(path);
 	
 	QObject::connect(location, SIGNAL(refreshed()), this, SLOT(refresh()));
-	QObject::connect(this, SIGNAL(iconChanged(QIcon)), this, SLOT(onIconChanged(QIcon)));
+    QObject::connect(this, SIGNAL(iconChanged(QString)), this, SLOT(onIconChanged(QString)));
 }
 
 DataPoint::~DataPoint()
@@ -45,9 +45,9 @@ void DataPoint::updateColor(float temp)
 
 }
 
-void Weather::DataPoint::onIconChanged(const QIcon& icon)
+void Weather::DataPoint::onIconChanged(const QString& icon)
 {
-	QString fileName = RESOURCE_FILE("images/" + icon.name() + ".jpg");
+    QString fileName = RESOURCE_FILE("images/" + icon + ".jpg");
 	
 	if (!QFile(fileName).exists()) {
 		fileName = RESOURCE_FILE("images/weather-clear.jpg");

@@ -53,7 +53,7 @@ namespace Forecast {
 		static QString pressure(float value);
 		static QString probability(float value);
 		static QString visibility(float value);
-		static KIcon icon(QString name);
+        static QString icon(QString name);
 		static QString precip(Point *data);
 		
 	protected:
